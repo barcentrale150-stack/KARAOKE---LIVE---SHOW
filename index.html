@@ -1,145 +1,18 @@
-<!doctype html>
-<html lang="it">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Karaoke Live Show</title>
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:
-    radial-gradient(circle at 20% 10%,rgba(255,0,255,.28),transparent 28%),
-    radial-gradient(circle at 80% 15%,rgba(0,180,255,.25),transparent 30%),
-    linear-gradient(180deg,#080816,#111126 45%,#090913);
-  color:#fff;min-height:100vh
-}
-.app{max-width:520px;margin:0 auto;padding:18px 14px 30px}
-.brand{text-align:center;margin:6px 0 18px}
-.brand h1{margin:0;font-size:44px;line-height:.95;letter-spacing:1px;font-weight:900}
-.brand .live{color:#ffd23f;text-shadow:0 0 12px #ff9c00}
-.tag{margin-top:8px;color:#ffd23f;font-size:15px;font-weight:700}
-.video-wrap{
-  border:2px solid #ffd23f;border-radius:22px;overflow:hidden;
-  box-shadow:0 0 24px rgba(255,210,63,.25),0 0 40px rgba(109,40,217,.25);
-  background:#000
-}
-.video-wrap iframe{width:100%;height:300px;border:0;display:block;background:#000}
-.contestant{text-align:center;margin:18px 0 8px;padding:14px;border:1px solid rgba(255,210,63,.6);border-radius:16px;background:rgba(255,210,63,.08)}
-.contestant small{display:block;color:#ddd;font-weight:700;margin-bottom:5px}
-.contestant strong{display:block;color:#ffd23f;font-size:25px;text-transform:uppercase}
-.admin{margin-top:14px;padding:12px;border-radius:14px;background:rgba(255,255,255,.06)}
-.admin input{width:68%;padding:11px;border:0;border-radius:10px;font-size:16px}
-.admin button{width:29%;padding:11px 4px;border:0;border-radius:10px;font-weight:800;background:#ffd23f;color:#171717}
-.vote-title{text-align:center;margin:22px 0 8px;font-size:29px;font-weight:900;color:#ffd23f}
-.vote-sub{text-align:center;margin-bottom:16px;color:#ddd}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.vote-btn{
-  border:0;border-radius:16px;padding:16px 0;font-size:30px;font-weight:900;
-  color:#fff;cursor:pointer;background:linear-gradient(180deg,#39125e,#15061f);
-  box-shadow:inset 0 0 0 2px #ff3df2,0 0 16px rgba(255,61,242,.35)
-}
-.vote-btn:nth-child(2n){box-shadow:inset 0 0 0 2px #00d4ff,0 0 16px rgba(0,212,255,.35)}
-.vote-btn:nth-child(3n){box-shadow:inset 0 0 0 2px #ffd23f,0 0 16px rgba(255,210,63,.35)}
-.vote-btn:active{transform:scale(.97)}
-.vote-btn:disabled{opacity:.45;cursor:not-allowed}
-.status{
-  margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.07);
-  text-align:center;min-height:48px
-}
-.footer{text-align:center;margin-top:22px;color:#cfcfe5;font-size:13px}
-.mini{display:block;color:#ffd23f;font-weight:700;margin-top:5px}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="brand">
-    <h1>KARAOKE <span class="live">LIVE</span> SHOW</h1>
-    <div class="tag">La tua voce, la nostra emozione</div>
-  </div>
-
-  <div class="video-wrap">
-    <iframe
-      src="https://vdo.ninja/?view=sgBmC5c&label=KARAOKE_LIVE_SHOW"
-      allow="autoplay; fullscreen; picture-in-picture"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-  <div class="contestant">
-    <small>CONCORRENTE IN GARA</small>
-    <strong id="contestantName">DA IMPOSTARE</strong>
-  </div>
-
-  <div class="admin">
-    <input id="nameInput" type="text" placeholder="Scrivi nome concorrente">
-    <button onclick="setContestant()">AGGIORNA</button>
-  </div>
-
-  <div class="vote-title">DAI IL TUO VOTO</div>
-  <div class="vote-sub">Scegli un numero da 1 a 10</div>
-
-  <div class="grid" id="voteGrid">
-    <button class="vote-btn" onclick="sendVote(1)">1</button>
-    <button class="vote-btn" onclick="sendVote(2)">2</button>
-    <button class="vote-btn" onclick="sendVote(3)">3</button>
-    <button class="vote-btn" onclick="sendVote(4)">4</button>
-    <button class="vote-btn" onclick="sendVote(5)">5</button>
-    <button class="vote-btn" onclick="sendVote(6)">6</button>
-    <button class="vote-btn" onclick="sendVote(7)">7</button>
-    <button class="vote-btn" onclick="sendVote(8)">8</button>
-    <button class="vote-btn" onclick="sendVote(9)">9</button>
-    <button class="vote-btn" onclick="sendVote(10)">10</button>
-  </div>
-
-  <div class="status" id="status">Tocca un numero per votare.</div>
-
-  <div class="footer">
-    KARAOKE LIVE SHOW
-    <span class="mini">Emozioni • Musica • Spettacolo</span>
-  </div>
-</div>
-
-<iframe name="hidden_iframe" style="display:none"></iframe>
-
-<form
-  id="voteForm"
-  action="https://docs.google.com/forms/d/e/1FAIpQLSfq3oGyqoLiIqhmkm7VIhDYOn-0mASiJ1s58rPKoYifiBLK4A/formResponse"
-  method="POST"
-  target="hidden_iframe"
-  style="display:none">
-  <input id="voteInput" name="entry.1863461787" value="">
-</form>
-
-<script>
-let busy = false;
-
-function setContestant(){
-  const name = document.getElementById("nameInput").value.trim();
-  if(!name) return;
-  document.getElementById("contestantName").textContent = name;
-  document.getElementById("status").textContent = "Concorrente impostato: " + name;
-}
-
-function sendVote(n){
-  if (busy) return;
-  busy = true;
-
-  document.getElementById("voteInput").value = n;
-  document.getElementById("status").textContent = "Invio voto " + n + "...";
-
-  const buttons = document.querySelectorAll(".vote-btn");
-  buttons.forEach(b => b.disabled = true);
-
-  document.getElementById("voteForm").submit();
-
-  setTimeout(() => {
-    document.getElementById("status").textContent = "Voto " + n + " registrato ✓";
-    buttons.forEach(b => b.disabled = false);
-    busy = false;
-  }, 1200);
-}
-</script>
-</body>
-</html>
+   <!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Karaoke Live Show</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 20% 10%,rgba(255,0,255,.28),transparent 28%),radial-gradient(circle at 80% 15%,rgba(0,180,255,.25),transparent 30%),linear-gradient(180deg,#080816,#111126 45%,#090913);color:#fff;min-height:100vh}.app{max-width:560px;margin:0 auto;padding:18px 14px 30px}.brand{text-align:center;margin:6px 0 18px}.brand h1{margin:0;font-size:42px;line-height:.95;font-weight:900}.brand .live{color:#ffd23f;text-shadow:0 0 12px #ff9c00}.tag{margin-top:8px;color:#ffd23f;font-size:15px;font-weight:700}.video-wrap{border:2px solid #ffd23f;border-radius:22px;overflow:hidden;box-shadow:0 0 24px rgba(255,210,63,.25),0 0 40px rgba(109,40,217,.25);background:#000}.video-wrap iframe{width:100%;height:300px;border:0;display:block;background:#000}.card{margin-top:18px;padding:16px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}.current-label{text-align:center;color:#ddd;font-size:13px;font-weight:700}.current-name{text-align:center;color:#ffd23f;font-size:27px;font-weight:900;margin-top:6px;text-transform:uppercase}.vote-title{text-align:center;margin:18px 0 8px;font-size:28px;font-weight:900;color:#ffd23f}.vote-sub{text-align:center;margin-bottom:16px;color:#ddd}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.vote-btn{border:0;border-radius:16px;padding:16px 0;font-size:30px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(180deg,#39125e,#15061f);box-shadow:inset 0 0 0 2px #ff3df2,0 0 16px rgba(255,61,242,.35)}.vote-btn:nth-child(2n){box-shadow:inset 0 0 0 2px #00d4ff,0 0 16px rgba(0,212,255,.35)}.vote-btn:nth-child(3n){box-shadow:inset 0 0 0 2px #ffd23f,0 0 16px rgba(255,210,63,.35)}.vote-btn:disabled{opacity:.35;cursor:not-allowed}.status{margin-top:14px;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);text-align:center}.rank-title{text-align:center;color:#ffd23f;font-size:24px;font-weight:900;margin-bottom:12px}.rank-row{display:flex;justify-content:space-between;align-items:center;padding:11px 12px;margin:8px 0;background:#241b55;border-radius:12px}.rank-pos{font-weight:900;color:#ffd23f;min-width:42px}.rank-name{flex:1;text-align:left;font-weight:800}.rank-score{text-align:right}.closed{color:#ff7a9a;font-weight:800}.open{color:#52ff8a;font-weight:800}.footer{text-align:center;margin-top:22px;color:#cfcfe5;font-size:13px}.mini{display:block;color:#ffd23f;font-weight:700;margin-top:5px}</style></head><body>
+<div class="app"><div class="brand"><h1>KARAOKE <span class="live">LIVE</span> SHOW</h1><div class="tag">La tua voce, la nostra emozione</div></div>
+<div class="video-wrap"><iframe src="https://vdo.ninja/?view=sgBmC5c&label=KARAOKE_LIVE_SHOW" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+<div class="card"><div class="current-label">CONCORRENTE IN GARA</div><div class="current-name" id="currentName">IN ATTESA</div><div class="vote-title">DAI IL TUO VOTO</div><div class="vote-sub">Scegli un numero da 1 a 10</div><div class="grid">
+<button class="vote-btn" onclick="sendVote(1)">1</button><button class="vote-btn" onclick="sendVote(2)">2</button><button class="vote-btn" onclick="sendVote(3)">3</button><button class="vote-btn" onclick="sendVote(4)">4</button><button class="vote-btn" onclick="sendVote(5)">5</button><button class="vote-btn" onclick="sendVote(6)">6</button><button class="vote-btn" onclick="sendVote(7)">7</button><button class="vote-btn" onclick="sendVote(8)">8</button><button class="vote-btn" onclick="sendVote(9)">9</button><button class="vote-btn" onclick="sendVote(10)">10</button></div><div class="status" id="status">In attesa dell'ADMIN…</div></div>
+<div class="card"><div class="rank-title">🏆 CLASSIFICA LIVE</div><div id="ranking">Nessun concorrente.</div></div><div class="footer">KARAOKE LIVE SHOW<span class="mini">Emozioni • Musica • Spettacolo</span></div></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+const firebaseConfig={apiKey:"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",authDomain:"karaoke-live-show-12421.firebaseapp.com",databaseURL:"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",projectId:"karaoke-live-show-12421",storageBucket:"karaoke-live-show-12421.firebasestorage.app",messagingSenderId:"522751685586",appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"};
+const app=initializeApp(firebaseConfig); const db=getDatabase(app); let currentId=null,currentName="",votingOpen=false;
+const buttons=()=>document.querySelectorAll(".vote-btn");
+function refreshButtons(){const already=currentId?localStorage.getItem("voted_"+currentId):null;const disabled=!currentId||!votingOpen||!!already;buttons().forEach(b=>b.disabled=disabled);const s=document.getElementById("status");if(!currentId)s.innerHTML='<span class="closed">Nessun concorrente attivo.</span>';else if(!votingOpen)s.innerHTML='<span class="closed">Votazione chiusa.</span>';else if(already)s.textContent="Hai già votato questo concorrente ✓";else s.innerHTML='<span class="open">Votazione aperta.</span> Scegli da 1 a 10.'}
+window.sendVote=async function(n){if(!currentId||!votingOpen||localStorage.getItem("voted_"+currentId))return;buttons().forEach(b=>b.disabled=true);document.getElementById("status").textContent="Invio voto "+n+"...";await runTransaction(ref(db,"concorrenti/"+currentId),c=>{if(c){c.voti=(c.voti||0)+1;c.totale=(c.totale||0)+n}return c});localStorage.setItem("voted_"+currentId,String(n));document.getElementById("status").textContent="Voto "+n+" registrato ✓";refreshButtons()}
+onValue(ref(db,"gara"),snap=>{const g=snap.val()||{};currentId=g.currentId||null;currentName=g.currentName||"";votingOpen=!!g.votingOpen;document.getElementById("currentName").textContent=currentName||"IN ATTESA";refreshButtons()});
+onValue(ref(db,"concorrenti"),snap=>{const data=snap.val()||{};const arr=Object.entries(data).map(([id,c])=>{const voti=c.voti||0,totale=c.totale||0;return{id,nome:c.nome||"Senza nome",voti,media:voti?totale/voti:0}}).sort((a,b)=>b.media-a.media||b.voti-a.voti);const box=document.getElementById("ranking");if(!arr.length){box.textContent="Nessun concorrente.";return}box.innerHTML=arr.map((c,i)=>{const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":"";return `<div class="rank-row"><div class="rank-pos">${medal||(i+1)+"°"}</div><div class="rank-name">${c.nome}</div><div class="rank-score">⭐ ${c.media.toFixed(1)}<br><small>${c.voti} voti</small></div></div>`}).join("")});
+</script></body></html>
