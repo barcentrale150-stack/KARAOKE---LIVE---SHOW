@@ -404,7 +404,7 @@ section{
 }
 
 
-/* EVENTI FIREBASE */
+/* EVENTI */
 
 .events-grid{
   display:grid;
@@ -638,8 +638,6 @@ footer{
 <body>
 
 
-<!-- MENU -->
-
 <nav>
 
 <div class="container nav-inner">
@@ -647,9 +645,7 @@ footer{
 <div class="logo">
 
 🎤 KARAOKE
-
 <span>LIVE</span>
-
 SHOW
 
 </div>
@@ -688,11 +684,7 @@ CONTATTI
 <main>
 
 
-<!-- HOME -->
-
-<section
-class="hero"
-id="home">
+<section class="hero" id="home">
 
 <div class="container hero-grid">
 
@@ -843,10 +835,7 @@ Concorrente 4
 
 
 
-<!-- COME FUNZIONA -->
-
-<section
-id="come-funziona">
+<section id="come-funziona">
 
 <div class="container">
 
@@ -969,10 +958,7 @@ il pubblico scopre il vincitore.
 
 
 
-<!-- PER I LOCALI -->
-
-<section
-id="locali">
+<section id="locali">
 
 <div class="container">
 
@@ -1114,10 +1100,7 @@ in diretta.
 
 
 
-<!-- EVENTI -->
-
-<section
-id="eventi">
+<section id="eventi">
 
 <div class="container">
 
@@ -1160,10 +1143,7 @@ Caricamento eventi...
 
 
 
-<!-- CONTATTI -->
-
-<section
-id="contatti">
+<section id="contatti">
 
 <div class="container">
 
@@ -1251,7 +1231,6 @@ href="mailto:Info@karaokeliveshow.it">
 </div>
 
 </section>
-
 
 
 </main>
@@ -1369,8 +1348,6 @@ Classifica Live
 
 
 
-<!-- FIREBASE EVENTI -->
-
 <script type="module">
 
 import {
@@ -1416,9 +1393,7 @@ appId:
 
 
 const app =
-initializeApp(
-firebaseConfig
-);
+initializeApp(firebaseConfig);
 
 
 const db =
@@ -1431,33 +1406,22 @@ document.getElementById(
 );
 
 
+/* CORREZIONE DATA */
+
 function formatDate(dateString){
 
-if(!dateString){
+  if(!dateString){
+    return "";
+  }
 
-return "";
+  const parts =
+  dateString.split("-");
 
-}
+  if(parts.length !== 3){
+    return dateString;
+  }
 
-const parts =
-dateString.split("-");
-
-if(parts.length !== 3){
-
-return dateString;
-
-}
-
-return
-parts[2]
-+
-"/"
-+
-parts[1]
-+
-"/"
-+
-parts[0];
+  return parts[2] + "/" + parts[1] + "/" + parts[0];
 
 }
 
@@ -1488,10 +1452,10 @@ citta:
 e.citta || "",
 
 data:
-e.data || "",
+e.data || e.date || e.eventDate || "",
 
 ora:
-e.ora || ""
+e.ora || e.time || ""
 
 }));
 
@@ -1506,8 +1470,7 @@ a.data + " " + a.ora;
 const second =
 b.data + " " + b.ora;
 
-return
-first.localeCompare(second);
+return first.localeCompare(second);
 
 }
 );
@@ -1596,9 +1559,7 @@ date.className=
 date.textContent=
 "📅 "
 +
-formatDate(
-evento.data
-)
+formatDate(evento.data)
 +
 "  •  ⏰ "
 +
