@@ -1,1 +1,741 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eventi Admin - Karaoke Live Show</title>
 
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.18),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  width:min(1000px,94%);
+  margin:auto;
+  padding:30px 15px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+h1{
+  margin:0;
+  color:#ffd21f;
+  font-size:38px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  font-size:18px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.create{
+  width:100%;
+  margin-top:12px;
+  background:#7d4dff;
+  color:white;
+}
+
+.edit{
+  background:#ffd21f;
+  color:#2b2200;
+}
+
+.delete{
+  background:#ff315d;
+  color:white;
+}
+
+.save{
+  background:#52ff8a;
+  color:#063b1c;
+}
+
+.cancel{
+  background:#777b91;
+  color:white;
+}
+
+.event{
+  margin-top:14px;
+  padding:18px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+}
+
+.event-title{
+  color:#ffd21f;
+  font-size:22px;
+  font-weight:900;
+}
+
+.event-meta{
+  margin-top:8px;
+  color:#d8d9e8;
+  line-height:1.6;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.edit-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+
+.empty{
+  text-align:center;
+  color:#cfd1e2;
+  padding:25px;
+}
+
+@media(max-width:700px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .form-grid,
+  .edit-grid{
+    grid-template-columns:1fr;
+  }
+
+  button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div>
+    <h1>📅 EVENTI</h1>
+    <div>Gestione eventi pubblicati sul sito</div>
+  </div>
+
+  <a class="back" href="admin.html">
+    ← TORNA ALL'ADMIN
+  </a>
+
+</div>
+
+<div class="card">
+
+  <h2>Crea nuovo evento</h2>
+
+  <div class="form-grid">
+
+    <input id="eventTitle" placeholder="Titolo evento">
+
+    <input id="eventVenue" placeholder="Nome locale">
+
+    <input id="eventCity" placeholder="Città">
+
+    <input id="eventDate" type="date">
+
+    <input id="eventTime" type="time">
+
+  </div>
+
+  <button class="create" id="createEventButton">
+    CREA EVENTO
+  </button>
+
+</div>
+
+<div class="card">
+
+  <h2>Eventi pubblicati</h2>
+
+  <div id="eventsList">
+    Caricamento...
+  </div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  remove,
+  onValue,
+  update
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+
+  authDomain:
+  "karaoke-live-show-12421.firebaseapp.com",
+
+  databaseURL:
+  "https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+
+  projectId:
+  "karaoke-live-show-12421",
+
+  storageBucket:
+  "karaoke-live-show-12421.firebasestorage.app",
+
+  messagingSenderId:
+  "522751685586",
+
+  appId:
+  "1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+
+const eventTitle =
+document.getElementById("eventTitle");
+
+const eventVenue =
+document.getElementById("eventVenue");
+
+const eventCity =
+document.getElementById("eventCity");
+
+const eventDate =
+document.getElementById("eventDate");
+
+const eventTime =
+document.getElementById("eventTime");
+
+const createEventButton =
+document.getElementById("createEventButton");
+
+const eventsList =
+document.getElementById("eventsList");
+
+
+createEventButton.addEventListener(
+"click",
+async function(){
+
+  const titolo =
+  eventTitle.value.trim();
+
+  const locale =
+  eventVenue.value.trim();
+
+  const citta =
+  eventCity.value.trim();
+
+  const data =
+  eventDate.value;
+
+  const ora =
+  eventTime.value;
+
+
+  if(
+    !titolo ||
+    !locale ||
+    !citta ||
+    !data ||
+    !ora
+  ){
+
+    alert(
+      "Compila tutti i campi dell'evento"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    const newRef =
+    push(
+      ref(db,"eventi")
+    );
+
+
+    await set(
+      newRef,
+      {
+        titolo: titolo,
+        locale: locale,
+        citta: citta,
+        data: data,
+        ora: ora,
+        createdAt: Date.now()
+      }
+    );
+
+
+    eventTitle.value="";
+    eventVenue.value="";
+    eventCity.value="";
+    eventDate.value="";
+    eventTime.value="";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Errore durante la creazione dell'evento"
+    );
+
+  }
+
+});
+
+
+async function deleteEvent(id){
+
+  const conferma =
+  confirm(
+    "Vuoi eliminare questo evento?"
+  );
+
+  if(!conferma) return;
+
+
+  try{
+
+    await remove(
+      ref(db,"eventi/" + id)
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Errore durante l'eliminazione"
+    );
+
+  }
+
+}
+
+
+async function saveEvent(
+id,
+titolo,
+locale,
+citta,
+data,
+ora
+){
+
+  titolo =
+  titolo.trim();
+
+  locale =
+  locale.trim();
+
+  citta =
+  citta.trim();
+
+
+  if(
+    !titolo ||
+    !locale ||
+    !citta ||
+    !data ||
+    !ora
+  ){
+
+    alert(
+      "Compila tutti i campi"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    await update(
+      ref(db,"eventi/" + id),
+      {
+        titolo: titolo,
+        locale: locale,
+        citta: citta,
+        data: data,
+        ora: ora
+      }
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Errore durante la modifica dell'evento"
+    );
+
+  }
+
+}
+
+
+function formatDate(dateString){
+
+  if(!dateString){
+    return "";
+  }
+
+  const parts =
+  dateString.split("-");
+
+  if(parts.length !== 3){
+    return dateString;
+  }
+
+  return
+  parts[2]
+  + "/"
+  + parts[1]
+  + "/"
+  + parts[0];
+}
+
+
+onValue(
+ref(db,"eventi"),
+snapshot=>{
+
+  const data =
+  snapshot.val() || {};
+
+
+  const eventi =
+  Object.entries(data)
+  .map(([id,e])=>({
+
+    id:id,
+
+    titolo:
+    e.titolo || "",
+
+    locale:
+    e.locale || "",
+
+    citta:
+    e.citta || "",
+
+    data:
+    e.data || "",
+
+    ora:
+    e.ora || ""
+
+  }));
+
+
+  eventi.sort(
+    (a,b)=>{
+
+      const first =
+      a.data + " " + a.ora;
+
+      const second =
+      b.data + " " + b.ora;
+
+      return
+      first.localeCompare(second);
+
+    }
+  );
+
+
+  eventsList.innerHTML="";
+
+
+  if(eventi.length === 0){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className="empty";
+
+    empty.textContent=
+    "Nessun evento.";
+
+    eventsList.appendChild(empty);
+
+    return;
+  }
+
+
+  eventi.forEach(
+  evento=>{
+
+    const box =
+    document.createElement("div");
+
+    box.className="event";
+
+
+    const title =
+    document.createElement("div");
+
+    title.className="event-title";
+
+    title.textContent=
+    evento.titolo;
+
+
+    const meta =
+    document.createElement("div");
+
+    meta.className="event-meta";
+
+    meta.innerHTML=
+    "📍 "
+    + evento.locale
+    + " - "
+    + evento.citta
+    + "<br>"
+    + "📅 "
+    + formatDate(evento.data)
+    + " &nbsp; ⏰ "
+    + evento.ora;
+
+
+    const actions =
+    document.createElement("div");
+
+    actions.className="actions";
+
+
+    const editButton =
+    document.createElement("button");
+
+    editButton.className="edit";
+
+    editButton.textContent=
+    "MODIFICA";
+
+
+    const deleteButton =
+    document.createElement("button");
+
+    deleteButton.className="delete";
+
+    deleteButton.textContent=
+    "ELIMINA";
+
+
+    deleteButton.addEventListener(
+      "click",
+      ()=>deleteEvent(evento.id)
+    );
+
+
+    editButton.addEventListener(
+      "click",
+      ()=>{
+
+        box.innerHTML="";
+
+
+        const grid =
+        document.createElement("div");
+
+        grid.className="edit-grid";
+
+
+        const titleEdit =
+        document.createElement("input");
+
+        titleEdit.value=
+        evento.titolo;
+
+
+        const venueEdit =
+        document.createElement("input");
+
+        venueEdit.value=
+        evento.locale;
+
+
+        const cityEdit =
+        document.createElement("input");
+
+        cityEdit.value=
+        evento.citta;
+
+
+        const dateEdit =
+        document.createElement("input");
+
+        dateEdit.type="date";
+
+        dateEdit.value=
+        evento.data;
+
+
+        const timeEdit =
+        document.createElement("input");
+
+        timeEdit.type="time";
+
+        timeEdit.value=
+        evento.ora;
+
+
+        const saveButton =
+        document.createElement("button");
+
+        saveButton.className="save";
+
+        saveButton.textContent=
+        "SALVA";
+
+
+        const cancelButton =
+        document.createElement("button");
+
+        cancelButton.className="cancel";
+
+        cancelButton.textContent=
+        "ANNULLA";
+
+
+        saveButton.addEventListener(
+          "click",
+          async ()=>{
+
+            await saveEvent(
+              evento.id,
+              titleEdit.value,
+              venueEdit.value,
+              cityEdit.value,
+              dateEdit.value,
+              timeEdit.value
+            );
+
+          }
+        );
+
+
+        cancelButton.addEventListener(
+          "click",
+          ()=>location.reload()
+        );
+
+
+        grid.appendChild(titleEdit);
+        grid.appendChild(venueEdit);
+        grid.appendChild(cityEdit);
+        grid.appendChild(dateEdit);
+        grid.appendChild(timeEdit);
+        grid.appendChild(saveButton);
+        grid.appendChild(cancelButton);
+
+        box.appendChild(grid);
+
+      }
+    );
+
+
+    actions.appendChild(editButton);
+    actions.appendChild(deleteButton);
+
+
+    box.appendChild(title);
+    box.appendChild(meta);
+    box.appendChild(actions);
+
+
+    eventsList.appendChild(box);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
