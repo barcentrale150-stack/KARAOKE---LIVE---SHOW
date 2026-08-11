@@ -6,22 +6,48 @@
 <title>Karaoke Live Show</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 20% 10%,rgba(255,0,255,.28),transparent 28%),radial-gradient(circle at 80% 15%,rgba(0,180,255,.25),transparent 30%),linear-gradient(180deg,#080816,#111126 45%,#090913);color:#fff;min-height:100vh}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(255,0,255,.28),transparent 28%),
+    radial-gradient(circle at 80% 15%,rgba(0,180,255,.25),transparent 30%),
+    linear-gradient(180deg,#080816,#111126 45%,#090913);
+  color:#fff;min-height:100vh
+}
 .app{max-width:520px;margin:0 auto;padding:18px 14px 30px}
 .brand{text-align:center;margin:6px 0 18px}
 .brand h1{margin:0;font-size:44px;line-height:.95;letter-spacing:1px;font-weight:900}
 .brand .live{color:#ffd23f;text-shadow:0 0 12px #ff9c00}
 .tag{margin-top:8px;color:#ffd23f;font-size:15px;font-weight:700}
-.video-wrap{border:2px solid #ffd23f;border-radius:22px;overflow:hidden;box-shadow:0 0 24px rgba(255,210,63,.25),0 0 40px rgba(109,40,217,.25);background:#000}
+.video-wrap{
+  border:2px solid #ffd23f;border-radius:22px;overflow:hidden;
+  box-shadow:0 0 24px rgba(255,210,63,.25),0 0 40px rgba(109,40,217,.25);
+  background:#000
+}
 .video-wrap iframe{width:100%;height:300px;border:0;display:block;background:#000}
+.contestant{text-align:center;margin:18px 0 8px;padding:14px;border:1px solid rgba(255,210,63,.6);border-radius:16px;background:rgba(255,210,63,.08)}
+.contestant small{display:block;color:#ddd;font-weight:700;margin-bottom:5px}
+.contestant strong{display:block;color:#ffd23f;font-size:25px;text-transform:uppercase}
+.admin{margin-top:14px;padding:12px;border-radius:14px;background:rgba(255,255,255,.06)}
+.admin input{width:68%;padding:11px;border:0;border-radius:10px;font-size:16px}
+.admin button{width:29%;padding:11px 4px;border:0;border-radius:10px;font-weight:800;background:#ffd23f;color:#171717}
 .vote-title{text-align:center;margin:22px 0 8px;font-size:29px;font-weight:900;color:#ffd23f}
 .vote-sub{text-align:center;margin-bottom:16px;color:#ddd}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.vote-btn{border:0;border-radius:16px;padding:16px 0;font-size:30px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(180deg,#39125e,#15061f);box-shadow:inset 0 0 0 2px #ff3df2,0 0 16px rgba(255,61,242,.35)}
+.vote-btn{
+  border:0;border-radius:16px;padding:16px 0;font-size:30px;font-weight:900;
+  color:#fff;cursor:pointer;background:linear-gradient(180deg,#39125e,#15061f);
+  box-shadow:inset 0 0 0 2px #ff3df2,0 0 16px rgba(255,61,242,.35)
+}
 .vote-btn:nth-child(2n){box-shadow:inset 0 0 0 2px #00d4ff,0 0 16px rgba(0,212,255,.35)}
 .vote-btn:nth-child(3n){box-shadow:inset 0 0 0 2px #ffd23f,0 0 16px rgba(255,210,63,.35)}
 .vote-btn:active{transform:scale(.97)}
-.status{margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.07);text-align:center;min-height:48px}
+.vote-btn:disabled{opacity:.45;cursor:not-allowed}
+.status{
+  margin-top:18px;padding:14px;border-radius:14px;background:rgba(255,255,255,.07);
+  text-align:center;min-height:48px
+}
 .footer{text-align:center;margin-top:22px;color:#cfcfe5;font-size:13px}
 .mini{display:block;color:#ffd23f;font-weight:700;margin-top:5px}
 </style>
@@ -32,23 +58,87 @@ body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(
     <h1>KARAOKE <span class="live">LIVE</span> SHOW</h1>
     <div class="tag">La tua voce, la nostra emozione</div>
   </div>
+
   <div class="video-wrap">
-    <iframe src="https://vdo.ninja/?view=sgBmC5c&label=KARAOKE_LIVE_SHOW" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+    <iframe
+      src="https://vdo.ninja/?view=sgBmC5c&label=KARAOKE_LIVE_SHOW"
+      allow="autoplay; fullscreen; picture-in-picture"
+      allowfullscreen>
+    </iframe>
   </div>
+
+  <div class="contestant">
+    <small>CONCORRENTE IN GARA</small>
+    <strong id="contestantName">DA IMPOSTARE</strong>
+  </div>
+
+  <div class="admin">
+    <input id="nameInput" type="text" placeholder="Scrivi nome concorrente">
+    <button onclick="setContestant()">AGGIORNA</button>
+  </div>
+
   <div class="vote-title">DAI IL TUO VOTO</div>
   <div class="vote-sub">Scegli un numero da 1 a 10</div>
-  <div class="grid">
-    <button class="vote-btn" onclick="vote(1)">1</button><button class="vote-btn" onclick="vote(2)">2</button><button class="vote-btn" onclick="vote(3)">3</button><button class="vote-btn" onclick="vote(4)">4</button><button class="vote-btn" onclick="vote(5)">5</button>
-    <button class="vote-btn" onclick="vote(6)">6</button><button class="vote-btn" onclick="vote(7)">7</button><button class="vote-btn" onclick="vote(8)">8</button><button class="vote-btn" onclick="vote(9)">9</button><button class="vote-btn" onclick="vote(10)">10</button>
+
+  <div class="grid" id="voteGrid">
+    <button class="vote-btn" onclick="sendVote(1)">1</button>
+    <button class="vote-btn" onclick="sendVote(2)">2</button>
+    <button class="vote-btn" onclick="sendVote(3)">3</button>
+    <button class="vote-btn" onclick="sendVote(4)">4</button>
+    <button class="vote-btn" onclick="sendVote(5)">5</button>
+    <button class="vote-btn" onclick="sendVote(6)">6</button>
+    <button class="vote-btn" onclick="sendVote(7)">7</button>
+    <button class="vote-btn" onclick="sendVote(8)">8</button>
+    <button class="vote-btn" onclick="sendVote(9)">9</button>
+    <button class="vote-btn" onclick="sendVote(10)">10</button>
   </div>
-  <div class="status" id="status">Tocca un voto per aprire la votazione.</div>
-  <div class="footer">KARAOKE LIVE SHOW<span class="mini">Emozioni • Musica • Spettacolo</span></div>
+
+  <div class="status" id="status">Tocca un numero per votare.</div>
+
+  <div class="footer">
+    KARAOKE LIVE SHOW
+    <span class="mini">Emozioni • Musica • Spettacolo</span>
+  </div>
 </div>
+
+<iframe name="hidden_iframe" style="display:none"></iframe>
+
+<form
+  id="voteForm"
+  action="https://docs.google.com/forms/d/e/1FAIpQLSfq3oGyqoLiIqhmkm7VIhDYOn-0mASiJ1s58rPKoYifiBLK4A/formResponse"
+  method="POST"
+  target="hidden_iframe"
+  style="display:none">
+  <input id="voteInput" name="entry.1863461787" value="">
+</form>
+
 <script>
-const FORM_BASE="https://docs.google.com/forms/d/e/1FAIpQLSfq3oGyqoLiIqhmkm7VIhDYOn-0mASiJ1s58rPKoYifiBLK4A/viewform?usp=header";
-function vote(n){
-  document.getElementById("status").textContent="Hai scelto "+n+". Si apre la scheda di voto.";
-  window.open(FORM_BASE,"_blank");
+let busy = false;
+
+function setContestant(){
+  const name = document.getElementById("nameInput").value.trim();
+  if(!name) return;
+  document.getElementById("contestantName").textContent = name;
+  document.getElementById("status").textContent = "Concorrente impostato: " + name;
+}
+
+function sendVote(n){
+  if (busy) return;
+  busy = true;
+
+  document.getElementById("voteInput").value = n;
+  document.getElementById("status").textContent = "Invio voto " + n + "...";
+
+  const buttons = document.querySelectorAll(".vote-btn");
+  buttons.forEach(b => b.disabled = true);
+
+  document.getElementById("voteForm").submit();
+
+  setTimeout(() => {
+    document.getElementById("status").textContent = "Voto " + n + " registrato ✓";
+    buttons.forEach(b => b.disabled = false);
+    busy = false;
+  }, 1200);
 }
 </script>
 </body>
