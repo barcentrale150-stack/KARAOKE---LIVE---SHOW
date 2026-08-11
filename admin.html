@@ -17,7 +17,7 @@ body{
 }
 
 .app{
-  max-width:750px;
+  max-width:780px;
   margin:auto;
   padding:25px 15px 50px;
 }
@@ -43,11 +43,17 @@ h2{
 }
 
 input{
-  width:70%;
-  padding:16px;
+  width:100%;
+  padding:15px;
   border:0;
   border-radius:12px;
   font-size:18px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
 }
 
 button{
@@ -100,6 +106,14 @@ button{
   font-weight:bold;
 }
 
+.song{
+  display:block;
+  font-size:14px;
+  color:#ffd23f;
+  margin-top:4px;
+  font-weight:normal;
+}
+
 .score{
   min-width:100px;
   text-align:center;
@@ -110,11 +124,28 @@ button{
   font-weight:bold;
 }
 
+.current-song{
+  display:block;
+  color:#ffd23f;
+  margin-top:8px;
+  font-size:18px;
+}
+
 .status{
   text-align:center;
   font-size:20px;
   padding:15px;
   color:#ffd23f;
+}
+
+@media(max-width:650px){
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .row{
+    flex-wrap:wrap;
+  }
 }
 </style>
 </head>
@@ -130,9 +161,10 @@ button{
 
 <h2>Concorrenti</h2>
 
-<div style="display:flex;gap:10px">
-<input id="nameInput" placeholder="Nome concorrente">
-<button class="add" onclick="addContestant()">AGGIUNGI</button>
+<div class="form-grid">
+  <input id="nameInput" placeholder="Nome concorrente">
+  <input id="songInput" placeholder="Titolo canzone">
+  <button class="add" onclick="addContestant()">AGGIUNGI</button>
 </div>
 
 <div id="contestants"></div>
@@ -167,282 +199,230 @@ AZZERA TUTTI I VOTI
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 import {
-getDatabase,
-ref,
-push,
-set,
-remove,
-onValue,
-update
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
+  getDatabase,
+  ref,
+  push,
+  set,
+  remove,
+  onValue,
+  update,
+  get
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 const firebaseConfig = {
-
-apiKey:"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
-
-authDomain:"karaoke-live-show-12421.firebaseapp.com",
-
-databaseURL:"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
-
-projectId:"karaoke-live-show-12421",
-
-storageBucket:"karaoke-live-show-12421.firebasestorage.app",
-
-messagingSenderId:"522751685586",
-
-appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
-
+  apiKey:"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+  authDomain:"karaoke-live-show-12421.firebaseapp.com",
+  databaseURL:"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+  projectId:"karaoke-live-show-12421",
+  storageBucket:"karaoke-live-show-12421.firebasestorage.app",
+  messagingSenderId:"522751685586",
+  appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
 };
 
-
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
-
 
 window.addContestant = async function(){
 
-const input = document.getElementById("nameInput");
+  const nameInput = document.getElementById("nameInput");
+  const songInput = document.getElementById("songInput");
 
-const nome = input.value.trim();
+  const nome = nameInput.value.trim();
+  const canzone = songInput.value.trim();
 
-if(!nome) return;
+  if(!nome){
+    alert("Scrivi il nome del concorrente");
+    return;
+  }
 
-const newRef = push(ref(db,"concorrenti"));
+  if(!canzone){
+    alert("Scrivi il titolo della canzone");
+    return;
+  }
 
-await set(newRef,{
-nome:nome,
-voti:0,
-totale:0
-});
+  const newRef = push(ref(db,"concorrenti"));
 
-input.value="";
+  await set(newRef,{
+    nome:nome,
+    canzone:canzone,
+    voti:0,
+    totale:0
+  });
 
+  nameInput.value="";
+  songInput.value="";
 };
 
+window.startContestant = async function(id,nome,canzone){
 
-window.startContestant = async function(id,nome){
-
-await set(ref(db,"gara"),{
-
-currentId:id,
-currentName:nome,
-votingOpen:true
-
-});
-
+  await set(ref(db,"gara"),{
+    currentId:id,
+    currentName:nome,
+    currentSong:canzone || "",
+    votingOpen:true
+  });
 };
-
 
 window.stopVoting = async function(){
 
-await update(ref(db,"gara"),{
-
-votingOpen:false
-
-});
-
+  await update(ref(db,"gara"),{
+    votingOpen:false
+  });
 };
-
 
 window.deleteContestant = async function(id){
 
-if(!confirm("Eliminare questo concorrente?")) return;
+  if(!confirm("Eliminare questo concorrente?")) return;
 
-await remove(ref(db,"concorrenti/"+id));
-
+  await remove(ref(db,"concorrenti/"+id));
 };
-
 
 window.resetVotes = async function(){
 
-if(!confirm("Vuoi azzerare tutti i voti?")) return;
+  if(!confirm("Vuoi azzerare tutti i voti?")) return;
 
-const snap = await new Promise(resolve=>{
+  const snap = await get(ref(db,"concorrenti"));
+  const data = snap.val() || {};
 
-onValue(ref(db,"concorrenti"),resolve,{onlyOnce:true});
+  const updates = {};
 
-});
+  Object.keys(data).forEach(id=>{
+    updates["concorrenti/"+id+"/voti"]=0;
+    updates["concorrenti/"+id+"/totale"]=0;
+  });
 
-const data = snap.val() || {};
-
-const updates = {};
-
-Object.keys(data).forEach(id=>{
-
-updates["concorrenti/"+id+"/voti"]=0;
-
-updates["concorrenti/"+id+"/totale"]=0;
-
-});
-
-await update(ref(db),updates);
-
+  await update(ref(db),updates);
 };
-
 
 onValue(ref(db,"gara"),snap=>{
 
-const g = snap.val() || {};
+  const g = snap.val() || {};
+  const box = document.getElementById("currentStatus");
 
-const box = document.getElementById("currentStatus");
+  if(!g.currentId){
+    box.innerHTML="Nessun concorrente attivo";
+    return;
+  }
 
-if(!g.currentId){
-
-box.innerHTML="Nessun concorrente attivo";
-
-return;
-
-}
-
-box.innerHTML =
-
-'<span class="active">'+
-(g.currentName || "")+
-'</span><br><br>'+
-
-(g.votingOpen ?
-
-'<button class="stop" onclick="stopVoting()">CHIUDI VOTAZIONE</button>'
-
-:
-
-'<button class="start" onclick="startContestant(\''+
-g.currentId+
-'\',\''+
-(g.currentName || "").replace(/'/g,"\\'")+
-'\')">RIAPRI VOTAZIONE</button>');
-
+  box.innerHTML =
+    '<span class="active">'+escapeHtml(g.currentName || "")+'</span>'+
+    '<span class="current-song">🎵 '+escapeHtml(g.currentSong || "")+'</span><br>'+
+    (g.votingOpen
+      ? '<button class="stop" onclick="stopVoting()">CHIUDI VOTAZIONE</button>'
+      : '<button class="start" onclick=\'startContestant('+
+        JSON.stringify(g.currentId)+','+
+        JSON.stringify(g.currentName || "")+','+
+        JSON.stringify(g.currentSong || "")+
+        ')\'>RIAPRI VOTAZIONE</button>'
+    );
 });
-
 
 onValue(ref(db,"concorrenti"),snap=>{
 
-const data = snap.val() || {};
+  const data = snap.val() || {};
 
-const list = document.getElementById("contestants");
+  const list = document.getElementById("contestants");
+  const ranking = document.getElementById("ranking");
 
-const ranking = document.getElementById("ranking");
+  const arr = Object.entries(data).map(([id,c])=>{
 
-const arr = Object.entries(data).map(([id,c])=>{
+    const voti = c.voti || 0;
+    const totale = c.totale || 0;
 
-const voti = c.voti || 0;
+    return {
+      id:id,
+      nome:c.nome || "Senza nome",
+      canzone:c.canzone || "",
+      voti:voti,
+      totale:totale,
+      media:voti ? totale/voti : 0
+    };
+  });
 
-const totale = c.totale || 0;
+  if(!arr.length){
 
-return {
+    list.innerHTML="<p>Nessun concorrente.</p>";
+    ranking.innerHTML="Nessun concorrente.";
+    return;
+  }
 
-id:id,
+  list.innerHTML = arr.map(c=>`
 
-nome:c.nome || "Senza nome",
+    <div class="row">
 
-voti:voti,
+      <div class="name">
+        🎤 ${escapeHtml(c.nome)}
+        <span class="song">🎵 ${escapeHtml(c.canzone)}</span>
+      </div>
 
-totale:totale,
+      <button
+        class="start"
+        onclick='startContestant(
+          ${JSON.stringify(c.id)},
+          ${JSON.stringify(c.nome)},
+          ${JSON.stringify(c.canzone)}
+        )'>
+        IN GARA
+      </button>
 
-media:voti ? totale/voti : 0
+      <button
+        class="delete"
+        onclick='deleteContestant(${JSON.stringify(c.id)})'>
+        ELIMINA
+      </button>
 
-};
+    </div>
 
+  `).join("");
+
+  const sorted = [...arr].sort((a,b)=>
+    b.media-a.media || b.voti-a.voti
+  );
+
+  ranking.innerHTML = sorted.map((c,i)=>{
+
+    const medal =
+      i===0 ? "🥇" :
+      i===1 ? "🥈" :
+      i===2 ? "🥉" :
+      (i+1)+"°";
+
+    return `
+
+      <div class="row">
+
+        <div style="font-size:25px;width:45px">
+          ${medal}
+        </div>
+
+        <div class="name">
+          ${escapeHtml(c.nome)}
+          <span class="song">🎵 ${escapeHtml(c.canzone)}</span>
+        </div>
+
+        <div class="score">
+          ⭐ ${c.media.toFixed(1)}
+          <br>
+          <small>${c.voti} voti</small>
+        </div>
+
+      </div>
+
+    `;
+  }).join("");
 });
-
-
-if(!arr.length){
-
-list.innerHTML="<p>Nessun concorrente.</p>";
-
-ranking.innerHTML="Nessun concorrente.";
-
-return;
-
-}
-
-
-list.innerHTML = arr.map(c=>`
-
-<div class="row">
-
-<div class="name">
-🎤 ${escapeHtml(c.nome)}
-</div>
-
-<button
-class="start"
-onclick='startContestant(${JSON.stringify(c.id)},${JSON.stringify(c.nome)})'>
-IN GARA
-</button>
-
-<button
-class="delete"
-onclick='deleteContestant(${JSON.stringify(c.id)})'>
-ELIMINA
-</button>
-
-</div>
-
-`).join("");
-
-
-const sorted = [...arr].sort((a,b)=>
-
-b.media-a.media || b.voti-a.voti
-
-);
-
-
-ranking.innerHTML = sorted.map((c,i)=>{
-
-const medal =
-i===0 ? "🥇" :
-i===1 ? "🥈" :
-i===2 ? "🥉" :
-(i+1)+"°";
-
-return `
-
-<div class="row">
-
-<div style="font-size:25px;width:45px">
-${medal}
-</div>
-
-<div class="name">
-${escapeHtml(c.nome)}
-</div>
-
-<div class="score">
-⭐ ${c.media.toFixed(1)}
-<br>
-<small>${c.voti} voti</small>
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-});
-
 
 function escapeHtml(text){
 
-return String(text)
-
-.replace(/&/g,"&amp;")
-
-.replace(/</g,"&lt;")
-
-.replace(/>/g,"&gt;")
-
-.replace(/"/g,"&quot;")
-
-.replace(/'/g,"&#039;");
-
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 </script>
