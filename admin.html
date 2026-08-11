@@ -1,120 +1,183 @@
-<!DOCTYPE html>
+ <!doctype html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin - Karaoke Live Show</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
-    margin:0;
-    font-family:Arial,sans-serif;
-    background:linear-gradient(135deg,#07142e,#25115b);
-    color:white;
-    text-align:center;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#07194d,#142a72,#09143d);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  max-width:750px;
+  margin:auto;
+  padding:25px 15px 50px;
 }
 
 h1{
-    color:#ffd900;
-    margin-top:30px;
+  text-align:center;
+  color:#ffd23f;
+  font-size:38px;
+  margin-bottom:5px;
 }
 
-.box{
-    max-width:700px;
-    margin:25px auto;
-    padding:25px;
-    background:rgba(255,255,255,.08);
-    border-radius:20px;
+h2{
+  text-align:center;
+  margin-top:5px;
+}
+
+.card{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:20px;
+  padding:20px;
+  margin-top:20px;
 }
 
 input{
-    padding:15px;
-    width:65%;
-    border-radius:10px;
-    border:none;
-    font-size:18px;
+  width:70%;
+  padding:16px;
+  border:0;
+  border-radius:12px;
+  font-size:18px;
 }
 
 button{
-    padding:15px 20px;
-    margin:5px;
-    border:none;
-    border-radius:10px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+  border:0;
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.aggiungi{
-    background:#00e5ff;
+.add{
+  background:#13d8e8;
+  color:#073348;
 }
 
-.elimina{
-    background:#ff3b6b;
-    color:white;
+.start{
+  background:#35e779;
+  color:#063b1c;
 }
 
-.concorrente{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#202c55;
-    padding:12px;
-    margin:10px 0;
-    border-radius:12px;
+.stop{
+  background:#ffbd28;
+  color:#4c3100;
 }
 
-.classifica{
-    font-size:20px;
-    padding:12px;
-    margin:8px;
-    background:#31276b;
-    border-radius:12px;
+.delete{
+  background:#ff315d;
+  color:white;
+}
+
+.reset{
+  background:#ff315d;
+  color:white;
+  width:100%;
+  margin-top:15px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 5px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.name{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.score{
+  min-width:100px;
+  text-align:center;
+}
+
+.active{
+  color:#52ff8a;
+  font-weight:bold;
+}
+
+.status{
+  text-align:center;
+  font-size:20px;
+  padding:15px;
+  color:#ffd23f;
 }
 </style>
 </head>
 
 <body>
 
+<div class="app">
+
 <h1>🎤 KARAOKE LIVE SHOW</h1>
 <h2>PANNELLO ADMIN</h2>
 
-<div class="box">
+<div class="card">
 
 <h2>Concorrenti</h2>
 
-<input id="nome" placeholder="Nome concorrente">
+<div style="display:flex;gap:10px">
+<input id="nameInput" placeholder="Nome concorrente">
+<button class="add" onclick="addContestant()">AGGIUNGI</button>
+</div>
 
-<button class="aggiungi" onclick="aggiungiConcorrente()">
-AGGIUNGI
-</button>
-
-<div id="lista"></div>
+<div id="contestants"></div>
 
 </div>
 
-<div class="box">
+<div class="card">
+
+<h2>🎙️ CONCORRENTE IN GARA</h2>
+
+<div class="status" id="currentStatus">
+Nessun concorrente attivo
+</div>
+
+</div>
+
+<div class="card">
 
 <h2>🏆 CLASSIFICA LIVE</h2>
 
-<div id="classifica"></div>
+<div id="ranking">
+Nessun concorrente.
+</div>
+
+<button class="reset" onclick="resetVotes()">
+AZZERA TUTTI I VOTI
+</button>
+
+</div>
 
 </div>
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 getDatabase,
 ref,
+push,
 set,
 remove,
-onValue
-}
-from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+onValue,
+update
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -135,119 +198,252 @@ appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
 
 };
 
+
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
 
-window.aggiungiConcorrente=function(){
+window.addContestant = async function(){
 
-const nome=document.getElementById("nome").value.trim();
+const input = document.getElementById("nameInput");
 
-if(!nome){
-alert("Scrivi il nome del concorrente");
-return;
-}
+const nome = input.value.trim();
 
-const id=Date.now();
+if(!nome) return;
 
-set(ref(db,"concorrenti/"+id),{
+const newRef = push(ref(db,"concorrenti"));
+
+await set(newRef,{
 nome:nome,
 voti:0,
 totale:0
 });
 
-document.getElementById("nome").value="";
+input.value="";
 
 };
 
 
-window.eliminaConcorrente=function(id){
+window.startContestant = async function(id,nome){
 
-if(confirm("Eliminare questo concorrente?")){
+await set(ref(db,"gara"),{
 
-remove(ref(db,"concorrenti/"+id));
+currentId:id,
+currentName:nome,
+votingOpen:true
+
+});
+
+};
+
+
+window.stopVoting = async function(){
+
+await update(ref(db,"gara"),{
+
+votingOpen:false
+
+});
+
+};
+
+
+window.deleteContestant = async function(id){
+
+if(!confirm("Eliminare questo concorrente?")) return;
+
+await remove(ref(db,"concorrenti/"+id));
+
+};
+
+
+window.resetVotes = async function(){
+
+if(!confirm("Vuoi azzerare tutti i voti?")) return;
+
+const snap = await new Promise(resolve=>{
+
+onValue(ref(db,"concorrenti"),resolve,{onlyOnce:true});
+
+});
+
+const data = snap.val() || {};
+
+const updates = {};
+
+Object.keys(data).forEach(id=>{
+
+updates["concorrenti/"+id+"/voti"]=0;
+
+updates["concorrenti/"+id+"/totale"]=0;
+
+});
+
+await update(ref(db),updates);
+
+};
+
+
+onValue(ref(db,"gara"),snap=>{
+
+const g = snap.val() || {};
+
+const box = document.getElementById("currentStatus");
+
+if(!g.currentId){
+
+box.innerHTML="Nessun concorrente attivo";
+
+return;
 
 }
 
+box.innerHTML =
+
+'<span class="active">'+
+(g.currentName || "")+
+'</span><br><br>'+
+
+(g.votingOpen ?
+
+'<button class="stop" onclick="stopVoting()">CHIUDI VOTAZIONE</button>'
+
+:
+
+'<button class="start" onclick="startContestant(\''+
+g.currentId+
+'\',\''+
+(g.currentName || "").replace(/'/g,"\\'")+
+'\')">RIAPRI VOTAZIONE</button>');
+
+});
+
+
+onValue(ref(db,"concorrenti"),snap=>{
+
+const data = snap.val() || {};
+
+const list = document.getElementById("contestants");
+
+const ranking = document.getElementById("ranking");
+
+const arr = Object.entries(data).map(([id,c])=>{
+
+const voti = c.voti || 0;
+
+const totale = c.totale || 0;
+
+return {
+
+id:id,
+
+nome:c.nome || "Senza nome",
+
+voti:voti,
+
+totale:totale,
+
+media:voti ? totale/voti : 0
+
 };
 
+});
 
-onValue(ref(db,"concorrenti"),snapshot=>{
 
-const dati=snapshot.val() || {};
+if(!arr.length){
 
-const lista=document.getElementById("lista");
-const classifica=document.getElementById("classifica");
+list.innerHTML="<p>Nessun concorrente.</p>";
 
-lista.innerHTML="";
-classifica.innerHTML="";
+ranking.innerHTML="Nessun concorrente.";
 
-let concorrenti=[];
+return;
 
-Object.entries(dati).forEach(([id,c])=>{
+}
 
-lista.innerHTML+=`
 
-<div class="concorrente">
+list.innerHTML = arr.map(c=>`
 
-<span>🎤 ${c.nome}</span>
+<div class="row">
 
-<button class="elimina"
-onclick="eliminaConcorrente('${id}')">
+<div class="name">
+🎤 ${escapeHtml(c.nome)}
+</div>
 
+<button
+class="start"
+onclick='startContestant(${JSON.stringify(c.id)},${JSON.stringify(c.nome)})'>
+IN GARA
+</button>
+
+<button
+class="delete"
+onclick='deleteContestant(${JSON.stringify(c.id)})'>
 ELIMINA
-
 </button>
 
 </div>
 
-`;
-
-let media=0;
-
-if(c.voti>0){
-media=c.totale/c.voti;
-}
-
-concorrenti.push({
-nome:c.nome,
-media:media,
-voti:c.voti || 0
-});
-
-});
+`).join("");
 
 
-concorrenti.sort((a,b)=>b.media-a.media);
+const sorted = [...arr].sort((a,b)=>
+
+b.media-a.media || b.voti-a.voti
+
+);
 
 
-concorrenti.forEach((c,i)=>{
+ranking.innerHTML = sorted.map((c,i)=>{
 
-let medaglia="";
+const medal =
+i===0 ? "🥇" :
+i===1 ? "🥈" :
+i===2 ? "🥉" :
+(i+1)+"°";
 
-if(i===0) medaglia="🥇";
-if(i===1) medaglia="🥈";
-if(i===2) medaglia="🥉";
+return `
 
-classifica.innerHTML+=`
+<div class="row">
 
-<div class="classifica">
+<div style="font-size:25px;width:45px">
+${medal}
+</div>
 
-${medaglia}
-<strong>${i+1}° ${c.nome}</strong>
+<div class="name">
+${escapeHtml(c.nome)}
+</div>
 
+<div class="score">
+⭐ ${c.media.toFixed(1)}
 <br>
-
-⭐ ${c.media.toFixed(1)} / 10
-— ${c.voti} voti
+<small>${c.voti} voti</small>
+</div>
 
 </div>
 
 `;
 
-});
+}).join("");
 
 });
+
+
+function escapeHtml(text){
+
+return String(text)
+
+.replace(/&/g,"&amp;")
+
+.replace(/</g,"&lt;")
+
+.replace(/>/g,"&gt;")
+
+.replace(/"/g,"&quot;")
+
+.replace(/'/g,"&#039;");
+
+}
 
 </script>
 
