@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin - Karaoke Live Show</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#07142e,#25115b);
+    color:white;
+    text-align:center;
+}
+
+h1{
+    color:#ffd900;
+    margin-top:30px;
+}
+
+.box{
+    max-width:700px;
+    margin:25px auto;
+    padding:25px;
+    background:rgba(255,255,255,.08);
+    border-radius:20px;
+}
+
+input{
+    padding:15px;
+    width:65%;
+    border-radius:10px;
+    border:none;
+    font-size:18px;
+}
+
+button{
+    padding:15px 20px;
+    margin:5px;
+    border:none;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.aggiungi{
+    background:#00e5ff;
+}
+
+.elimina{
+    background:#ff3b6b;
+    color:white;
+}
+
+.concorrente{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#202c55;
+    padding:12px;
+    margin:10px 0;
+    border-radius:12px;
+}
+
+.classifica{
+    font-size:20px;
+    padding:12px;
+    margin:8px;
+    background:#31276b;
+    border-radius:12px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎤 KARAOKE LIVE SHOW</h1>
+<h2>PANNELLO ADMIN</h2>
+
+<div class="box">
+
+<h2>Concorrenti</h2>
+
+<input id="nome" placeholder="Nome concorrente">
+
+<button class="aggiungi" onclick="aggiungiConcorrente()">
+AGGIUNGI
+</button>
+
+<div id="lista"></div>
+
+</div>
+
+<div class="box">
+
+<h2>🏆 CLASSIFICA LIVE</h2>
+
+<div id="classifica"></div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+getDatabase,
+ref,
+set,
+remove,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+
+authDomain:"karaoke-live-show-12421.firebaseapp.com",
+
+databaseURL:"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+
+projectId:"karaoke-live-show-12421",
+
+storageBucket:"karaoke-live-show-12421.firebasestorage.app",
+
+messagingSenderId:"522751685586",
+
+appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+
+window.aggiungiConcorrente=function(){
+
+const nome=document.getElementById("nome").value.trim();
+
+if(!nome){
+alert("Scrivi il nome del concorrente");
+return;
+}
+
+const id=Date.now();
+
+set(ref(db,"concorrenti/"+id),{
+nome:nome,
+voti:0,
+totale:0
+});
+
+document.getElementById("nome").value="";
+
+};
+
+
+window.eliminaConcorrente=function(id){
+
+if(confirm("Eliminare questo concorrente?")){
+
+remove(ref(db,"concorrenti/"+id));
+
+}
+
+};
+
+
+onValue(ref(db,"concorrenti"),snapshot=>{
+
+const dati=snapshot.val() || {};
+
+const lista=document.getElementById("lista");
+const classifica=document.getElementById("classifica");
+
+lista.innerHTML="";
+classifica.innerHTML="";
+
+let concorrenti=[];
+
+Object.entries(dati).forEach(([id,c])=>{
+
+lista.innerHTML+=`
+
+<div class="concorrente">
+
+<span>🎤 ${c.nome}</span>
+
+<button class="elimina"
+onclick="eliminaConcorrente('${id}')">
+
+ELIMINA
+
+</button>
+
+</div>
+
+`;
+
+let media=0;
+
+if(c.voti>0){
+media=c.totale/c.voti;
+}
+
+concorrenti.push({
+nome:c.nome,
+media:media,
+voti:c.voti || 0
+});
+
+});
+
+
+concorrenti.sort((a,b)=>b.media-a.media);
+
+
+concorrenti.forEach((c,i)=>{
+
+let medaglia="";
+
+if(i===0) medaglia="🥇";
+if(i===1) medaglia="🥈";
+if(i===2) medaglia="🥉";
+
+classifica.innerHTML+=`
+
+<div class="classifica">
+
+${medaglia}
+<strong>${i+1}° ${c.nome}</strong>
+
+<br>
+
+⭐ ${c.media.toFixed(1)} / 10
+— ${c.voti} voti
+
+</div>
+
+`;
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
