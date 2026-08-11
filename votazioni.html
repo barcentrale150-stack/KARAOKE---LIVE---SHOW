@@ -1,1 +1,509 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Votazione - Karaoke Live Show</title>
 
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.18),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  width:min(1000px,94%);
+  margin:auto;
+  padding:30px 15px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+h1{
+  margin:0;
+  color:#ffd21f;
+  font-size:38px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.current{
+  text-align:center;
+  padding:20px;
+}
+
+.current-name{
+  font-size:34px;
+  font-weight:900;
+  color:#52ff8a;
+}
+
+.current-song{
+  margin-top:8px;
+  color:#ffd21f;
+  font-size:22px;
+}
+
+.state{
+  margin-top:16px;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.controls{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.start{
+  background:#52ff8a;
+  color:#063b1c;
+}
+
+.stop{
+  background:#ffbd28;
+  color:#4c3100;
+}
+
+.delete{
+  background:#ff315d;
+  color:white;
+}
+
+.reset{
+  background:#ff9f1c;
+  color:#2b1a00;
+}
+
+.newgame{
+  background:#d90429;
+  color:white;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 4px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.info{
+  flex:1;
+}
+
+.name{
+  font-size:20px;
+  font-weight:900;
+}
+
+.song{
+  color:#ffd21f;
+  margin-top:5px;
+}
+
+.empty{
+  text-align:center;
+  color:#cfd1e2;
+  padding:25px;
+}
+
+@media(max-width:700px){
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .row{
+    flex-wrap:wrap;
+  }
+
+  button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div>
+    <h1>⭐ VOTAZIONE</h1>
+    <div>Gestione concorrente in gara e voti</div>
+  </div>
+
+  <a class="back" href="admin.html">
+    ← TORNA ALL'ADMIN
+  </a>
+
+</div>
+
+<div class="card">
+
+  <h2 style="text-align:center">🎙️ CONCORRENTE IN GARA</h2>
+
+  <div class="current">
+
+    <div id="currentName" class="current-name">
+      Nessun concorrente attivo
+    </div>
+
+    <div id="currentSong" class="current-song"></div>
+
+    <div id="voteState" class="state">
+      Votazione non attiva
+    </div>
+
+    <div class="controls">
+
+      <button id="toggleVoteButton" class="stop" style="display:none">
+        CHIUDI VOTAZIONE
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="card">
+
+  <h2>Concorrenti disponibili</h2>
+
+  <div id="contestants">
+    Caricamento...
+  </div>
+
+</div>
+
+<div class="card">
+
+  <h2>Gestione gara</h2>
+
+  <div class="controls">
+
+    <button id="resetVotesButton" class="reset">
+      AZZERA SOLO I VOTI
+    </button>
+
+    <button id="newGameButton" class="newgame">
+      🗑️ NUOVA GARA - CANCELLA TUTTO
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  update,
+  remove,
+  get
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+  apiKey:"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+  authDomain:"karaoke-live-show-12421.firebaseapp.com",
+  databaseURL:"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+  projectId:"karaoke-live-show-12421",
+  storageBucket:"karaoke-live-show-12421.firebasestorage.app",
+  messagingSenderId:"522751685586",
+  appId:"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const currentName = document.getElementById("currentName");
+const currentSong = document.getElementById("currentSong");
+const voteState = document.getElementById("voteState");
+const toggleVoteButton = document.getElementById("toggleVoteButton");
+const contestantsBox = document.getElementById("contestants");
+const resetVotesButton = document.getElementById("resetVotesButton");
+const newGameButton = document.getElementById("newGameButton");
+
+let currentGame = null;
+
+
+async function startContestant(id,nome,canzone){
+
+  await set(ref(db,"gara"),{
+    currentId:id,
+    currentName:nome,
+    currentSong:canzone || "",
+    votingOpen:true
+  });
+
+}
+
+
+async function toggleVoting(){
+
+  if(!currentGame || !currentGame.currentId) return;
+
+  await update(ref(db,"gara"),{
+    votingOpen:!currentGame.votingOpen
+  });
+
+}
+
+
+toggleVoteButton.addEventListener("click",toggleVoting);
+
+
+resetVotesButton.addEventListener("click",async()=>{
+
+  const conferma =
+  confirm("Vuoi azzerare tutti i voti lasciando i concorrenti?");
+
+  if(!conferma) return;
+
+  const snap = await get(ref(db,"concorrenti"));
+  const data = snap.val() || {};
+
+  const updates = {};
+
+  Object.keys(data).forEach(id=>{
+    updates["concorrenti/"+id+"/voti"] = 0;
+    updates["concorrenti/"+id+"/totale"] = 0;
+  });
+
+  await update(ref(db),updates);
+
+  alert("Voti azzerati.");
+
+});
+
+
+newGameButton.addEventListener("click",async()=>{
+
+  const conferma =
+  confirm("Vuoi iniziare una nuova gara? Verranno cancellati concorrenti, voti e concorrente attivo.");
+
+  if(!conferma) return;
+
+  const conferma2 =
+  confirm("Sei sicuro? Questa operazione cancella tutta la gara attuale.");
+
+  if(!conferma2) return;
+
+  await remove(ref(db,"concorrenti"));
+  await remove(ref(db,"gara"));
+
+  alert("Nuova gara pronta.");
+
+});
+
+
+onValue(ref(db,"gara"),snapshot=>{
+
+  const gara = snapshot.val() || {};
+
+  currentGame = gara;
+
+  if(!gara.currentId){
+
+    currentName.textContent =
+    "Nessun concorrente attivo";
+
+    currentSong.textContent = "";
+
+    voteState.textContent =
+    "Votazione non attiva";
+
+    voteState.style.color = "#ff7a9a";
+
+    toggleVoteButton.style.display = "none";
+
+    return;
+  }
+
+  currentName.textContent =
+  gara.currentName || "";
+
+  currentSong.textContent =
+  gara.currentSong
+  ? "🎵 " + gara.currentSong
+  : "";
+
+  toggleVoteButton.style.display = "inline-block";
+
+  if(gara.votingOpen){
+
+    voteState.textContent =
+    "🟢 VOTAZIONE APERTA";
+
+    voteState.style.color =
+    "#52ff8a";
+
+    toggleVoteButton.textContent =
+    "CHIUDI VOTAZIONE";
+
+    toggleVoteButton.className =
+    "stop";
+
+  }else{
+
+    voteState.textContent =
+    "🔴 VOTAZIONE CHIUSA";
+
+    voteState.style.color =
+    "#ff7a9a";
+
+    toggleVoteButton.textContent =
+    "RIAPRI VOTAZIONE";
+
+    toggleVoteButton.className =
+    "start";
+
+  }
+
+});
+
+
+onValue(ref(db,"concorrenti"),snapshot=>{
+
+  const data =
+  snapshot.val() || {};
+
+  contestantsBox.innerHTML = "";
+
+  const concorrenti =
+  Object.entries(data);
+
+  if(concorrenti.length === 0){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className = "empty";
+
+    empty.textContent =
+    "Nessun concorrente.";
+
+    contestantsBox.appendChild(empty);
+
+    return;
+  }
+
+  concorrenti.forEach(([id,c])=>{
+
+    const row =
+    document.createElement("div");
+
+    row.className = "row";
+
+    const info =
+    document.createElement("div");
+
+    info.className = "info";
+
+    const name =
+    document.createElement("div");
+
+    name.className = "name";
+
+    name.textContent =
+    "🎤 " + (c.nome || "Senza nome");
+
+    const song =
+    document.createElement("div");
+
+    song.className = "song";
+
+    song.textContent =
+    "🎵 " + (c.canzone || "");
+
+    info.appendChild(name);
+    info.appendChild(song);
+
+    const startButton =
+    document.createElement("button");
+
+    startButton.className = "start";
+
+    startButton.textContent =
+    "IN GARA";
+
+    startButton.addEventListener("click",()=>{
+
+      startContestant(
+        id,
+        c.nome || "",
+        c.canzone || ""
+      );
+
+    });
+
+    row.appendChild(info);
+    row.appendChild(startButton);
+
+    contestantsBox.appendChild(row);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
