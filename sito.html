@@ -1,1 +1,784 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Karaoke Live Show</title>
+<meta name="description" content="Karaoke Live Show: canta, fai votare il pubblico e segui la classifica live.">
 
+<style>
+:root{
+  --bg:#070711;
+  --panel:#11142a;
+  --panel2:#171a38;
+  --pink:#ff2aa6;
+  --cyan:#19d8ff;
+  --yellow:#ffd51f;
+  --white:#ffffff;
+  --muted:#c9c9d5;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--white);
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,42,166,.18),transparent 28%),
+    radial-gradient(circle at 85% 14%,rgba(25,216,255,.18),transparent 30%),
+    linear-gradient(180deg,#05050b,#0c0d1b 45%,#05050b);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.wrap{
+  width:min(1180px,92%);
+  margin:auto;
+}
+
+nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(5,5,11,.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.nav-inner{
+  min-height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.brand{
+  font-weight:900;
+  font-size:24px;
+  letter-spacing:.5px;
+}
+
+.brand span{
+  color:var(--yellow);
+}
+
+.menu{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  font-size:14px;
+  font-weight:700;
+}
+
+.menu a:hover{
+  color:var(--yellow);
+}
+
+.hero{
+  min-height:76vh;
+  display:grid;
+  align-items:center;
+  padding:76px 0 54px;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:34px;
+  align-items:center;
+}
+
+.kicker{
+  color:var(--yellow);
+  font-weight:800;
+  font-size:18px;
+  margin-bottom:14px;
+}
+
+h1{
+  font-size:clamp(54px,8vw,108px);
+  line-height:.86;
+  margin:0 0 18px;
+  font-weight:1000;
+  letter-spacing:-3px;
+}
+
+h1 .live{
+  color:var(--yellow);
+  text-shadow:0 0 20px rgba(255,213,31,.35);
+}
+
+.hero p{
+  font-size:20px;
+  line-height:1.55;
+  color:var(--muted);
+  max-width:760px;
+}
+
+.actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:54px;
+  padding:0 24px;
+  border-radius:14px;
+  font-weight:900;
+  border:1px solid transparent;
+}
+
+.btn-primary{
+  background:linear-gradient(90deg,var(--pink),#c414ff);
+}
+
+.btn-secondary{
+  background:linear-gradient(90deg,#1676ff,var(--cyan));
+  color:#00111a;
+}
+
+.btn-outline{
+  border-color:rgba(255,255,255,.22);
+  background:rgba(255,255,255,.04);
+}
+
+.live-card{
+  background:linear-gradient(180deg,rgba(29,31,67,.95),rgba(13,14,31,.95));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:26px;
+  box-shadow:0 0 50px rgba(255,42,166,.12);
+}
+
+.live-card h3{
+  font-size:28px;
+  margin:0 0 16px;
+  color:var(--yellow);
+}
+
+.rank-row{
+  display:grid;
+  grid-template-columns:52px 1fr 72px;
+  gap:12px;
+  align-items:center;
+  background:rgba(255,255,255,.06);
+  padding:14px;
+  border-radius:14px;
+  margin:10px 0;
+}
+
+.rank-row strong{
+  font-size:20px;
+}
+
+.rank-row .score{
+  font-weight:900;
+  color:var(--yellow);
+  text-align:right;
+}
+
+section{
+  padding:70px 0;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:34px;
+}
+
+.section-title h2{
+  font-size:clamp(34px,5vw,58px);
+  margin:0 0 10px;
+}
+
+.section-title p{
+  color:var(--muted);
+  margin:0;
+  font-size:18px;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.card{
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:22px;
+  padding:24px;
+}
+
+.step-num{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  background:var(--yellow);
+  color:#181100;
+  margin-bottom:16px;
+}
+
+.card h3{
+  margin:0 0 10px;
+  font-size:22px;
+}
+
+.card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.two-col{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+.feature-list{
+  display:grid;
+  gap:12px;
+  margin-top:18px;
+}
+
+.feature{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:14px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+}
+
+.feature b{
+  color:var(--yellow);
+}
+
+.events{
+  display:grid;
+  gap:14px;
+}
+
+.event{
+  display:grid;
+  grid-template-columns:110px 1fr auto;
+  gap:18px;
+  align-items:center;
+  background:rgba(255,255,255,.05);
+  padding:16px;
+  border-radius:16px;
+}
+
+.date{
+  text-align:center;
+  background:#22114c;
+  border:1px solid rgba(255,42,166,.4);
+  padding:12px;
+  border-radius:14px;
+  font-weight:900;
+}
+
+.event .where{
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.callout{
+  text-align:center;
+  padding:48px 24px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(255,42,166,.25),transparent 35%),
+    radial-gradient(circle at 80% 30%,rgba(25,216,255,.25),transparent 35%),
+    #101226;
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.callout h2{
+  font-size:clamp(34px,5vw,58px);
+  margin:0 0 14px;
+}
+
+.callout p{
+  color:var(--muted);
+  font-size:19px;
+  margin:0 auto 24px;
+  max-width:780px;
+}
+
+footer{
+  padding:38px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+  color:var(--muted);
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:24px;
+}
+
+.footer-grid h4{
+  color:white;
+  margin:0 0 12px;
+}
+
+.small{
+  font-size:13px;
+  margin-top:24px;
+  text-align:center;
+  color:#8f90a5;
+}
+
+@media(max-width:900px){
+  .hero-grid,
+  .two-col{
+    grid-template-columns:1fr;
+  }
+
+  .steps{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .menu{
+    display:none;
+  }
+}
+
+@media(max-width:580px){
+  .steps{
+    grid-template-columns:1fr;
+  }
+
+  .event{
+    grid-template-columns:90px 1fr;
+  }
+
+  .event .btn{
+    grid-column:1/-1;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{
+    letter-spacing:-1px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+
+    <div class="brand">
+      🎤 KARAOKE <span>LIVE</span> SHOW
+    </div>
+
+    <div class="menu">
+      <a href="#home">HOME</a>
+      <a href="#come-funziona">COME FUNZIONA</a>
+      <a href="#eventi">EVENTI</a>
+      <a href="#locali">PER I LOCALI</a>
+      <a href="#contatti">CONTATTI</a>
+    </div>
+
+  </div>
+</nav>
+
+<main>
+
+<section class="hero" id="home">
+
+  <div class="wrap hero-grid">
+
+    <div>
+
+      <div class="kicker">
+        TU CANTI. IL PUBBLICO VOTA. LA CLASSIFICA È LIVE.
+      </div>
+
+      <h1>
+        KARAOKE
+        <br>
+        <span class="live">LIVE</span>
+        SHOW
+      </h1>
+
+      <p>
+        Un format karaoke interattivo dove il pubblico vota dal proprio smartphone
+        e la classifica si aggiorna in tempo reale.
+        Più spettacolo, più partecipazione, più divertimento.
+      </p>
+
+      <div class="actions">
+
+        <a
+        class="btn btn-primary"
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
+        📱 VOTA ORA
+        </a>
+
+        <a
+        class="btn btn-secondary"
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
+        🏆 CLASSIFICA LIVE
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="live-card">
+
+      <h3>🏆 Classifica Live</h3>
+
+      <div class="rank-row">
+        <div>🥇</div>
+        <strong>Concorrente 1</strong>
+        <div class="score">9.4</div>
+      </div>
+
+      <div class="rank-row">
+        <div>🥈</div>
+        <strong>Concorrente 2</strong>
+        <div class="score">8.7</div>
+      </div>
+
+      <div class="rank-row">
+        <div>🥉</div>
+        <strong>Concorrente 3</strong>
+        <div class="score">8.1</div>
+      </div>
+
+      <div class="rank-row">
+        <div>4°</div>
+        <strong>Concorrente 4</strong>
+        <div class="score">7.6</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section id="come-funziona">
+
+  <div class="wrap">
+
+    <div class="section-title">
+
+      <h2>Come funziona</h2>
+
+      <p>
+        Una serata semplice da seguire e coinvolgente per tutti.
+      </p>
+
+    </div>
+
+    <div class="steps">
+
+      <div class="card">
+
+        <div class="step-num">1</div>
+
+        <h3>Il cantante sale sul palco</h3>
+
+        <p>
+          Nome e titolo della canzone vengono mostrati al pubblico.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="step-num">2</div>
+
+        <h3>Il pubblico vota</h3>
+
+        <p>
+          Con il QR code apre la pagina e assegna un voto da 1 a 10.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="step-num">3</div>
+
+        <h3>Classifica in tempo reale</h3>
+
+        <p>
+          I risultati vengono aggiornati automaticamente durante la gara.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="step-num">4</div>
+
+        <h3>Premiazione finale</h3>
+
+        <p>
+          I migliori salgono sul podio e la serata si chiude con il vincitore.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section id="locali">
+
+  <div class="wrap two-col">
+
+    <div class="card">
+
+      <h3>🎤 Porta Karaoke Live Show nel tuo locale</h3>
+
+      <div class="feature-list">
+
+        <div class="feature">
+
+          <div>✓</div>
+
+          <div>
+            <b>Format interattivo</b>
+            <br>
+            Il pubblico partecipa davvero alla serata.
+          </div>
+
+        </div>
+
+        <div class="feature">
+
+          <div>✓</div>
+
+          <div>
+            <b>Voto da smartphone</b>
+            <br>
+            Nessuna app obbligatoria:
+            basta aprire il link o scansionare il QR.
+          </div>
+
+        </div>
+
+        <div class="feature">
+
+          <div>✓</div>
+
+          <div>
+            <b>Classifica sul maxi-schermo</b>
+            <br>
+            Il pubblico segue i risultati in tempo reale.
+          </div>
+
+        </div>
+
+        <div class="feature">
+
+          <div>✓</div>
+
+          <div>
+            <b>Adatto a locali ed eventi</b>
+            <br>
+            Bar, pub, ristoranti, piazze, feste e serate private.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card" id="eventi">
+
+      <h3>📅 Prossimi eventi</h3>
+
+      <div class="events">
+
+        <div class="event">
+
+          <div class="date">
+            DATA
+            <br>
+            DA INSERIRE
+          </div>
+
+          <div>
+            <strong>KARAOKE LIVE SHOW</strong>
+            <div class="where">
+              Locale e città da inserire
+            </div>
+          </div>
+
+          <a
+          class="btn btn-outline"
+          href="#contatti">
+          INFO
+          </a>
+
+        </div>
+
+        <div class="event">
+
+          <div class="date">
+            DATA
+            <br>
+            DA INSERIRE
+          </div>
+
+          <div>
+            <strong>KARAOKE NIGHT</strong>
+            <div class="where">
+              Locale e città da inserire
+            </div>
+          </div>
+
+          <a
+          class="btn btn-outline"
+          href="#contatti">
+          INFO
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section>
+
+  <div class="wrap">
+
+    <div class="callout">
+
+      <h2>
+        Sei pronto a salire sul palco?
+      </h2>
+
+      <p>
+        Canta, fai votare il pubblico e prova a conquistare
+        il primo posto della classifica.
+      </p>
+
+      <div
+      class="actions"
+      style="justify-content:center">
+
+        <a
+        class="btn btn-primary"
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
+        VOTA ORA
+        </a>
+
+        <a
+        class="btn btn-secondary"
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
+        VEDI CLASSIFICA
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer id="contatti">
+
+  <div class="wrap footer-grid">
+
+    <div>
+
+      <div class="brand">
+        🎤 KARAOKE <span>LIVE</span> SHOW
+      </div>
+
+      <p>
+        La tua voce, la nostra emozione.
+      </p>
+
+    </div>
+
+    <div>
+
+      <h4>Contatti</h4>
+
+      <p>
+        Telefono: da inserire
+        <br>
+        Email: da inserire
+        <br>
+        WhatsApp: da inserire
+      </p>
+
+    </div>
+
+    <div>
+
+      <h4>Link rapidi</h4>
+
+      <p>
+
+        <a
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
+        Vota
+        </a>
+
+        <br>
+
+        <a
+        href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
+        Classifica Live
+        </a>
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="wrap small">
+    © KARAOKE LIVE SHOW — Tutti i diritti riservati
+  </div>
+
+</footer>
+
+</body>
+</html>
