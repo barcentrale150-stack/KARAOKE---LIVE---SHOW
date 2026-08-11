@@ -1,1 +1,441 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Impostazioni - Karaoke Live Show</title>
 
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.18),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  width:min(900px,94%);
+  margin:auto;
+  padding:30px 15px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+h1{
+  margin:0;
+  color:#ffd21f;
+  font-size:38px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+label{
+  color:#ffd21f;
+  font-weight:bold;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  font-size:18px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:15px 20px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.save{
+  width:100%;
+  margin-top:18px;
+  background:#52ff8a;
+  color:#063b1c;
+}
+
+.preview{
+  margin-top:20px;
+  padding:18px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+}
+
+.preview-title{
+  color:#ffd21f;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.preview-line{
+  margin:8px 0;
+  color:#e1e2ee;
+  font-size:18px;
+}
+
+.status{
+  margin-top:14px;
+  text-align:center;
+  color:#52ff8a;
+  font-weight:bold;
+  min-height:22px;
+}
+
+@media(max-width:700px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div>
+    <h1>⚙️ IMPOSTAZIONI</h1>
+    <div>Dati generali di Karaoke Live Show</div>
+  </div>
+
+  <a class="back" href="admin.html">
+    ← TORNA ALL'ADMIN
+  </a>
+
+</div>
+
+<div class="card">
+
+  <h2>Configurazione generale</h2>
+
+  <div class="form-grid">
+
+    <div class="field">
+      <label for="showName">Nome dello show</label>
+      <input
+      id="showName"
+      value="KARAOKE LIVE SHOW"
+      placeholder="Nome dello show">
+    </div>
+
+    <div class="field">
+      <label for="phone">Telefono</label>
+      <input
+      id="phone"
+      value="3756466066"
+      placeholder="Telefono">
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+      id="email"
+      value="Info@karaokeliveshow.it"
+      placeholder="Email">
+    </div>
+
+    <div class="field">
+      <label for="whatsapp">WhatsApp</label>
+      <input
+      id="whatsapp"
+      value="393756466066"
+      placeholder="WhatsApp con prefisso internazionale">
+    </div>
+
+  </div>
+
+  <button class="save" id="saveButton">
+    SALVA IMPOSTAZIONI
+  </button>
+
+  <div class="status" id="status"></div>
+
+</div>
+
+<div class="card">
+
+  <div class="preview-title">
+    Anteprima dati
+  </div>
+
+  <div class="preview">
+
+    <div class="preview-line">
+      🎤 <span id="previewShow">KARAOKE LIVE SHOW</span>
+    </div>
+
+    <div class="preview-line">
+      📞 <span id="previewPhone">3756466066</span>
+    </div>
+
+    <div class="preview-line">
+      ✉️ <span id="previewEmail">Info@karaokeliveshow.it</span>
+    </div>
+
+    <div class="preview-line">
+      💬 <span id="previewWhatsapp">393756466066</span>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+
+  authDomain:
+  "karaoke-live-show-12421.firebaseapp.com",
+
+  databaseURL:
+  "https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+
+  projectId:
+  "karaoke-live-show-12421",
+
+  storageBucket:
+  "karaoke-live-show-12421.firebasestorage.app",
+
+  messagingSenderId:
+  "522751685586",
+
+  appId:
+  "1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+
+const showName =
+document.getElementById("showName");
+
+const phone =
+document.getElementById("phone");
+
+const email =
+document.getElementById("email");
+
+const whatsapp =
+document.getElementById("whatsapp");
+
+const saveButton =
+document.getElementById("saveButton");
+
+const status =
+document.getElementById("status");
+
+const previewShow =
+document.getElementById("previewShow");
+
+const previewPhone =
+document.getElementById("previewPhone");
+
+const previewEmail =
+document.getElementById("previewEmail");
+
+const previewWhatsapp =
+document.getElementById("previewWhatsapp");
+
+
+function updatePreview(){
+
+  previewShow.textContent =
+  showName.value || "";
+
+  previewPhone.textContent =
+  phone.value || "";
+
+  previewEmail.textContent =
+  email.value || "";
+
+  previewWhatsapp.textContent =
+  whatsapp.value || "";
+
+}
+
+
+showName.addEventListener("input",updatePreview);
+
+phone.addEventListener("input",updatePreview);
+
+email.addEventListener("input",updatePreview);
+
+whatsapp.addEventListener("input",updatePreview);
+
+
+saveButton.addEventListener(
+"click",
+async function(){
+
+  const nome =
+  showName.value.trim();
+
+  const telefono =
+  phone.value.trim();
+
+  const mail =
+  email.value.trim();
+
+  const wa =
+  whatsapp.value.trim();
+
+
+  if(!nome){
+
+    alert("Inserisci il nome dello show");
+
+    return;
+  }
+
+
+  try{
+
+    await set(
+      ref(db,"impostazioni"),
+      {
+        showName:nome,
+        phone:telefono,
+        email:mail,
+        whatsapp:wa
+      }
+    );
+
+
+    status.textContent =
+    "Impostazioni salvate ✓";
+
+
+    setTimeout(()=>{
+
+      status.textContent="";
+
+    },2500);
+
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Errore durante il salvataggio"
+    );
+
+  }
+
+});
+
+
+onValue(
+ref(db,"impostazioni"),
+snapshot=>{
+
+  const data =
+  snapshot.val();
+
+  if(!data){
+
+    updatePreview();
+
+    return;
+  }
+
+
+  showName.value =
+  data.showName || "KARAOKE LIVE SHOW";
+
+  phone.value =
+  data.phone || "";
+
+  email.value =
+  data.email || "";
+
+  whatsapp.value =
+  data.whatsapp || "";
+
+
+  updatePreview();
+
+});
+
+</script>
+
+</body>
+</html>
