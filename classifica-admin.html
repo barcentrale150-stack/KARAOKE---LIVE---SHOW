@@ -1,1 +1,462 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classifica Admin - Karaoke Live Show</title>
 
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.18),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  width:min(1100px,94%);
+  margin:auto;
+  padding:30px 15px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+h1{
+  margin:0;
+  color:#ffd21f;
+  font-size:38px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:22px;
+}
+
+.summary-box{
+  background:rgba(255,255,255,.06);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+
+.summary-label{
+  color:#cfd1e2;
+  font-size:14px;
+}
+
+.summary-value{
+  margin-top:6px;
+  font-size:30px;
+  font-weight:900;
+  color:#ffd21f;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:80px 1fr 150px 120px;
+  gap:15px;
+  align-items:center;
+  padding:16px 10px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.position{
+  font-size:28px;
+  font-weight:900;
+  text-align:center;
+}
+
+.name{
+  font-size:21px;
+  font-weight:900;
+}
+
+.song{
+  margin-top:5px;
+  color:#ffd21f;
+  font-size:15px;
+}
+
+.media{
+  text-align:center;
+  color:#ffd21f;
+  font-size:24px;
+  font-weight:900;
+}
+
+.votes{
+  text-align:center;
+  color:#d8d9e8;
+}
+
+.first{
+  background:rgba(255,210,31,.08);
+  border-radius:14px;
+}
+
+.second{
+  background:rgba(210,210,220,.06);
+  border-radius:14px;
+}
+
+.third{
+  background:rgba(205,127,50,.07);
+  border-radius:14px;
+}
+
+.empty{
+  text-align:center;
+  padding:40px 20px;
+  color:#cfd1e2;
+  font-size:21px;
+}
+
+@media(max-width:750px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .summary{
+    grid-template-columns:1fr;
+  }
+
+  .row{
+    grid-template-columns:55px 1fr 90px;
+  }
+
+  .votes{
+    grid-column:2 / 4;
+    text-align:left;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div>
+    <h1>🏆 CLASSIFICA ADMIN</h1>
+    <div>Classifica completa della gara</div>
+  </div>
+
+  <a class="back" href="admin.html">
+    ← TORNA ALL'ADMIN
+  </a>
+
+</div>
+
+<div class="card">
+
+  <div class="summary">
+
+    <div class="summary-box">
+      <div class="summary-label">CONCORRENTI</div>
+      <div class="summary-value" id="totalContestants">0</div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-label">VOTI TOTALI</div>
+      <div class="summary-value" id="totalVotes">0</div>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-label">MEDIA GENERALE</div>
+      <div class="summary-value" id="overallAverage">0.0</div>
+    </div>
+
+  </div>
+
+  <div id="ranking">
+    Caricamento...
+  </div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+
+  authDomain:
+  "karaoke-live-show-12421.firebaseapp.com",
+
+  databaseURL:
+  "https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+
+  projectId:
+  "karaoke-live-show-12421",
+
+  storageBucket:
+  "karaoke-live-show-12421.firebasestorage.app",
+
+  messagingSenderId:
+  "522751685586",
+
+  appId:
+  "1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+
+const rankingBox =
+document.getElementById("ranking");
+
+const totalContestants =
+document.getElementById("totalContestants");
+
+const totalVotes =
+document.getElementById("totalVotes");
+
+const overallAverage =
+document.getElementById("overallAverage");
+
+
+onValue(
+ref(db,"concorrenti"),
+snapshot=>{
+
+  const data =
+  snapshot.val() || {};
+
+  const concorrenti =
+  Object.entries(data).map(([id,c])=>{
+
+    const voti =
+    Number(c.voti || 0);
+
+    const totale =
+    Number(c.totale || 0);
+
+    const media =
+    voti > 0
+    ? totale / voti
+    : 0;
+
+    return{
+      id:id,
+      nome:c.nome || "Senza nome",
+      canzone:c.canzone || "",
+      voti:voti,
+      totale:totale,
+      media:media
+    };
+
+  });
+
+  concorrenti.sort((a,b)=>
+    b.media - a.media ||
+    b.voti - a.voti
+  );
+
+
+  totalContestants.textContent =
+  concorrenti.length;
+
+
+  const votiTotali =
+  concorrenti.reduce(
+    (somma,c)=>somma+c.voti,
+    0
+  );
+
+  totalVotes.textContent =
+  votiTotali;
+
+
+  const totalePunti =
+  concorrenti.reduce(
+    (somma,c)=>somma+c.totale,
+    0
+  );
+
+  const mediaGenerale =
+  votiTotali > 0
+  ? totalePunti / votiTotali
+  : 0;
+
+  overallAverage.textContent =
+  mediaGenerale.toFixed(1);
+
+
+  rankingBox.innerHTML="";
+
+
+  if(concorrenti.length === 0){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className="empty";
+
+    empty.textContent =
+    "Nessun concorrente in classifica.";
+
+    rankingBox.appendChild(empty);
+
+    return;
+
+  }
+
+
+  concorrenti.forEach((c,index)=>{
+
+    const row =
+    document.createElement("div");
+
+    row.className="row";
+
+    if(index===0){
+      row.classList.add("first");
+    }
+
+    if(index===1){
+      row.classList.add("second");
+    }
+
+    if(index===2){
+      row.classList.add("third");
+    }
+
+
+    const position =
+    document.createElement("div");
+
+    position.className="position";
+
+    if(index===0){
+      position.textContent="🥇";
+    }else if(index===1){
+      position.textContent="🥈";
+    }else if(index===2){
+      position.textContent="🥉";
+    }else{
+      position.textContent=
+      (index+1)+"°";
+    }
+
+
+    const info =
+    document.createElement("div");
+
+    const name =
+    document.createElement("div");
+
+    name.className="name";
+
+    name.textContent=
+    c.nome;
+
+
+    const song =
+    document.createElement("div");
+
+    song.className="song";
+
+    song.textContent=
+    c.canzone
+    ? "🎵 "+c.canzone
+    : "";
+
+
+    info.appendChild(name);
+    info.appendChild(song);
+
+
+    const media =
+    document.createElement("div");
+
+    media.className="media";
+
+    media.textContent=
+    "⭐ "+c.media.toFixed(1);
+
+
+    const votes =
+    document.createElement("div");
+
+    votes.className="votes";
+
+    votes.textContent=
+    c.voti +
+    (c.voti===1
+      ? " voto"
+      : " voti");
+
+
+    row.appendChild(position);
+    row.appendChild(info);
+    row.appendChild(media);
+    row.appendChild(votes);
+
+    rankingBox.appendChild(row);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
