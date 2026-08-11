@@ -1,1 +1,617 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
+<title>Concorrenti - Karaoke Live Show</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.18),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+  color:white;
+  min-height:100vh;
+}
+
+.app{
+  width:min(950px,94%);
+  margin:auto;
+  padding:30px 15px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+h1{
+  color:#ffd21f;
+  margin:0;
+  font-size:38px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  font-size:18px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:14px 18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.add{
+  background:#13d8e8;
+  color:#073348;
+}
+
+.edit{
+  background:#ffd21f;
+  color:#2b2200;
+}
+
+.delete{
+  background:#ff315d;
+  color:white;
+}
+
+.save{
+  background:#52ff8a;
+  color:#063b1c;
+}
+
+.cancel{
+  background:#777b91;
+  color:white;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:16px 4px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.info{
+  flex:1;
+}
+
+.name{
+  font-size:20px;
+  font-weight:900;
+}
+
+.song{
+  margin-top:5px;
+  color:#ffd21f;
+}
+
+.edit-box{
+  display:grid;
+  grid-template-columns:1fr 1fr auto auto;
+  gap:8px;
+  width:100%;
+}
+
+.empty{
+  text-align:center;
+  color:#cfd1e2;
+  padding:25px;
+}
+
+@media(max-width:700px){
+
+  .topbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .row{
+    flex-wrap:wrap;
+  }
+
+  .edit-box{
+    grid-template-columns:1fr;
+  }
+
+  button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div>
+    <h1>👤 CONCORRENTI</h1>
+    <div>Gestione concorrenti e canzoni</div>
+  </div>
+
+  <a class="back" href="admin.html">
+    ← TORNA ALL'ADMIN
+  </a>
+
+</div>
+
+<div class="card">
+
+  <h2>Aggiungi concorrente</h2>
+
+  <div class="form-grid">
+
+    <input
+    id="nameInput"
+    placeholder="Nome concorrente">
+
+    <input
+    id="songInput"
+    placeholder="Titolo canzone">
+
+    <button
+    class="add"
+    id="addButton">
+      AGGIUNGI
+    </button>
+
+  </div>
+
+</div>
+
+<div class="card">
+
+  <h2>Elenco concorrenti</h2>
+
+  <div id="contestants">
+    Caricamento...
+  </div>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  push,
+  set,
+  remove,
+  onValue,
+  update,
+  get
+}
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+
+  authDomain:
+  "karaoke-live-show-12421.firebaseapp.com",
+
+  databaseURL:
+  "https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+
+  projectId:
+  "karaoke-live-show-12421",
+
+  storageBucket:
+  "karaoke-live-show-12421.firebasestorage.app",
+
+  messagingSenderId:
+  "522751685586",
+
+  appId:
+  "1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getDatabase(app);
+
+
+const nameInput =
+document.getElementById("nameInput");
+
+const songInput =
+document.getElementById("songInput");
+
+const addButton =
+document.getElementById("addButton");
+
+const contestantsBox =
+document.getElementById("contestants");
+
+
+addButton.addEventListener(
+"click",
+async function(){
+
+  const nome =
+  nameInput.value.trim();
+
+  const canzone =
+  songInput.value.trim();
+
+  if(!nome){
+    alert("Scrivi il nome del concorrente");
+    return;
+  }
+
+  if(!canzone){
+    alert("Scrivi il titolo della canzone");
+    return;
+  }
+
+  try{
+
+    const newRef =
+    push(ref(db,"concorrenti"));
+
+    await set(newRef,{
+      nome:nome,
+      canzone:canzone,
+      voti:0,
+      totale:0
+    });
+
+    nameInput.value="";
+    songInput.value="";
+
+  }catch(error){
+
+    console.error(error);
+    alert("Errore durante l'aggiunta");
+
+  }
+
+});
+
+
+async function deleteContestant(id){
+
+  const conferma =
+  confirm("Vuoi eliminare questo concorrente?");
+
+  if(!conferma) return;
+
+  try{
+
+    const garaSnap =
+    await get(ref(db,"gara"));
+
+    const gara =
+    garaSnap.val();
+
+    await remove(
+      ref(db,"concorrenti/" + id)
+    );
+
+    if(
+      gara &&
+      gara.currentId === id
+    ){
+      await remove(ref(db,"gara"));
+    }
+
+  }catch(error){
+
+    console.error(error);
+    alert("Errore durante l'eliminazione");
+
+  }
+
+}
+
+
+async function saveEdit(id,nome,canzone){
+
+  nome =
+  nome.trim();
+
+  canzone =
+  canzone.trim();
+
+  if(!nome || !canzone){
+
+    alert("Nome e canzone sono obbligatori");
+
+    return;
+  }
+
+  try{
+
+    await update(
+      ref(db,"concorrenti/" + id),
+      {
+        nome:nome,
+        canzone:canzone
+      }
+    );
+
+    const garaSnap =
+    await get(ref(db,"gara"));
+
+    const gara =
+    garaSnap.val();
+
+    if(
+      gara &&
+      gara.currentId === id
+    ){
+
+      await update(
+        ref(db,"gara"),
+        {
+          currentName:nome,
+          currentSong:canzone
+        }
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Errore durante la modifica"
+    );
+
+  }
+
+}
+
+
+onValue(
+ref(db,"concorrenti"),
+snapshot=>{
+
+  const data =
+  snapshot.val() || {};
+
+  contestantsBox.innerHTML="";
+
+  const concorrenti =
+  Object.entries(data);
+
+  if(
+    concorrenti.length === 0
+  ){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className="empty";
+
+    empty.textContent=
+    "Nessun concorrente.";
+
+    contestantsBox.appendChild(empty);
+
+    return;
+
+  }
+
+
+  concorrenti.forEach(
+  ([id,c])=>{
+
+    const row =
+    document.createElement("div");
+
+    row.className="row";
+
+
+    const info =
+    document.createElement("div");
+
+    info.className="info";
+
+
+    const name =
+    document.createElement("div");
+
+    name.className="name";
+
+    name.textContent=
+    "🎤 " +
+    (c.nome || "Senza nome");
+
+
+    const song =
+    document.createElement("div");
+
+    song.className="song";
+
+    song.textContent=
+    "🎵 " +
+    (c.canzone || "");
+
+
+    info.appendChild(name);
+    info.appendChild(song);
+
+
+    const editButton =
+    document.createElement("button");
+
+    editButton.className="edit";
+
+    editButton.textContent=
+    "MODIFICA";
+
+
+    const deleteButton =
+    document.createElement("button");
+
+    deleteButton.className="delete";
+
+    deleteButton.textContent=
+    "ELIMINA";
+
+
+    deleteButton.addEventListener(
+      "click",
+      ()=>deleteContestant(id)
+    );
+
+
+    editButton.addEventListener(
+      "click",
+      ()=>{
+
+        row.innerHTML="";
+
+
+        const editBox =
+        document.createElement("div");
+
+        editBox.className=
+        "edit-box";
+
+
+        const nameEdit =
+        document.createElement("input");
+
+        nameEdit.value=
+        c.nome || "";
+
+
+        const songEdit =
+        document.createElement("input");
+
+        songEdit.value=
+        c.canzone || "";
+
+
+        const saveButton =
+        document.createElement("button");
+
+        saveButton.className="save";
+
+        saveButton.textContent=
+        "SALVA";
+
+
+        const cancelButton =
+        document.createElement("button");
+
+        cancelButton.className="cancel";
+
+        cancelButton.textContent=
+        "ANNULLA";
+
+
+        saveButton.addEventListener(
+          "click",
+          async ()=>{
+
+            await saveEdit(
+              id,
+              nameEdit.value,
+              songEdit.value
+            );
+
+          }
+        );
+
+
+        cancelButton.addEventListener(
+          "click",
+          ()=>{
+
+            location.reload();
+
+          }
+        );
+
+
+        editBox.appendChild(nameEdit);
+        editBox.appendChild(songEdit);
+        editBox.appendChild(saveButton);
+        editBox.appendChild(cancelButton);
+
+        row.appendChild(editBox);
+
+      }
+    );
+
+
+    row.appendChild(info);
+    row.appendChild(editButton);
+    row.appendChild(deleteButton);
+
+    contestantsBox.appendChild(row);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>
