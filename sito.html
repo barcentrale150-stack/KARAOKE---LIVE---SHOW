@@ -1,48 +1,23 @@
-<!doctype html>
+ <!doctype html>
 <html lang="it">
-
 <head>
-
 <meta charset="utf-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Karaoke Live Show</title>
 
 <style>
+*{box-sizing:border-box}
 
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   color:white;
-
   background:
-  radial-gradient(
-    circle at 15% 10%,
-    rgba(255,0,180,.25),
-    transparent 30%
-  ),
-  radial-gradient(
-    circle at 85% 15%,
-    rgba(0,180,255,.22),
-    transparent 32%
-  ),
-  linear-gradient(
-    180deg,
-    #050510,
-    #0d1028 50%,
-    #050510
-  );
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.25),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.22),transparent 32%),
+    linear-gradient(180deg,#050510,#0d1028 50%,#050510);
 }
 
 a{
@@ -62,25 +37,20 @@ nav{
   position:sticky;
   top:0;
   z-index:20;
-
   background:rgba(5,5,16,.94);
-
-  border-bottom:
-  1px solid rgba(255,255,255,.12);
+  border-bottom:1px solid rgba(255,255,255,.12);
 }
 
 .nav-inner{
-  min-height:96px;
-
+  min-height:82px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-
-  gap:26px;
+  gap:22px;
 }
 
 .logo{
-  font-size:34px;
+  font-size:28px;
   font-weight:900;
 }
 
@@ -90,9 +60,8 @@ nav{
 
 .menu{
   display:flex;
-  gap:28px;
-
-  font-size:18px;
+  gap:22px;
+  font-size:15px;
   font-weight:bold;
 }
 
@@ -104,58 +73,40 @@ nav{
 /* HERO */
 
 .hero{
-  padding:110px 0 90px;
+  padding:85px 0 75px;
 }
 
 .hero-grid{
   display:grid;
-
-  grid-template-columns:
-  1.1fr .9fr;
-
-  gap:50px;
-
+  grid-template-columns:1.1fr .9fr;
+  gap:45px;
   align-items:start;
 }
 
 .kicker{
   color:#ffd21f;
-
   font-weight:bold;
-
-  font-size:24px;
-
-  margin-bottom:20px;
+  font-size:20px;
+  margin-bottom:18px;
 }
 
 h1{
-  font-size:
-  clamp(80px,10vw,150px);
-
-  line-height:.88;
-
-  margin:
-  0 0 28px;
-
-  letter-spacing:-3px;
+  font-size:clamp(62px,8vw,115px);
+  line-height:.9;
+  margin:0 0 24px;
+  letter-spacing:-2px;
 }
 
 .live{
   color:#ffd21f;
-
-  text-shadow:
-  0 0 20px
-  rgba(255,210,31,.4);
+  text-shadow:0 0 18px rgba(255,210,31,.4);
 }
 
 .hero p{
   color:#d7d7e2;
-
-  font-size:28px;
-
-  line-height:1.55;
-
-  max-width:900px;
+  font-size:22px;
+  line-height:1.5;
+  max-width:850px;
 }
 
 
@@ -163,110 +114,66 @@ h1{
 
 .buttons{
   display:flex;
-
-  gap:20px;
-
+  gap:18px;
   flex-wrap:wrap;
-
-  margin-top:36px;
+  margin-top:30px;
 }
 
 .btn{
   display:inline-flex;
-
   align-items:center;
   justify-content:center;
-
-  min-height:72px;
-
-  padding:
-  0 34px;
-
-  border-radius:18px;
-
+  min-height:62px;
+  padding:0 28px;
+  border-radius:16px;
   font-weight:900;
-
-  font-size:22px;
+  font-size:19px;
 }
 
 .btn-pink{
-  background:
-  linear-gradient(
-    90deg,
-    #ff259d,
-    #be20ff
-  );
+  background:linear-gradient(90deg,#ff259d,#be20ff);
 }
 
 .btn-blue{
-  background:
-  linear-gradient(
-    90deg,
-    #1a77ff,
-    #20d6ff
-  );
-
+  background:linear-gradient(90deg,#1a77ff,#20d6ff);
   color:#001a25;
 }
 
 .btn-dark{
-  background:
-  rgba(255,255,255,.08);
-
-  border:
-  1px solid
-  rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.18);
 }
 
 
-/* CLASSIFICA LIVE */
+/* TOP 10 LIVE */
 
 .hero-card{
-  background:
-  rgba(18,21,52,.96);
-
-  border:
-  1px solid
-  rgba(255,255,255,.12);
-
-  border-radius:32px;
-
-  padding:30px;
+  background:rgba(18,21,52,.96);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:28px;
 }
 
 .hero-card h3{
-  margin:
-  0 0 20px;
-
+  margin:0 0 18px;
   color:#ffd21f;
-
-  font-size:36px;
-
+  font-size:32px;
   text-align:center;
 }
 
 .rank{
   display:grid;
-
-  grid-template-columns:
-  65px 1fr 100px;
-
+  grid-template-columns:60px 1fr 90px;
   align-items:center;
-
-  gap:15px;
-
-  padding:17px;
-
-  margin:10px 0;
-
-  border-radius:17px;
-
-  background:
-  rgba(255,255,255,.07);
+  gap:14px;
+  padding:15px;
+  margin:9px 0;
+  border-radius:16px;
+  background:rgba(255,255,255,.07);
 }
 
 .rank-position{
-  font-size:28px;
+  font-size:25px;
   font-weight:900;
   text-align:center;
 }
@@ -276,14 +183,14 @@ h1{
 }
 
 .rank-name{
-  font-size:23px;
+  font-size:21px;
   font-weight:900;
 }
 
 .rank-song{
   margin-top:4px;
   color:#cfcfe0;
-  font-size:15px;
+  font-size:14px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -293,54 +200,44 @@ h1{
   color:#ffd21f;
   font-weight:900;
   text-align:right;
-  font-size:25px;
+  font-size:22px;
 }
 
 .rank-votes{
   display:block;
   color:#cfcfe0;
-  font-size:12px;
+  font-size:11px;
   margin-top:3px;
 }
 
 .ranking-empty{
   text-align:center;
-
-  padding:
-  35px 15px;
-
+  padding:30px 15px;
   color:#c9c9d5;
-
-  font-size:22px;
+  font-size:20px;
 }
 
 
 /* SEZIONI */
 
 section{
-  padding:95px 0;
+  padding:80px 0;
 }
 
 .title{
   text-align:center;
-
-  margin-bottom:50px;
+  margin-bottom:42px;
 }
 
 .title h2{
-  font-size:
-  clamp(48px,6vw,78px);
-
-  margin:
-  0 0 16px;
+  font-size:clamp(40px,5vw,64px);
+  margin:0 0 14px;
 }
 
 .title p{
   margin:0;
-
   color:#c9c9d5;
-
-  font-size:25px;
+  font-size:21px;
 }
 
 
@@ -348,62 +245,40 @@ section{
 
 .steps{
   display:grid;
-
-  grid-template-columns:
-  repeat(4,1fr);
-
-  gap:24px;
+  grid-template-columns:repeat(4,1fr);
+  gap:22px;
 }
 
 .card{
-  background:
-  rgba(22,25,58,.96);
-
-  border:
-  1px solid
-  rgba(255,255,255,.10);
-
-  border-radius:26px;
-
-  padding:32px;
+  background:rgba(22,25,58,.96);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:24px;
+  padding:28px;
 }
 
 .number{
-  width:60px;
-  height:60px;
-
+  width:54px;
+  height:54px;
   display:grid;
-
   place-items:center;
-
   border-radius:50%;
-
   background:#ffd21f;
-
   color:#161000;
-
   font-weight:900;
-
-  font-size:26px;
-
-  margin-bottom:20px;
+  font-size:23px;
+  margin-bottom:18px;
 }
 
 .card h3{
-  margin:
-  0 0 14px;
-
-  font-size:30px;
+  margin:0 0 12px;
+  font-size:26px;
 }
 
 .card p{
   color:#c9c9d5;
-
-  line-height:1.55;
-
+  line-height:1.5;
   margin:0;
-
-  font-size:21px;
+  font-size:18px;
 }
 
 
@@ -411,32 +286,22 @@ section{
 
 .columns{
   display:grid;
-
-  grid-template-columns:
-  1fr 1fr;
-
-  gap:30px;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
 }
 
 .feature{
-  background:
-  rgba(255,255,255,.05);
-
-  border-radius:18px;
-
-  padding:20px;
-
-  margin:16px 0;
-
-  font-size:21px;
-
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
+  padding:18px;
+  margin:14px 0;
+  font-size:18px;
   line-height:1.5;
 }
 
 .feature b{
   color:#ffd21f;
-
-  font-size:23px;
+  font-size:20px;
 }
 
 
@@ -444,80 +309,47 @@ section{
 
 .events-grid{
   display:grid;
-
-  grid-template-columns:
-  repeat(2,1fr);
-
-  gap:20px;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
 }
 
 .event{
-  background:
-  linear-gradient(
-    180deg,
-    rgba(39,33,86,.96),
-    rgba(18,20,49,.96)
-  );
-
-  border:
-  1px solid
-  rgba(255,255,255,.12);
-
-  border-radius:24px;
-
-  padding:26px;
+  background:linear-gradient(180deg,rgba(39,33,86,.96),rgba(18,20,49,.96));
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:24px;
 }
 
 .event-title{
   color:#ffd21f;
-
-  font-size:29px;
-
+  font-size:25px;
   font-weight:900;
-
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
 .event-line{
-  margin:10px 0;
-
-  font-size:22px;
-
+  margin:9px 0;
+  font-size:19px;
   color:#e2e2ed;
 }
 
 .event-date{
-  margin-top:20px;
-
+  margin-top:18px;
   display:inline-block;
-
-  padding:
-  10px 16px;
-
-  border-radius:12px;
-
-  background:
-  rgba(255,210,31,.12);
-
+  padding:9px 14px;
+  border-radius:11px;
+  background:rgba(255,210,31,.12);
   color:#ffd21f;
-
-  font-size:21px;
-
+  font-size:18px;
   font-weight:bold;
 }
 
 .no-events{
-  grid-column:
-  1 / -1;
-
+  grid-column:1 / -1;
   text-align:center;
-
-  padding:
-  50px 20px;
-
+  padding:45px 20px;
   color:#c9c9d5;
-
-  font-size:27px;
+  font-size:23px;
 }
 
 
@@ -525,92 +357,57 @@ section{
 
 .contact{
   text-align:center;
-
   background:
-  radial-gradient(
-    circle at 20% 30%,
-    rgba(255,0,180,.28),
-    transparent 35%
-  ),
-  radial-gradient(
-    circle at 80% 30%,
-    rgba(0,180,255,.28),
-    transparent 35%
-  ),
-  #101329;
-
-  border:
-  1px solid
-  rgba(255,255,255,.12);
-
-  border-radius:32px;
-
-  padding:
-  65px 30px;
+    radial-gradient(circle at 20% 30%,rgba(255,0,180,.28),transparent 35%),
+    radial-gradient(circle at 80% 30%,rgba(0,180,255,.28),transparent 35%),
+    #101329;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:30px;
+  padding:55px 28px;
 }
 
 .contact h2{
-  font-size:
-  clamp(50px,6vw,80px);
-
-  margin:
-  0 0 20px;
+  font-size:clamp(42px,5vw,66px);
+  margin:0 0 18px;
 }
 
 .contact p{
   color:#d2d2df;
-
-  font-size:27px;
+  font-size:22px;
 }
 
 .contact-data{
-  margin-top:28px;
-
-  font-size:30px;
-
-  line-height:1.9;
+  margin-top:24px;
+  font-size:25px;
+  line-height:1.8;
 }
 
 
 /* FOOTER */
 
 footer{
-  border-top:
-  1px solid
-  rgba(255,255,255,.10);
-
-  padding:
-  50px 0;
-
+  border-top:1px solid rgba(255,255,255,.10);
+  padding:42px 0;
   color:#b8b8c9;
-
-  font-size:20px;
+  font-size:17px;
 }
 
 .footer-grid{
   display:grid;
-
-  grid-template-columns:
-  1.2fr 1fr 1fr;
-
-  gap:30px;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:28px;
 }
 
 .footer-grid h4{
   color:white;
-
   margin-top:0;
-
-  font-size:26px;
+  font-size:22px;
 }
 
 .copyright{
   text-align:center;
-
-  font-size:16px;
-
-  margin-top:32px;
-
+  font-size:14px;
+  margin-top:28px;
   color:#88899c;
 }
 
@@ -625,8 +422,7 @@ footer{
   }
 
   .steps{
-    grid-template-columns:
-    1fr 1fr;
+    grid-template-columns:1fr 1fr;
   }
 
   .events-grid{
@@ -638,8 +434,7 @@ footer{
   }
 
   h1{
-    font-size:
-    clamp(70px,15vw,120px);
+    font-size:clamp(58px,13vw,95px);
   }
 }
 
@@ -654,312 +449,177 @@ footer{
   }
 
   .hero{
-    padding:
-    70px 0 50px;
+    padding:60px 0 45px;
   }
 
   .hero p{
-    font-size:22px;
+    font-size:19px;
+  }
+
+  .kicker{
+    font-size:17px;
+  }
+
+  .logo{
+    font-size:24px;
   }
 
   .btn{
     width:100%;
+    font-size:17px;
+    min-height:56px;
   }
 
   .rank{
-    grid-template-columns:
-    48px 1fr 75px;
-
-    padding:13px;
+    grid-template-columns:45px 1fr 72px;
+    padding:12px;
   }
 
   .rank-name{
-    font-size:18px;
+    font-size:17px;
   }
 
   .rank-score{
-    font-size:20px;
+    font-size:18px;
   }
-
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <nav>
-
 <div class="container nav-inner">
 
-<div class="logo">
+  <div class="logo">
+    🎤 KARAOKE <span>LIVE</span> SHOW
+  </div>
 
-🎤 KARAOKE
-
-<span>LIVE</span>
-
-SHOW
-
-</div>
-
-
-<div class="menu">
-
-<a href="#home">
-HOME
-</a>
-
-<a href="#come-funziona">
-COME FUNZIONA
-</a>
-
-<a href="#locali">
-PER I LOCALI
-</a>
-
-<a href="#eventi">
-EVENTI
-</a>
-
-<a href="#contatti">
-CONTATTI
-</a>
+  <div class="menu">
+    <a href="#home">HOME</a>
+    <a href="#come-funziona">COME FUNZIONA</a>
+    <a href="#locali">PER I LOCALI</a>
+    <a href="#eventi">EVENTI</a>
+    <a href="#contatti">CONTATTI</a>
+  </div>
 
 </div>
-
-</div>
-
 </nav>
-
 
 
 <main>
 
-
-<section
-class="hero"
-id="home">
+<section class="hero" id="home">
 
 <div class="container hero-grid">
 
-
 <div>
 
+  <div class="kicker">
+    TU CANTI • IL PUBBLICO VOTA • LA CLASSIFICA È LIVE
+  </div>
 
-<div class="kicker">
+  <h1>
+    KARAOKE
+    <br>
+    <span class="live">LIVE</span>
+    SHOW
+  </h1>
 
-TU CANTI •
-IL PUBBLICO VOTA •
-LA CLASSIFICA È LIVE
+  <p>
+    Il karaoke diventa uno spettacolo interattivo.
+    Il pubblico vota dal proprio smartphone,
+    segue la classifica in tempo reale
+    e partecipa alla gara fino alla premiazione finale.
+  </p>
 
-</div>
+  <div class="buttons">
 
+    <a
+    class="btn btn-pink"
+    href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
+      📱 VOTA ORA
+    </a>
 
-<h1>
+    <a
+    class="btn btn-blue"
+    href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
+      🏆 CLASSIFICA LIVE
+    </a>
 
-KARAOKE
-
-<br>
-
-<span class="live">
-LIVE
-</span>
-
-SHOW
-
-</h1>
-
-
-<p>
-
-Il karaoke diventa uno spettacolo interattivo.
-
-Il pubblico vota dal proprio smartphone,
-
-segue la classifica in tempo reale
-
-e partecipa alla gara fino alla premiazione finale.
-
-</p>
-
-
-<div class="buttons">
-
-
-<a
-class="btn btn-pink"
-href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
-
-📱 VOTA ORA
-
-</a>
-
-
-<a
-class="btn btn-blue"
-href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
-
-🏆 CLASSIFICA LIVE
-
-</a>
-
+  </div>
 
 </div>
-
-
-</div>
-
 
 
 <div class="hero-card">
 
+  <h3>🏆 TOP 10 LIVE</h3>
 
-<h3>
+  <div id="liveRanking">
 
-🏆 TOP 10 LIVE
+    <div class="ranking-empty">
+      In attesa dei concorrenti...
+    </div>
 
-</h3>
-
-
-<div
-id="liveRanking">
-
-<div class="ranking-empty">
-
-In attesa dei concorrenti...
+  </div>
 
 </div>
-
-</div>
-
-
-</div>
-
 
 </div>
 
 </section>
 
 
-
-<section
-id="come-funziona">
+<section id="come-funziona">
 
 <div class="container">
 
-
 <div class="title">
-
-<h2>
-Come funziona
-</h2>
-
-<p>
-
-Quattro passaggi per trasformare una serata karaoke
-
-in uno spettacolo coinvolgente.
-
-</p>
-
+  <h2>Come funziona</h2>
+  <p>
+    Quattro passaggi per trasformare una serata karaoke
+    in uno spettacolo coinvolgente.
+  </p>
 </div>
-
-
 
 <div class="steps">
 
+  <div class="card">
+    <div class="number">1</div>
+    <h3>Il cantante sale sul palco</h3>
+    <p>
+      Il nome del concorrente e il titolo della canzone
+      vengono inseriti dal pannello regia.
+    </p>
+  </div>
 
-<div class="card">
+  <div class="card">
+    <div class="number">2</div>
+    <h3>Il pubblico vota</h3>
+    <p>
+      Gli spettatori scansionano il QR code
+      e assegnano un voto da 1 a 10.
+    </p>
+  </div>
 
-<div class="number">
-1
-</div>
+  <div class="card">
+    <div class="number">3</div>
+    <h3>Classifica live</h3>
+    <p>
+      I risultati vengono aggiornati automaticamente
+      sul cellulare e sul maxi-schermo.
+    </p>
+  </div>
 
-<h3>
-Il cantante sale sul palco
-</h3>
-
-<p>
-
-Il nome del concorrente
-
-e il titolo della canzone
-
-vengono inseriti dal pannello regia.
-
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="number">
-2
-</div>
-
-<h3>
-Il pubblico vota
-</h3>
-
-<p>
-
-Gli spettatori scansionano il QR code
-
-e assegnano un voto da 1 a 10.
-
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="number">
-3
-</div>
-
-<h3>
-Classifica live
-</h3>
-
-<p>
-
-I risultati vengono aggiornati automaticamente
-
-sul cellulare e sul maxi-schermo.
-
-</p>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="number">
-4
-</div>
-
-<h3>
-Premiazione
-</h3>
-
-<p>
-
-Al termine della gara
-
-il pubblico scopre il vincitore.
-
-</p>
-
-</div>
-
+  <div class="card">
+    <div class="number">4</div>
+    <h3>Premiazione</h3>
+    <p>
+      Al termine della gara
+      il pubblico scopre il vincitore.
+    </p>
+  </div>
 
 </div>
 
@@ -968,141 +628,65 @@ il pubblico scopre il vincitore.
 </section>
 
 
-
-<section
-id="locali">
+<section id="locali">
 
 <div class="container">
 
-
 <div class="title">
-
-<h2>
-Per i locali
-</h2>
-
-<p>
-
-Porta Karaoke Live Show
-
-nel tuo locale.
-
-</p>
-
+  <h2>Per i locali</h2>
+  <p>Porta Karaoke Live Show nel tuo locale.</p>
 </div>
-
-
 
 <div class="columns">
 
-
 <div class="card">
 
-<h3>
+  <h3>🎤 Karaoke Live Show nel tuo locale</h3>
 
-🎤 Karaoke Live Show
+  <div class="feature">
+    <b>✓ Format interattivo</b>
+    <br>
+    Coinvolge direttamente tutto il pubblico.
+  </div>
 
-nel tuo locale
+  <div class="feature">
+    <b>✓ Voto da smartphone</b>
+    <br>
+    Nessuna app obbligatoria: basta un QR code.
+  </div>
 
-</h3>
+  <div class="feature">
+    <b>✓ Classifica sul maxi-schermo</b>
+    <br>
+    I risultati vengono mostrati in tempo reale.
+  </div>
 
-
-<div class="feature">
-
-<b>
-✓ Format interattivo
-</b>
-
-<br>
-
-Coinvolge direttamente tutto il pubblico.
-
-</div>
-
-
-<div class="feature">
-
-<b>
-✓ Voto da smartphone
-</b>
-
-<br>
-
-Nessuna app obbligatoria:
-
-basta un QR code.
+  <div class="feature">
+    <b>✓ Perfetto per locali ed eventi</b>
+    <br>
+    Bar, pub, ristoranti, piazze, feste ed eventi privati.
+  </div>
 
 </div>
-
-
-<div class="feature">
-
-<b>
-✓ Classifica sul maxi-schermo
-</b>
-
-<br>
-
-I risultati vengono mostrati
-
-in tempo reale.
-
-</div>
-
-
-<div class="feature">
-
-<b>
-✓ Perfetto per locali ed eventi
-</b>
-
-<br>
-
-Bar, pub, ristoranti,
-
-piazze, feste ed eventi privati.
-
-</div>
-
-
-</div>
-
 
 
 <div class="card">
 
-<h3>
+  <h3>✨ Una serata diversa</h3>
 
-✨ Una serata diversa
+  <p>
+    Karaoke Live Show trasforma il karaoke tradizionale
+    in una vera gara interattiva.
+  </p>
 
-</h3>
+  <br>
 
-<p>
-
-Karaoke Live Show trasforma
-
-il karaoke tradizionale
-
-in una vera gara interattiva.
-
-</p>
-
-<br>
-
-<p>
-
-Il pubblico partecipa,
-
-vota dal cellulare
-
-e segue i risultati
-
-in diretta.
-
-</p>
+  <p>
+    Il pubblico partecipa, vota dal cellulare
+    e segue i risultati in diretta.
+  </p>
 
 </div>
-
 
 </div>
 
@@ -1111,297 +695,181 @@ in diretta.
 </section>
 
 
-
-<section
-id="eventi">
+<section id="eventi">
 
 <div class="container">
-
 
 <div class="title">
-
-<h2>
-
-📅 Prossimi eventi
-
-</h2>
-
-<p>
-
-Le serate Karaoke Live Show
-
-vengono pubblicate automaticamente.
-
-</p>
-
+  <h2>📅 Prossimi eventi</h2>
+  <p>
+    Le serate Karaoke Live Show
+    vengono pubblicate automaticamente.
+  </p>
 </div>
 
+<div class="events-grid" id="eventsList">
 
-<div
-class="events-grid"
-id="eventsList">
-
-<div class="no-events">
-
-Caricamento eventi...
+  <div class="no-events">
+    Caricamento eventi...
+  </div>
 
 </div>
-
-</div>
-
 
 </div>
 
 </section>
 
 
-
-<section
-id="contatti">
+<section id="contatti">
 
 <div class="container">
-
 
 <div class="contact">
 
+  <h2>
+    Porta Karaoke Live Show nel tuo locale
+  </h2>
 
-<h2>
+  <p>
+    Contattaci per organizzare
+    una serata Karaoke Live Show.
+  </p>
 
-Porta Karaoke Live Show
+  <div class="contact-data">
 
-nel tuo locale
+    📞
+    <a href="tel:+393756466066">
+      375 646 6066
+    </a>
 
-</h2>
+    <br>
 
+    ✉️
+    <a href="mailto:Info@karaokeliveshow.it">
+      Info@karaokeliveshow.it
+    </a>
 
-<p>
+  </div>
 
-Contattaci per organizzare
+  <div class="buttons" style="justify-content:center">
 
-una serata Karaoke Live Show.
+    <a
+    class="btn btn-pink"
+    href="https://wa.me/393756466066">
+      💬 SCRIVICI SU WHATSAPP
+    </a>
 
-</p>
+    <a
+    class="btn btn-dark"
+    href="mailto:Info@karaokeliveshow.it">
+      ✉️ INVIA EMAIL
+    </a>
 
-
-
-<div class="contact-data">
-
-
-📞
-
-<a
-href="tel:+393756466066">
-
-375 646 6066
-
-</a>
-
-
-<br>
-
-
-✉️
-
-<a
-href="mailto:Info@karaokeliveshow.it">
-
-Info@karaokeliveshow.it
-
-</a>
-
-
-</div>
-
-
-
-<div
-class="buttons"
-style="justify-content:center">
-
-
-<a
-class="btn btn-pink"
-href="https://wa.me/393756466066">
-
-💬 SCRIVICI SU WHATSAPP
-
-</a>
-
-
-<a
-class="btn btn-dark"
-href="mailto:Info@karaokeliveshow.it">
-
-✉️ INVIA EMAIL
-
-</a>
-
-
-</div>
-
+  </div>
 
 </div>
 
 </div>
 
 </section>
-
 
 </main>
 
 
-
 <footer>
-
 
 <div class="container footer-grid">
 
-
 <div>
 
+  <div class="logo">
+    🎤 KARAOKE <span>LIVE</span> SHOW
+  </div>
 
-<div class="logo">
-
-🎤 KARAOKE
-
-<span>
-LIVE
-</span>
-
-SHOW
+  <p>
+    La tua voce, la nostra emozione.
+  </p>
 
 </div>
-
-
-<p>
-
-La tua voce,
-
-la nostra emozione.
-
-</p>
-
-
-</div>
-
 
 
 <div>
 
+  <h4>Contatti</h4>
 
-<h4>
-Contatti
-</h4>
-
-
-<p>
-
-📞 375 646 6066
-
-<br>
-
-✉️ Info@karaokeliveshow.it
-
-</p>
-
+  <p>
+    📞 375 646 6066
+    <br>
+    ✉️ Info@karaokeliveshow.it
+  </p>
 
 </div>
-
 
 
 <div>
 
+  <h4>Link rapidi</h4>
 
-<h4>
-Link rapidi
-</h4>
+  <p>
 
+    <a href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
+      Vota
+    </a>
 
-<p>
+    <br>
 
+    <a href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
+      Classifica Live
+    </a>
 
-<a
-href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/">
-
-Vota
-
-</a>
-
-
-<br>
-
-
-<a
-href="https://barcentrale150-stack.github.io/KARAOKE---LIVE---SHOW/classifica.html">
-
-Classifica Live
-
-</a>
-
-
-</p>
-
+  </p>
 
 </div>
 
-
 </div>
-
-
 
 <div class="container copyright">
-
-© KARAOKE LIVE SHOW
-
-— Tutti i diritti riservati
-
+  © KARAOKE LIVE SHOW — Tutti i diritti riservati
 </div>
-
 
 </footer>
 
 
-
 <script type="module">
 
-import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 import {
-getDatabase,
-ref,
-onValue
+  getDatabase,
+  ref,
+  onValue
 }
-from
-"https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
 
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
+  apiKey:
+  "AIzaSyCHVOquom1j9D-0CzEzOlT3V3JpiHFIaII",
 
-authDomain:
-"karaoke-live-show-12421.firebaseapp.com",
+  authDomain:
+  "karaoke-live-show-12421.firebaseapp.com",
 
-databaseURL:
-"https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
+  databaseURL:
+  "https://karaoke-live-show-12421-default-rtdb.firebaseio.com",
 
-projectId:
-"karaoke-live-show-12421",
+  projectId:
+  "karaoke-live-show-12421",
 
-storageBucket:
-"karaoke-live-show-12421.firebasestorage.app",
+  storageBucket:
+  "karaoke-live-show-12421.firebasestorage.app",
 
-messagingSenderId:
-"522751685586",
+  messagingSenderId:
+  "522751685586",
 
-appId:
-"1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
+  appId:
+  "1:522751685586:web:6b7e65ab23f05ca0fb4e0b"
 
 };
 
@@ -1409,22 +877,14 @@ appId:
 const app =
 initializeApp(firebaseConfig);
 
-
 const db =
 getDatabase(app);
 
-
 const eventsList =
-document.getElementById(
-"eventsList"
-);
-
+document.getElementById("eventsList");
 
 const liveRanking =
-document.getElementById(
-"liveRanking"
-);
-
+document.getElementById("liveRanking");
 
 
 function formatDate(dateString){
@@ -1444,207 +904,166 @@ function formatDate(dateString){
 }
 
 
-
-/* CLASSIFICA LIVE TOP 10 */
+/* TOP 10 LIVE */
 
 onValue(
 ref(db,"concorrenti"),
 snapshot=>{
 
+  const data =
+  snapshot.val() || {};
 
-const data =
-snapshot.val() || {};
+  const concorrenti =
+  Object.entries(data)
+  .map(([id,c])=>{
+
+    const voti =
+    Number(c.voti || 0);
+
+    const totale =
+    Number(c.totale || 0);
+
+    const media =
+    voti > 0
+    ? totale / voti
+    : 0;
+
+    return {
+      id:id,
+      nome:c.nome || "Senza nome",
+      canzone:c.canzone || "",
+      voti:voti,
+      media:media
+    };
+
+  });
 
 
-const concorrenti =
-Object.entries(data)
-.map(([id,c])=>{
+  concorrenti.sort(
+    (a,b)=>
+    b.media - a.media ||
+    b.voti - a.voti
+  );
 
 
-const voti =
-Number(c.voti || 0);
+  const top10 =
+  concorrenti.slice(0,10);
 
 
-const totale =
-Number(c.totale || 0);
+  liveRanking.innerHTML="";
 
 
-const media =
-voti > 0
-?
-totale / voti
-:
-0;
+  if(top10.length === 0){
+
+    const empty =
+    document.createElement("div");
+
+    empty.className=
+    "ranking-empty";
+
+    empty.textContent=
+    "In attesa dei concorrenti...";
+
+    liveRanking.appendChild(empty);
+
+    return;
+  }
 
 
-return {
+  top10.forEach(
+  (c,index)=>{
 
-id:id,
+    const row =
+    document.createElement("div");
 
-nome:
-c.nome || "Senza nome",
+    row.className="rank";
 
-canzone:
-c.canzone || "",
 
-voti:voti,
+    const position =
+    document.createElement("div");
 
-media:media
+    position.className=
+    "rank-position";
 
-};
+
+    if(index===0){
+
+      position.textContent="🥇";
+
+    }else if(index===1){
+
+      position.textContent="🥈";
+
+    }else if(index===2){
+
+      position.textContent="🥉";
+
+    }else{
+
+      position.textContent=
+      (index+1)+"°";
+
+    }
+
+
+    const info =
+    document.createElement("div");
+
+    info.className=
+    "rank-info";
+
+
+    const name =
+    document.createElement("div");
+
+    name.className=
+    "rank-name";
+
+    name.textContent=
+    c.nome;
+
+
+    const song =
+    document.createElement("div");
+
+    song.className=
+    "rank-song";
+
+    song.textContent=
+    c.canzone
+    ? "🎵 "+c.canzone
+    : "";
+
+
+    info.appendChild(name);
+    info.appendChild(song);
+
+
+    const score =
+    document.createElement("div");
+
+    score.className=
+    "rank-score";
+
+
+    score.innerHTML=
+    "⭐ "
+    + c.media.toFixed(1)
+    + '<span class="rank-votes">'
+    + c.voti
+    + (c.voti===1 ? " voto" : " voti")
+    + "</span>";
+
+
+    row.appendChild(position);
+    row.appendChild(info);
+    row.appendChild(score);
+
+    liveRanking.appendChild(row);
+
+  });
 
 });
-
-
-concorrenti.sort(
-(a,b)=>
-
-b.media - a.media
-
-||
-
-b.voti - a.voti
-
-);
-
-
-const top10 =
-concorrenti.slice(0,10);
-
-
-liveRanking.innerHTML="";
-
-
-if(top10.length === 0){
-
-const empty =
-document.createElement("div");
-
-empty.className=
-"ranking-empty";
-
-empty.textContent=
-"In attesa dei concorrenti...";
-
-liveRanking.appendChild(empty);
-
-return;
-
-}
-
-
-top10.forEach(
-(c,index)=>{
-
-
-const row =
-document.createElement("div");
-
-row.className="rank";
-
-
-const position =
-document.createElement("div");
-
-position.className=
-"rank-position";
-
-
-if(index===0){
-
-position.textContent="🥇";
-
-}else if(index===1){
-
-position.textContent="🥈";
-
-}else if(index===2){
-
-position.textContent="🥉";
-
-}else{
-
-position.textContent=
-(index+1)+"°";
-
-}
-
-
-const info =
-document.createElement("div");
-
-info.className=
-"rank-info";
-
-
-const name =
-document.createElement("div");
-
-name.className=
-"rank-name";
-
-name.textContent=
-c.nome;
-
-
-const song =
-document.createElement("div");
-
-song.className=
-"rank-song";
-
-song.textContent=
-c.canzone
-?
-"🎵 "+c.canzone
-:
-"";
-
-
-info.appendChild(name);
-
-info.appendChild(song);
-
-
-const score =
-document.createElement("div");
-
-score.className=
-"rank-score";
-
-
-score.innerHTML=
-
-"⭐ "
-+
-c.media.toFixed(1)
-+
-'<span class="rank-votes">'
-+
-c.voti
-+
-(c.voti===1
-?
-" voto"
-:
-" voti")
-+
-"</span>";
-
-
-row.appendChild(position);
-
-row.appendChild(info);
-
-row.appendChild(score);
-
-
-liveRanking.appendChild(row);
-
-});
-
-});
-
 
 
 /* EVENTI */
@@ -1653,165 +1072,125 @@ onValue(
 ref(db,"eventi"),
 snapshot=>{
 
+  const data =
+  snapshot.val() || {};
 
-const data =
-snapshot.val() || {};
+  const eventi =
+  Object.entries(data)
+  .map(([id,e])=>({
 
+    id:id,
 
-const eventi =
-Object.entries(data)
-.map(([id,e])=>({
+    titolo:
+    e.titolo || "",
 
-id:id,
+    locale:
+    e.locale || "",
 
-titolo:
-e.titolo || "",
+    citta:
+    e.citta || "",
 
-locale:
-e.locale || "",
+    data:
+    e.data || e.date || e.eventDate || "",
 
-citta:
-e.citta || "",
+    ora:
+    e.ora || e.time || ""
 
-data:
-e.data || e.date || e.eventDate || "",
-
-ora:
-e.ora || e.time || ""
-
-}));
+  }));
 
 
+  eventi.sort(
+    (a,b)=>{
 
-eventi.sort(
-(a,b)=>{
+      const first =
+      a.data + " " + a.ora;
 
-const first =
-a.data + " " + a.ora;
+      const second =
+      b.data + " " + b.ora;
 
-const second =
-b.data + " " + b.ora;
+      return first.localeCompare(second);
 
-return first.localeCompare(second);
-
-}
-);
-
+    }
+  );
 
 
-eventsList.innerHTML="";
+  eventsList.innerHTML="";
 
 
-if(
-eventi.length === 0
-){
+  if(eventi.length === 0){
 
-const empty =
-document.createElement(
-"div"
-);
+    const empty =
+    document.createElement("div");
 
-empty.className=
-"no-events";
+    empty.className=
+    "no-events";
 
-empty.textContent=
-"Nuove date in arrivo.";
+    empty.textContent=
+    "Nuove date in arrivo.";
 
-eventsList.appendChild(
-empty
-);
+    eventsList.appendChild(empty);
 
-return;
-
-}
+    return;
+  }
 
 
+  eventi.forEach(
+  evento=>{
 
-eventi.forEach(
-evento=>{
+    const box =
+    document.createElement("div");
 
-
-const box =
-document.createElement(
-"div"
-);
-
-box.className=
-"event";
+    box.className=
+    "event";
 
 
-const title =
-document.createElement(
-"div"
-);
+    const title =
+    document.createElement("div");
 
-title.className=
-"event-title";
+    title.className=
+    "event-title";
 
-title.textContent=
-evento.titolo;
+    title.textContent=
+    evento.titolo;
 
 
-const venue =
-document.createElement(
-"div"
-);
+    const venue =
+    document.createElement("div");
 
-venue.className=
-"event-line";
+    venue.className=
+    "event-line";
 
-venue.textContent=
-"📍 "
-+
-evento.locale
-+
-" - "
-+
-evento.citta;
+    venue.textContent=
+    "📍 "
+    + evento.locale
+    + " - "
+    + evento.citta;
 
 
-const date =
-document.createElement(
-"div"
-);
+    const date =
+    document.createElement("div");
 
-date.className=
-"event-date";
+    date.className=
+    "event-date";
 
-date.textContent=
-"📅 "
-+
-formatDate(evento.data)
-+
-"  •  ⏰ "
-+
-evento.ora;
+    date.textContent=
+    "📅 "
+    + formatDate(evento.data)
+    + "  •  ⏰ "
+    + evento.ora;
 
 
-box.appendChild(
-title
-);
+    box.appendChild(title);
+    box.appendChild(venue);
+    box.appendChild(date);
 
-box.appendChild(
-venue
-);
+    eventsList.appendChild(box);
 
-box.appendChild(
-date
-);
-
-
-eventsList.appendChild(
-box
-);
-
-});
+  });
 
 });
 
 </script>
 
-
 </body>
-
 </html>
