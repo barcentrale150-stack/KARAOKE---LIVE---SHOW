@@ -1,1 +1,1443 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
+<title>Player - Karaoke Live Show</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:white;
+  min-height:100vh;
+
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,0,180,.20),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
+    linear-gradient(180deg,#07112d,#10184d,#080d29);
+}
+
+.app{
+  width:min(1250px,96%);
+  margin:auto;
+  padding:24px 14px 50px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px;
+  flex-wrap:wrap;
+}
+
+.brand{
+  color:#ffd21f;
+  font-size:32px;
+  font-weight:900;
+}
+
+.back{
+  display:inline-block;
+  padding:12px 18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:360px 1fr;
+  gap:22px;
+}
+
+.card{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  padding:20px;
+}
+
+.library-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.library-title h2{
+  margin:0;
+}
+
+.file-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  background:#18d7e7;
+  color:#04323b;
+  font-weight:900;
+}
+
+#fileInput{
+  display:none;
+}
+
+.search{
+  width:100%;
+  margin-top:16px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  font-size:17px;
+}
+
+.library{
+  margin-top:14px;
+  max-height:610px;
+  overflow:auto;
+}
+
+.song-item{
+  padding:13px;
+  margin:8px 0;
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  cursor:pointer;
+  border:1px solid transparent;
+}
+
+.song-item:hover{
+  background:rgba(255,255,255,.10);
+}
+
+.song-item.active{
+  border-color:#ffd21f;
+  background:rgba(255,210,31,.10);
+}
+
+.song-name{
+  font-weight:900;
+}
+
+.song-extra{
+  color:#bfc2d4;
+  font-size:13px;
+  margin-top:4px;
+}
+
+.player{
+  min-height:650px;
+}
+
+.now{
+  text-align:center;
+}
+
+.now-label{
+  color:#adb0c6;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.now-title{
+  margin-top:7px;
+  color:#ffd21f;
+  font-size:32px;
+  font-weight:900;
+}
+
+.time{
+  display:flex;
+  justify-content:space-between;
+  margin-top:24px;
+  color:#cfd1df;
+}
+
+#seek{
+  width:100%;
+}
+
+.controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  border-radius:14px;
+  padding:14px 18px;
+  font-weight:900;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.control{
+  background:rgba(255,255,255,.10);
+  color:white;
+}
+
+.play{
+  background:#52ff8a;
+  color:#052d14;
+  font-size:22px;
+  min-width:110px;
+}
+
+.stop{
+  background:#ff315d;
+  color:white;
+}
+
+.display{
+  background:#ffd21f;
+  color:#2b2200;
+}
+
+.full{
+  background:#7c4dff;
+  color:white;
+}
+
+.options{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.option{
+  background:rgba(255,255,255,.05);
+  border-radius:14px;
+  padding:14px;
+}
+
+.option label{
+  display:block;
+  color:#ffd21f;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.option input{
+  width:100%;
+}
+
+.value{
+  text-align:center;
+  margin-top:6px;
+  font-weight:bold;
+}
+
+.lyrics{
+  margin-top:24px;
+  min-height:250px;
+  border-radius:20px;
+  background:#03040a;
+  border:1px solid rgba(255,255,255,.10);
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+.previous-line,
+.next-line{
+  color:#74778a;
+  font-size:21px;
+  min-height:30px;
+}
+
+.current-line{
+  color:#ffd21f;
+  font-size:42px;
+  font-weight:900;
+  margin:20px 0;
+  text-shadow:0 0 14px rgba(255,210,31,.25);
+}
+
+.no-lyrics{
+  color:#9ca0b4;
+  font-size:18px;
+}
+
+.info-bar{
+  margin-top:15px;
+  color:#bfc2d4;
+  text-align:center;
+  font-size:13px;
+}
+
+@media(max-width:850px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .library{
+    max-height:280px;
+  }
+
+  .options{
+    grid-template-columns:1fr;
+  }
+
+  .current-line{
+    font-size:30px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="topbar">
+
+  <div class="brand">
+    🎤 KARAOKE LIVE SHOW — PLAYER
+  </div>
+
+  <div>
+    <a class="back" href="admin.html">
+      ← ADMIN
+    </a>
+
+    <a class="back" href="sito.html">
+      🌐 SITO
+    </a>
+  </div>
+
+</div>
+
+
+<div class="grid">
+
+
+<!-- LIBRERIA -->
+
+<div class="card">
+
+  <div class="library-title">
+
+    <h2>🎵 Libreria</h2>
+
+    <label class="file-label">
+      + CARICA
+      <input
+      id="fileInput"
+      type="file"
+      multiple
+      accept=".mp3,.lrc,.txt,audio/mpeg">
+    </label>
+
+  </div>
+
+  <input
+  id="search"
+  class="search"
+  placeholder="Cerca canzone...">
+
+  <div
+  id="library"
+  class="library">
+
+    <div class="song-extra">
+      Carica uno o più MP3.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PLAYER -->
+
+<div class="card player">
+
+  <div class="now">
+
+    <div class="now-label">
+      BRANO IN RIPRODUZIONE
+    </div>
+
+    <div
+    class="now-title"
+    id="nowTitle">
+      Nessun brano
+    </div>
+
+  </div>
+
+
+  <audio id="audio"></audio>
+
+
+  <div class="time">
+
+    <span id="currentTime">00:00</span>
+
+    <span id="duration">00:00</span>
+
+  </div>
+
+
+  <input
+  id="seek"
+  type="range"
+  min="0"
+  max="100"
+  value="0">
+
+
+  <div class="controls">
+
+    <button
+    class="control"
+    id="back10">
+      ⏪ 10s
+    </button>
+
+    <button
+    class="play"
+    id="playButton">
+      ▶ PLAY
+    </button>
+
+    <button
+    class="control"
+    id="forward10">
+      10s ⏩
+    </button>
+
+    <button
+    class="stop"
+    id="stopButton">
+      ■ STOP
+    </button>
+
+    <button
+    class="display"
+    id="displayButton">
+      🖥 DISPLAY 2
+    </button>
+
+    <button
+    class="full"
+    id="fullscreenButton">
+      ⛶ SCHERMO INTERO
+    </button>
+
+  </div>
+
+
+  <div class="options">
+
+    <div class="option">
+
+      <label>
+        🔊 Volume
+      </label>
+
+      <input
+      id="volume"
+      type="range"
+      min="0"
+      max="1"
+      step="0.01"
+      value="1">
+
+      <div
+      class="value"
+      id="volumeValue">
+        100%
+      </div>
+
+    </div>
+
+
+    <div class="option">
+
+      <label>
+        ⚡ Velocità
+      </label>
+
+      <input
+      id="speed"
+      type="range"
+      min="0.70"
+      max="1.30"
+      step="0.05"
+      value="1">
+
+      <div
+      class="value"
+      id="speedValue">
+        1.00x
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="lyrics">
+
+    <div
+    class="previous-line"
+    id="previousLine">
+    </div>
+
+    <div
+    class="current-line"
+    id="currentLine">
+
+      <span class="no-lyrics">
+        Carica un MP3 e, se disponibile,
+        il relativo file LRC.
+      </span>
+
+    </div>
+
+    <div
+    class="next-line"
+    id="nextLine">
+    </div>
+
+  </div>
+
+
+  <div class="info-bar">
+
+    Il player riproduce già gli MP3.
+    La lettura diretta del testo M-Live incorporato
+    verrà aggiunta nel prossimo passaggio.
+
+  </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<script>
+
+const audio =
+document.getElementById("audio");
+
+const fileInput =
+document.getElementById("fileInput");
+
+const library =
+document.getElementById("library");
+
+const search =
+document.getElementById("search");
+
+const nowTitle =
+document.getElementById("nowTitle");
+
+const playButton =
+document.getElementById("playButton");
+
+const stopButton =
+document.getElementById("stopButton");
+
+const back10 =
+document.getElementById("back10");
+
+const forward10 =
+document.getElementById("forward10");
+
+const seek =
+document.getElementById("seek");
+
+const currentTimeBox =
+document.getElementById("currentTime");
+
+const durationBox =
+document.getElementById("duration");
+
+const volume =
+document.getElementById("volume");
+
+const volumeValue =
+document.getElementById("volumeValue");
+
+const speed =
+document.getElementById("speed");
+
+const speedValue =
+document.getElementById("speedValue");
+
+const displayButton =
+document.getElementById("displayButton");
+
+const fullscreenButton =
+document.getElementById("fullscreenButton");
+
+const previousLine =
+document.getElementById("previousLine");
+
+const currentLine =
+document.getElementById("currentLine");
+
+const nextLine =
+document.getElementById("nextLine");
+
+
+let songs = [];
+
+let currentSong = null;
+
+let currentLyrics = [];
+
+let displayWindow = null;
+
+
+function cleanName(name){
+
+  return name
+  .replace(/\.[^/.]+$/,"")
+  .trim();
+
+}
+
+
+function baseName(name){
+
+  return cleanName(name)
+  .toLowerCase()
+  .replace(/\s+/g," ")
+  .trim();
+
+}
+
+
+fileInput.addEventListener(
+"change",
+function(){
+
+  const files =
+  Array.from(fileInput.files);
+
+  const mp3Files =
+  files.filter(
+    f =>
+    f.name.toLowerCase().endsWith(".mp3")
+  );
+
+  const lyricFiles =
+  files.filter(
+    f =>
+    f.name.toLowerCase().endsWith(".lrc")
+    ||
+    f.name.toLowerCase().endsWith(".txt")
+  );
+
+
+  mp3Files.forEach(mp3=>{
+
+    const existing =
+    songs.find(
+      s => s.file.name === mp3.name
+    );
+
+    if(existing){
+      return;
+    }
+
+
+    const lyric =
+    lyricFiles.find(
+      l =>
+      baseName(l.name) ===
+      baseName(mp3.name)
+    );
+
+
+    songs.push({
+
+      id:
+      Date.now()
+      +
+      Math.random(),
+
+      file:
+      mp3,
+
+      url:
+      URL.createObjectURL(mp3),
+
+      title:
+      cleanName(mp3.name),
+
+      lyricFile:
+      lyric || null
+
+    });
+
+  });
+
+
+  renderLibrary();
+
+});
+
+
+function renderLibrary(){
+
+  const query =
+  search.value
+  .toLowerCase()
+  .trim();
+
+
+  library.innerHTML="";
+
+
+  const filtered =
+  songs.filter(
+    song =>
+    song.title
+    .toLowerCase()
+    .includes(query)
+  );
+
+
+  if(filtered.length===0){
+
+    library.innerHTML=
+    '<div class="song-extra">Nessun brano.</div>';
+
+    return;
+  }
+
+
+  filtered.forEach(song=>{
+
+    const item =
+    document.createElement("div");
+
+    item.className=
+    "song-item";
+
+
+    if(
+      currentSong &&
+      currentSong.id === song.id
+    ){
+
+      item.classList.add("active");
+
+    }
+
+
+    const name =
+    document.createElement("div");
+
+    name.className=
+    "song-name";
+
+    name.textContent=
+    "🎵 " + song.title;
+
+
+    const extra =
+    document.createElement("div");
+
+    extra.className=
+    "song-extra";
+
+    extra.textContent=
+    song.lyricFile
+    ?
+    "Testo sincronizzato disponibile"
+    :
+    "MP3";
+
+
+    item.appendChild(name);
+
+    item.appendChild(extra);
+
+
+    item.addEventListener(
+      "click",
+      ()=>loadSong(song)
+    );
+
+
+    library.appendChild(item);
+
+  });
+
+}
+
+
+search.addEventListener(
+"input",
+renderLibrary
+);
+
+
+async function loadSong(song){
+
+  currentSong =
+  song;
+
+  audio.src =
+  song.url;
+
+  nowTitle.textContent =
+  song.title;
+
+  currentLyrics = [];
+
+
+  previousLine.textContent="";
+
+  currentLine.innerHTML=
+  '<span class="no-lyrics">Caricamento...</span>';
+
+  nextLine.textContent="";
+
+
+  if(song.lyricFile){
+
+    const text =
+    await song.lyricFile.text();
+
+    currentLyrics =
+    parseLRC(text);
+
+  }
+
+
+  if(currentLyrics.length===0){
+
+    currentLine.innerHTML=
+    '<span class="no-lyrics">Testo sincronizzato non ancora disponibile per questo MP3.</span>';
+
+  }
+
+
+  seek.value=0;
+
+  renderLibrary();
+
+  updateDisplay();
+
+}
+
+
+function parseLRC(text){
+
+  const result = [];
+
+  const lines =
+  text.split(/\r?\n/);
+
+
+  lines.forEach(line=>{
+
+    const matches =
+    [...line.matchAll(
+      /\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\]/g
+    )];
+
+
+    if(matches.length===0){
+      return;
+    }
+
+
+    const lyricText =
+    line.replace(
+      /\[[^\]]+\]/g,
+      ""
+    ).trim();
+
+
+    matches.forEach(match=>{
+
+      const minutes =
+      Number(match[1]);
+
+      const seconds =
+      Number(match[2]);
+
+      let fraction =
+      match[3] || "0";
+
+
+      if(fraction.length===1){
+
+        fraction =
+        Number(fraction)/10;
+
+      }else if(fraction.length===2){
+
+        fraction =
+        Number(fraction)/100;
+
+      }else{
+
+        fraction =
+        Number(fraction)/1000;
+
+      }
+
+
+      const time =
+      minutes * 60
+      +
+      seconds
+      +
+      Number(fraction);
+
+
+      result.push({
+        time:time,
+        text:lyricText
+      });
+
+    });
+
+  });
+
+
+  result.sort(
+    (a,b)=>a.time-b.time
+  );
+
+
+  return result;
+
+}
+
+
+playButton.addEventListener(
+"click",
+async ()=>{
+
+  if(!currentSong){
+
+    alert(
+      "Seleziona prima un brano."
+    );
+
+    return;
+  }
+
+
+  if(audio.paused){
+
+    await audio.play();
+
+  }else{
+
+    audio.pause();
+
+  }
+
+});
+
+
+audio.addEventListener(
+"play",
+()=>{
+
+  playButton.textContent=
+  "⏸ PAUSA";
+
+});
+
+
+audio.addEventListener(
+"pause",
+()=>{
+
+  playButton.textContent=
+  "▶ PLAY";
+
+});
+
+
+stopButton.addEventListener(
+"click",
+()=>{
+
+  audio.pause();
+
+  audio.currentTime=0;
+
+});
+
+
+back10.addEventListener(
+"click",
+()=>{
+
+  audio.currentTime =
+  Math.max(
+    0,
+    audio.currentTime-10
+  );
+
+});
+
+
+forward10.addEventListener(
+"click",
+()=>{
+
+  audio.currentTime =
+  Math.min(
+    audio.duration || 0,
+    audio.currentTime+10
+  );
+
+});
+
+
+volume.addEventListener(
+"input",
+()=>{
+
+  audio.volume =
+  Number(volume.value);
+
+  volumeValue.textContent =
+  Math.round(
+    audio.volume*100
+  )
+  + "%";
+
+});
+
+
+speed.addEventListener(
+"input",
+()=>{
+
+  audio.playbackRate =
+  Number(speed.value);
+
+  speedValue.textContent =
+  audio.playbackRate
+  .toFixed(2)
+  + "x";
+
+});
+
+
+seek.addEventListener(
+"input",
+()=>{
+
+  if(!audio.duration){
+    return;
+  }
+
+  audio.currentTime =
+  (
+    Number(seek.value)
+    /
+    100
+  )
+  *
+  audio.duration;
+
+});
+
+
+audio.addEventListener(
+"timeupdate",
+()=>{
+
+  if(audio.duration){
+
+    seek.value =
+    (
+      audio.currentTime
+      /
+      audio.duration
+    )
+    *
+    100;
+
+  }
+
+
+  currentTimeBox.textContent =
+  formatTime(
+    audio.currentTime
+  );
+
+
+  durationBox.textContent =
+  formatTime(
+    audio.duration
+  );
+
+
+  updateLyrics();
+
+});
+
+
+audio.addEventListener(
+"loadedmetadata",
+()=>{
+
+  durationBox.textContent =
+  formatTime(
+    audio.duration
+  );
+
+});
+
+
+function formatTime(seconds){
+
+  if(
+    !Number.isFinite(seconds)
+  ){
+
+    return "00:00";
+
+  }
+
+  const m =
+  Math.floor(seconds/60);
+
+  const s =
+  Math.floor(seconds%60);
+
+  return
+  String(m).padStart(2,"0")
+  +
+  ":"
+  +
+  String(s).padStart(2,"0");
+
+}
+
+
+function updateLyrics(){
+
+  if(currentLyrics.length===0){
+
+    updateDisplay();
+
+    return;
+
+  }
+
+
+  let index = -1;
+
+
+  for(
+    let i=0;
+    i<currentLyrics.length;
+    i++
+  ){
+
+    if(
+      audio.currentTime >=
+      currentLyrics[i].time
+    ){
+
+      index=i;
+
+    }else{
+
+      break;
+
+    }
+
+  }
+
+
+  if(index<0){
+
+    previousLine.textContent="";
+
+    currentLine.textContent="";
+
+    nextLine.textContent=
+    currentLyrics[0]?.text || "";
+
+  }else{
+
+    previousLine.textContent=
+    currentLyrics[index-1]?.text
+    || "";
+
+    currentLine.textContent=
+    currentLyrics[index]?.text
+    || "";
+
+    nextLine.textContent=
+    currentLyrics[index+1]?.text
+    || "";
+
+  }
+
+
+  updateDisplay();
+
+}
+
+
+displayButton.addEventListener(
+"click",
+()=>{
+
+  if(
+    displayWindow &&
+    !displayWindow.closed
+  ){
+
+    displayWindow.focus();
+
+    return;
+  }
+
+
+  displayWindow =
+  window.open(
+    "",
+    "KaraokeDisplay",
+    "width=1100,height=700"
+  );
+
+
+  if(!displayWindow){
+
+    alert(
+      "Il browser ha bloccato la finestra Display 2."
+    );
+
+    return;
+
+  }
+
+
+  displayWindow.document.write(`
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+
+<title>Display 2</title>
+
+<style>
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+}
+
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+#displayTitle{
+  position:absolute;
+  top:25px;
+  color:#888;
+  font-size:20px;
+}
+
+#displayPrevious,
+#displayNext{
+  color:#666;
+  font-size:34px;
+  min-height:45px;
+}
+
+#displayCurrent{
+  color:#ffd21f;
+  font-size:72px;
+  font-weight:900;
+  margin:35px 4vw;
+  text-shadow:0 0 20px rgba(255,210,31,.35);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="displayTitle">
+KARAOKE LIVE SHOW
+</div>
+
+<div id="displayPrevious"></div>
+
+<div id="displayCurrent">
+IN ATTESA
+</div>
+
+<div id="displayNext"></div>
+
+</body>
+</html>
+  `);
+
+
+  displayWindow.document.close();
+
+
+  updateDisplay();
+
+});
+
+
+function updateDisplay(){
+
+  if(
+    !displayWindow ||
+    displayWindow.closed
+  ){
+
+    return;
+
+  }
+
+
+  const p =
+  displayWindow.document
+  .getElementById(
+    "displayPrevious"
+  );
+
+
+  const c =
+  displayWindow.document
+  .getElementById(
+    "displayCurrent"
+  );
+
+
+  const n =
+  displayWindow.document
+  .getElementById(
+    "displayNext"
+  );
+
+
+  const t =
+  displayWindow.document
+  .getElementById(
+    "displayTitle"
+  );
+
+
+  if(t){
+
+    t.textContent =
+    currentSong
+    ?
+    currentSong.title
+    :
+    "KARAOKE LIVE SHOW";
+
+  }
+
+
+  if(p){
+
+    p.textContent =
+    previousLine.textContent;
+
+  }
+
+
+  if(c){
+
+    c.textContent =
+    currentLine.textContent
+    ||
+    "IN ATTESA";
+
+  }
+
+
+  if(n){
+
+    n.textContent =
+    nextLine.textContent;
+
+  }
+
+}
+
+
+fullscreenButton.addEventListener(
+"click",
+async ()=>{
+
+  try{
+
+    if(!document.fullscreenElement){
+
+      await document.documentElement
+      .requestFullscreen();
+
+    }else{
+
+      await document.exitFullscreen();
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
