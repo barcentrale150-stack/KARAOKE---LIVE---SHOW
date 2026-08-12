@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Karaoke Live Show - Player</title>
 
 <style>
@@ -13,6 +14,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   color:white;
   min-height:100vh;
+
   background:
     radial-gradient(circle at 15% 10%,rgba(255,0,180,.20),transparent 30%),
     radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
@@ -87,7 +89,8 @@ body{
   font-weight:900;
 }
 
-#fileInput{
+#fileInput,
+#klsInput{
   display:none;
 }
 
@@ -128,6 +131,32 @@ body{
   color:#bfc2d4;
   font-size:13px;
   margin-top:4px;
+}
+
+.kls-panel{
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+
+.kls-panel h3{
+  color:#ffd21f;
+  margin:0 0 12px;
+}
+
+.kls-buttons{
+  display:grid;
+  gap:9px;
+}
+
+.kls-open{
+  background:#7c4dff;
+  color:white;
+}
+
+.kls-save{
+  background:#ff259d;
+  color:white;
 }
 
 .now{
@@ -201,6 +230,60 @@ button{
 .full{
   background:#7c4dff;
   color:white;
+}
+
+.pitch-box{
+  margin-top:22px;
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+
+.pitch-title{
+  color:#ffd21f;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.pitch-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.pitch-minus{
+  background:#147cff;
+  color:white;
+  font-size:24px;
+  min-width:80px;
+}
+
+.pitch-plus{
+  background:#ff259d;
+  color:white;
+  font-size:24px;
+  min-width:80px;
+}
+
+.pitch-reset{
+  background:#ffd21f;
+  color:#281f00;
+}
+
+.pitch-number{
+  font-size:34px;
+  font-weight:900;
+  min-width:90px;
+}
+
+.pitch-status{
+  margin-top:9px;
+  color:#bfc2d4;
+  font-size:13px;
 }
 
 .options{
@@ -282,6 +365,7 @@ button{
   text-align:center;
   color:#52ff8a;
   font-weight:bold;
+  min-height:22px;
 }
 
 @media(max-width:850px){
@@ -293,11 +377,13 @@ button{
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
 
 <div class="topbar">
+
   <div class="brand">
     🎤 KARAOKE LIVE SHOW — PLAYER
   </div>
@@ -306,38 +392,85 @@ button{
     <a class="back" href="admin.html">← ADMIN</a>
     <a class="back" href="sito.html">🌐 SITO</a>
   </div>
+
 </div>
 
+
 <div class="grid">
+
+
+<!-- LIBRERIA -->
 
 <div class="card">
 
   <div class="library-title">
+
     <h2>🎵 Libreria</h2>
 
     <label class="file-label">
-      + CARICA
+
+      + CARICA MP3
+
       <input
       id="fileInput"
       type="file"
       multiple
       accept=".mp3,audio/mpeg">
+
     </label>
+
   </div>
+
 
   <input
   id="search"
   class="search"
   placeholder="Cerca canzone...">
 
+
   <div id="library" class="library">
+
     <div class="song-extra">
       Carica uno o più MP3.
     </div>
+
+  </div>
+
+
+  <div class="kls-panel">
+
+    <h3>💾 FORMATO KLS</h3>
+
+    <div class="kls-buttons">
+
+      <label class="file-label kls-open">
+
+        📂 APRI KLS
+
+        <input
+        id="klsInput"
+        type="file"
+        accept=".kls,application/json">
+
+      </label>
+
+
+      <button
+      class="kls-save"
+      id="saveKlsButton">
+
+        💾 SALVA COME KLS
+
+      </button>
+
+    </div>
+
   </div>
 
 </div>
 
+
+<!-- PLAYER -->
 
 <div class="card">
 
@@ -347,18 +480,35 @@ button{
       BRANO IN RIPRODUZIONE
     </div>
 
-    <div class="now-title" id="nowTitle">
+    <div
+    class="now-title"
+    id="nowTitle">
+
       Nessun brano
+
     </div>
 
   </div>
 
-  <audio id="audio" preload="metadata"></audio>
+
+  <audio
+  id="audio"
+  preload="metadata">
+  </audio>
+
 
   <div class="time">
-    <span id="currentTime">00:00</span>
-    <span id="duration">00:00</span>
+
+    <span id="currentTime">
+      00:00
+    </span>
+
+    <span id="duration">
+      00:00
+    </span>
+
   </div>
+
 
   <input
   id="seek"
@@ -368,40 +518,115 @@ button{
   step="0.1"
   value="0">
 
+
   <div class="controls">
 
-    <button class="control" id="back10">
+    <button
+    class="control"
+    id="back10">
       ⏪ 10s
     </button>
 
-    <button class="play" id="playButton">
+
+    <button
+    class="play"
+    id="playButton">
       ▶ PLAY
     </button>
 
-    <button class="control" id="forward10">
+
+    <button
+    class="control"
+    id="forward10">
       10s ⏩
     </button>
 
-    <button class="stop" id="stopButton">
+
+    <button
+    class="stop"
+    id="stopButton">
       ■ STOP
     </button>
 
-    <button class="display" id="displayButton">
+
+    <button
+    class="display"
+    id="displayButton">
       🖥 DISPLAY 2
     </button>
 
-    <button class="full" id="fullscreenButton">
+
+    <button
+    class="full"
+    id="fullscreenButton">
       ⛶ SCHERMO INTERO
     </button>
 
   </div>
 
 
+  <!-- TONALITÀ -->
+
+  <div class="pitch-box">
+
+    <div class="pitch-title">
+      🎼 TONALITÀ
+    </div>
+
+
+    <div class="pitch-controls">
+
+      <button
+      class="pitch-minus"
+      id="pitchMinus">
+        −
+      </button>
+
+
+      <div
+      class="pitch-number"
+      id="pitchNumber">
+        0
+      </div>
+
+
+      <button
+      class="pitch-plus"
+      id="pitchPlus">
+        +
+      </button>
+
+
+      <button
+      class="pitch-reset"
+      id="pitchReset">
+        RESET 0
+      </button>
+
+    </div>
+
+
+    <div
+    class="pitch-status"
+    id="pitchStatus">
+
+      Tonalità originale
+
+    </div>
+
+  </div>
+
+
+  <!-- VOLUME / VELOCITÀ -->
+
   <div class="options">
 
     <div class="option">
 
-      <label>🔊 Volume</label>
+      <label>
+        🔊 Volume
+      </label>
+
 
       <input
       id="volume"
@@ -411,8 +636,13 @@ button{
       step="0.01"
       value="1">
 
-      <div class="value" id="volumeValue">
+
+      <div
+      class="value"
+      id="volumeValue">
+
         100%
+
       </div>
 
     </div>
@@ -420,7 +650,10 @@ button{
 
     <div class="option">
 
-      <label>⚡ Velocità</label>
+      <label>
+        ⚡ Velocità
+      </label>
+
 
       <input
       id="speed"
@@ -430,8 +663,13 @@ button{
       step="0.05"
       value="1">
 
-      <div class="value" id="speedValue">
+
+      <div
+      class="value"
+      id="speedValue">
+
         1.00x
+
       </div>
 
     </div>
@@ -439,12 +677,15 @@ button{
   </div>
 
 
+  <!-- TESTO -->
+
   <div class="lyrics">
 
     <div
     class="previous-line"
     id="previousLine">
     </div>
+
 
     <div
     class="current-line"
@@ -456,6 +697,7 @@ button{
 
     </div>
 
+
     <div
     class="next-line"
     id="nextLine">
@@ -463,23 +705,45 @@ button{
 
   </div>
 
-  <div class="status" id="status">
+
+  <div
+  class="status"
+  id="status">
+
     In attesa...
+
   </div>
 
 </div>
 
 </div>
+
 </div>
 
 
-<script>
+<script type="module">
+
+import {
+  SoundTouchNode
+}
+from "https://esm.sh/@soundtouchjs/audio-worklet@2.1.1";
+
+
+/* ==============================
+   ELEMENTI
+================================ */
 
 const audio =
 document.getElementById("audio");
 
 const fileInput =
 document.getElementById("fileInput");
+
+const klsInput =
+document.getElementById("klsInput");
+
+const saveKlsButton =
+document.getElementById("saveKlsButton");
 
 const library =
 document.getElementById("library");
@@ -523,6 +787,21 @@ document.getElementById("speed");
 const speedValue =
 document.getElementById("speedValue");
 
+const pitchMinus =
+document.getElementById("pitchMinus");
+
+const pitchPlus =
+document.getElementById("pitchPlus");
+
+const pitchReset =
+document.getElementById("pitchReset");
+
+const pitchNumber =
+document.getElementById("pitchNumber");
+
+const pitchStatus =
+document.getElementById("pitchStatus");
+
 const displayButton =
 document.getElementById("displayButton");
 
@@ -542,6 +821,10 @@ const status =
 document.getElementById("status");
 
 
+/* ==============================
+   STATO
+================================ */
+
 let songs = [];
 
 let currentSong = null;
@@ -550,15 +833,310 @@ let lyricLines = [];
 
 let displayWindow = null;
 
+let pitchSemitones = 0;
 
-/* ------------------------------
+let pendingKls = null;
+
+
+/* ==============================
+   MOTORE TONALITÀ
+================================ */
+
+let audioContext = null;
+
+let mediaSource = null;
+
+let soundTouchNode = null;
+
+let gainNode = null;
+
+let pitchEngineReady = false;
+
+
+async function ensurePitchEngine(){
+
+  if(pitchEngineReady){
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+
+      await audioContext.resume();
+
+    }
+
+    return true;
+
+  }
+
+
+  try{
+
+    const AudioCtx =
+    window.AudioContext
+    ||
+    window.webkitAudioContext;
+
+
+    audioContext =
+    new AudioCtx();
+
+
+    /*
+    Processor ufficiale
+    SoundTouchJS.
+    */
+
+    await SoundTouchNode.register(
+
+      audioContext,
+
+      "https://cdn.jsdelivr.net/npm/@soundtouchjs/audio-worklet@2.1.1/.dist/soundtouch-processor.js"
+
+    );
+
+
+    soundTouchNode =
+    new SoundTouchNode({
+
+      context:
+      audioContext
+
+    });
+
+
+    gainNode =
+    audioContext.createGain();
+
+
+    soundTouchNode.connect(
+      gainNode
+    );
+
+
+    gainNode.connect(
+      audioContext.destination
+    );
+
+
+    /*
+    IMPORTANTE:
+    createMediaElementSource
+    una volta sola.
+    */
+
+    mediaSource =
+    audioContext
+    .createMediaElementSource(
+      audio
+    );
+
+
+    mediaSource.connect(
+      soundTouchNode
+    );
+
+
+    audio.preservesPitch =
+    false;
+
+
+    soundTouchNode
+    .pitchSemitones
+    .value =
+    pitchSemitones;
+
+
+    soundTouchNode
+    .playbackRate
+    .value =
+    Number(
+      speed.value
+    );
+
+
+    gainNode.gain.value =
+    Number(
+      volume.value
+    );
+
+
+    audio.volume = 1;
+
+
+    pitchEngineReady =
+    true;
+
+
+    await audioContext.resume();
+
+
+    pitchStatus.textContent =
+    "✓ Motore tonalità attivo";
+
+
+    return true;
+
+
+  }catch(error){
+
+    console.error(
+      "Pitch engine:",
+      error
+    );
+
+
+    pitchStatus.textContent =
+    "Tonalità non disponibile — audio normale attivo";
+
+
+    return false;
+
+  }
+
+}
+
+
+/* ==============================
+   TONALITÀ
+================================ */
+
+function showPitch(){
+
+  pitchNumber.textContent =
+  pitchSemitones > 0
+  ?
+  "+" + pitchSemitones
+  :
+  String(
+    pitchSemitones
+  );
+
+
+  if(
+    pitchSemitones === 0
+  ){
+
+    pitchStatus.textContent =
+    pitchEngineReady
+    ?
+    "Tonalità originale"
+    :
+    "Tonalità originale";
+
+  }else{
+
+    pitchStatus.textContent =
+    "Tonalità "
+    +
+    (
+      pitchSemitones > 0
+      ?
+      "+"
+      +
+      pitchSemitones
+      :
+      pitchSemitones
+    )
+    +
+    " semitoni";
+
+  }
+
+
+  updateDisplay();
+
+}
+
+
+async function setPitch(value){
+
+  pitchSemitones =
+  Math.max(
+    -6,
+    Math.min(
+      6,
+      value
+    )
+  );
+
+
+  showPitch();
+
+
+  if(
+    pitchSemitones === 0
+    &&
+    !pitchEngineReady
+  ){
+
+    return;
+
+  }
+
+
+  const ok =
+  await ensurePitchEngine();
+
+
+  if(
+    ok &&
+    soundTouchNode
+  ){
+
+    soundTouchNode
+    .pitchSemitones
+    .value =
+    pitchSemitones;
+
+  }
+
+}
+
+
+pitchMinus.addEventListener(
+"click",
+async ()=>{
+
+  await setPitch(
+    pitchSemitones - 1
+  );
+
+});
+
+
+pitchPlus.addEventListener(
+"click",
+async ()=>{
+
+  await setPitch(
+    pitchSemitones + 1
+  );
+
+});
+
+
+pitchReset.addEventListener(
+"click",
+async ()=>{
+
+  await setPitch(0);
+
+});
+
+
+/* ==============================
    LIBRERIA
--------------------------------- */
+================================ */
 
 function cleanName(name){
 
   return name
-  .replace(/\.[^/.]+$/,"")
+  .replace(
+    /\.[^/.]+$/,
+    ""
+  )
   .trim();
 
 }
@@ -572,6 +1150,7 @@ fileInput.addEventListener(
   Array.from(
     fileInput.files
   );
+
 
   files
   .filter(
@@ -589,8 +1168,11 @@ fileInput.addEventListener(
         file.name
       )
     ){
+
       return;
+
     }
+
 
     songs.push({
 
@@ -604,7 +1186,8 @@ fileInput.addEventListener(
         file.name
       ),
 
-      file:file,
+      file:
+      file,
 
       url:
       URL.createObjectURL(
@@ -615,7 +1198,22 @@ fileInput.addEventListener(
 
   });
 
+
   renderLibrary();
+
+
+  /*
+  Se prima avevi aperto
+  un KLS e ora carichi
+  l'MP3 corrispondente,
+  lo apre automaticamente.
+  */
+
+  if(pendingKls){
+
+    tryApplyPendingKls();
+
+  }
 
 });
 
@@ -633,7 +1231,9 @@ function renderLibrary(){
   .toLowerCase()
   .trim();
 
+
   library.innerHTML="";
+
 
   const list =
   songs.filter(
@@ -643,14 +1243,16 @@ function renderLibrary(){
     .includes(query)
   );
 
+
   if(!list.length){
 
-    library.innerHTML=
+    library.innerHTML =
     '<div class="song-extra">Nessun brano.</div>';
 
     return;
 
   }
+
 
   list.forEach(song=>{
 
@@ -659,8 +1261,10 @@ function renderLibrary(){
       "div"
     );
 
-    item.className=
+
+    item.className =
     "song-item";
+
 
     if(
       currentSong &&
@@ -674,27 +1278,31 @@ function renderLibrary(){
 
     }
 
-    item.innerHTML=
-    '<div class="song-name">'
-    +
-    '🎵 '
-    +
-    escapeHTML(
-      song.title
-    )
-    +
-    '</div>'
-    +
-    '<div class="song-extra">'
-    +
-    'MP3 SongService / M-Live'
-    +
-    '</div>';
+
+    item.innerHTML =
+
+      '<div class="song-name">'
+      +
+      '🎵 '
+      +
+      escapeHTML(
+        song.title
+      )
+      +
+      '</div>'
+      +
+      '<div class="song-extra">'
+      +
+      'MP3 SongService / M-Live'
+      +
+      '</div>';
+
 
     item.addEventListener(
       "click",
       ()=>loadSong(song)
     );
+
 
     library.appendChild(
       item
@@ -705,35 +1313,64 @@ function renderLibrary(){
 }
 
 
-/* ------------------------------
+/* ==============================
    CARICA BRANO
--------------------------------- */
+================================ */
 
-async function loadSong(song){
+async function loadSong(
+song,
+keepSettings=false
+){
 
   audio.pause();
+
 
   currentSong =
   song;
 
+
   lyricLines = [];
+
 
   audio.src =
   song.url;
 
+
   audio.load();
+
 
   nowTitle.textContent =
   song.title;
 
-  previousLine.textContent="";
 
-  currentLine.textContent=
+  if(
+    !keepSettings
+  ){
+
+    pitchSemitones = 0;
+
+    speed.value = 1;
+
+    speedValue.textContent =
+    "1.00x";
+
+  }
+
+
+  showPitch();
+
+
+  previousLine.textContent = "";
+
+
+  currentLine.textContent =
   "Analisi testo...";
 
-  nextLine.textContent="";
 
-  status.textContent=
+  nextLine.textContent = "";
+
+
+  status.textContent =
   "Ricerca testo SongService...";
 
 
@@ -742,10 +1379,12 @@ async function loadSong(song){
     const buffer =
     await song.file.arrayBuffer();
 
+
     const chunks =
     parseSongServiceSYLT(
       buffer
     );
+
 
     if(
       chunks.length
@@ -756,45 +1395,453 @@ async function loadSong(song){
         chunks
       );
 
-      status.textContent=
+
+      status.textContent =
       "✓ TESTO TROVATO — "
       +
       lyricLines.length
       +
       " righe";
 
-      currentLine.textContent=
+
+      currentLine.textContent =
       "TESTO CARICATO ✓";
+
 
     }else{
 
-      status.textContent=
+      status.textContent =
       "Questo MP3 non contiene testo karaoke riconosciuto.";
 
-      currentLine.innerHTML=
+
+      currentLine.innerHTML =
       '<span class="no-lyrics">Nessun testo sincronizzato.</span>';
 
     }
+
 
   }catch(error){
 
     console.error(error);
 
-    status.textContent=
+
+    status.textContent =
     "Errore durante la lettura.";
 
   }
 
-  seek.value=0;
+
+  seek.value = 0;
+
 
   renderLibrary();
+
+
+  updateDisplay();
 
 }
 
 
-/* ------------------------------
+/* ==============================
+   KLS
+================================ */
+
+/*
+KLS LEGGERO:
+non contiene l'MP3.
+*/
+
+saveKlsButton.addEventListener(
+"click",
+()=>{
+
+  if(
+    !currentSong
+  ){
+
+    alert(
+      "Carica e seleziona prima un MP3."
+    );
+
+    return;
+
+  }
+
+
+  const kls = {
+
+    format:
+    "KLS",
+
+    version:
+    1,
+
+    app:
+    "Karaoke Live Show",
+
+    song:{
+
+      filename:
+      currentSong.file.name,
+
+      title:
+      currentSong.title,
+
+      size:
+      currentSong.file.size,
+
+      lastModified:
+      currentSong.file.lastModified
+
+    },
+
+    settings:{
+
+      pitchSemitones:
+      pitchSemitones,
+
+      speed:
+      Number(
+        speed.value
+      ),
+
+      volume:
+      Number(
+        volume.value
+      )
+
+    }
+
+  };
+
+
+  const text =
+  JSON.stringify(
+    kls,
+    null,
+    2
+  );
+
+
+  const blob =
+  new Blob(
+    [text],
+    {
+      type:
+      "application/json"
+    }
+  );
+
+
+  const url =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  const a =
+  document.createElement(
+    "a"
+  );
+
+
+  a.href =
+  url;
+
+
+  a.download =
+  safeFileName(
+    currentSong.title
+  )
+  +
+  ".kls";
+
+
+  document.body
+  .appendChild(a);
+
+
+  a.click();
+
+
+  a.remove();
+
+
+  setTimeout(
+    ()=>URL.revokeObjectURL(
+      url
+    ),
+    1000
+  );
+
+
+  status.textContent =
+  "✓ File KLS salvato";
+
+});
+
+
+klsInput.addEventListener(
+"change",
+async ()=>{
+
+  const file =
+  klsInput.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  try{
+
+    const text =
+    await file.text();
+
+
+    const data =
+    JSON.parse(
+      text
+    );
+
+
+    if(
+      data.format !==
+      "KLS"
+      ||
+      !data.song
+    ){
+
+      throw new Error(
+        "Formato KLS non valido"
+      );
+
+    }
+
+
+    pendingKls =
+    data;
+
+
+    tryApplyPendingKls();
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    alert(
+      "Questo file KLS non è valido."
+    );
+
+  }
+
+
+  klsInput.value = "";
+
+});
+
+
+async function tryApplyPendingKls(){
+
+  if(
+    !pendingKls
+  ){
+
+    return;
+
+  }
+
+
+  const filename =
+  pendingKls.song.filename;
+
+
+  const song =
+  songs.find(
+    s =>
+    s.file.name ===
+    filename
+  );
+
+
+  if(!song){
+
+    status.textContent =
+    "📂 KLS aperto. Adesso carica l'MP3: "
+    +
+    filename;
+
+
+    return;
+
+  }
+
+
+  const settings =
+  pendingKls.settings
+  ||
+  {};
+
+
+  pitchSemitones =
+  Number(
+    settings.pitchSemitones
+    ||
+    0
+  );
+
+
+  pitchSemitones =
+  Math.max(
+    -6,
+    Math.min(
+      6,
+      pitchSemitones
+    )
+  );
+
+
+  speed.value =
+  Number(
+    settings.speed
+    ||
+    1
+  );
+
+
+  volume.value =
+  Number(
+    settings.volume
+    ??
+    1
+  );
+
+
+  speedValue.textContent =
+  Number(
+    speed.value
+  )
+  .toFixed(2)
+  +
+  "x";
+
+
+  volumeValue.textContent =
+  Math.round(
+    Number(
+      volume.value
+    )
+    *
+    100
+  )
+  +
+  "%";
+
+
+  await loadSong(
+    song,
+    true
+  );
+
+
+  audio.playbackRate =
+  Number(
+    speed.value
+  );
+
+
+  showPitch();
+
+
+  if(
+    pitchSemitones !== 0
+  ){
+
+    const ok =
+    await ensurePitchEngine();
+
+
+    if(
+      ok
+    ){
+
+      soundTouchNode
+      .pitchSemitones
+      .value =
+      pitchSemitones;
+
+    }
+
+  }
+
+
+  if(
+    pitchEngineReady
+  ){
+
+    soundTouchNode
+    .playbackRate
+    .value =
+    Number(
+      speed.value
+    );
+
+
+    gainNode.gain.value =
+    Number(
+      volume.value
+    );
+
+
+  }else{
+
+    audio.volume =
+    Number(
+      volume.value
+    );
+
+  }
+
+
+  status.textContent =
+  "✓ KLS caricato — tonalità "
+  +
+  (
+    pitchSemitones > 0
+    ?
+    "+"
+    +
+    pitchSemitones
+    :
+    pitchSemitones
+  );
+
+
+  pendingKls =
+  null;
+
+}
+
+
+function safeFileName(name){
+
+  return String(name)
+  .replace(
+    /[\\/:*?"<>|]/g,
+    "_"
+  )
+  .trim();
+
+}
+
+
+/* ==============================
    PARSER SONGSERVICE / M-LIVE
--------------------------------- */
+   (QUELLO CHE GIÀ FUNZIONA)
+================================ */
 
 function uint32be(
 bytes,
@@ -817,23 +1864,6 @@ offset
 }
 
 
-function synchsafe32(
-a,b,c,d
-){
-
-  return (
-    (a << 21)
-    |
-    (b << 14)
-    |
-    (c << 7)
-    |
-    d
-  ) >>> 0;
-
-}
-
-
 function parseSongServiceSYLT(
 arrayBuffer
 ){
@@ -843,11 +1873,6 @@ arrayBuffer
     arrayBuffer
   );
 
-
-  /*
-  Cerca direttamente
-  il frame SYLT.
-  */
 
   let frameStart = -1;
 
@@ -886,22 +1911,12 @@ arrayBuffer
   }
 
 
-  /*
-  Dimensione frame.
-  */
-
   const frameSize =
   uint32be(
     bytes,
     frameStart+4
   );
 
-
-  /*
-  Salta header
-  SYLT + size + flags
-  = 10 byte.
-  */
 
   const start =
   frameStart + 10;
@@ -921,21 +1936,6 @@ arrayBuffer
   );
 
 
-  /*
-  SONGSERVICE / M-LIVE:
-
-  00
-  00
-  XXX
-  02
-  01
-
-  Il secondo 00 è quello
-  che mancava nel parser
-  precedente.
-  */
-
-
   let pos = 0;
 
 
@@ -945,7 +1945,6 @@ arrayBuffer
 
   /*
   Byte aggiuntivo
-  presente nei file
   SongService/M-Live.
   */
 
@@ -965,7 +1964,7 @@ arrayBuffer
 
 
   /*
-  lingua XXX
+  Lingua XXX.
   */
 
   pos += 3;
@@ -976,15 +1975,14 @@ arrayBuffer
 
 
   /*
-  content type
+  Content type.
   */
 
   pos++;
 
 
   /*
-  descrizione:
-  Sincro by M-live
+  Descrizione SYLT.
   */
 
   while(
@@ -996,6 +1994,7 @@ arrayBuffer
     pos++;
 
   }
+
 
   pos++;
 
@@ -1063,20 +2062,19 @@ arrayBuffer
 
     const text =
     new TextDecoder(
+      encoding === 3
+      ?
+      "utf-8"
+      :
       "windows-1252"
-    ).decode(
+    )
+    .decode(
       textBytes
     );
 
 
     let seconds;
 
-
-    /*
-    Nei file SongService
-    che abbiamo controllato:
-    02 = millisecondi.
-    */
 
     if(
       timestampFormat === 2
@@ -1111,36 +2109,46 @@ arrayBuffer
 }
 
 
-/* ------------------------------
-   COSTRUISCE LE RIGHE
--------------------------------- */
+/* ==============================
+   RIGHE KARAOKE
+================================ */
 
-function buildLines(chunks){
+function buildLines(
+chunks
+){
 
   const lines = [];
 
-  let line = null;
+
+  let line =
+  null;
 
 
-  chunks.forEach(chunk=>{
+  chunks.forEach(
+  chunk=>{
 
     let text =
-    chunk.text || "";
+    chunk.text
+    ||
+    "";
 
-
-    /*
-    \n significa
-    NUOVA RIGA.
-    */
 
     const beginsNewLine =
-    text.includes("\n");
+    text.includes(
+      "\n"
+    );
 
 
     text =
     text
-    .replace(/\r/g,"")
-    .replace(/\n/g,"");
+    .replace(
+      /\r/g,
+      ""
+    )
+    .replace(
+      /\n/g,
+      ""
+    );
 
 
     if(
@@ -1149,9 +2157,14 @@ function buildLines(chunks){
       !line
     ){
 
-      if(line){
+      if(
+        line
+      ){
 
-        finishLine(line);
+        finishLine(
+          line
+        );
+
 
         if(
           validLine(
@@ -1180,7 +2193,9 @@ function buildLines(chunks){
     }
 
 
-    if(text){
+    if(
+      text
+    ){
 
       line.chunks.push({
 
@@ -1197,9 +2212,14 @@ function buildLines(chunks){
   });
 
 
-  if(line){
+  if(
+    line
+  ){
 
-    finishLine(line);
+    finishLine(
+      line
+    );
+
 
     if(
       validLine(
@@ -1221,12 +2241,15 @@ function buildLines(chunks){
 }
 
 
-function finishLine(line){
+function finishLine(
+line
+){
 
   line.text =
   line.chunks
   .map(
-    x => x.text
+    x =>
+    x.text
   )
   .join("")
   .trim();
@@ -1234,10 +2257,16 @@ function finishLine(line){
 }
 
 
-function validLine(text){
+function validLine(
+text
+){
 
   const t =
-  String(text || "")
+  String(
+    text
+    ||
+    ""
+  )
   .trim();
 
 
@@ -1246,17 +2275,14 @@ function validLine(text){
   }
 
 
-  /*
-  Elimina intestazioni
-  SongService.
-  */
-
   if(
     t.includes(
       "www.songservice.it"
     )
   ){
+
     return false;
+
   }
 
 
@@ -1265,7 +2291,9 @@ function validLine(text){
       "Universal Music"
     )
   ){
+
     return false;
+
   }
 
 
@@ -1273,23 +2301,9 @@ function validLine(text){
     /^[-_]{5,}$/
     .test(t)
   ){
+
     return false;
-  }
 
-
-  if(
-    /^".*"$/
-    .test(t)
-  ){
-    return false;
-  }
-
-
-  if(
-    /^\(.*\)$/
-    .test(t)
-  ){
-    return false;
   }
 
 
@@ -1298,13 +2312,14 @@ function validLine(text){
 }
 
 
-/* ------------------------------
+/* ==============================
    TESTO LIVE
--------------------------------- */
+================================ */
 
 function getLineIndex(){
 
-  let index = -1;
+  let index =
+  -1;
 
 
   for(
@@ -1319,7 +2334,8 @@ function getLineIndex(){
       lyricLines[i].start
     ){
 
-      index=i;
+      index =
+      i;
 
     }else{
 
@@ -1340,19 +2356,24 @@ line,
 time
 ){
 
-  if(!line){
+  if(
+    !line
+  ){
+
     return "";
+
   }
 
 
-  let html="";
+  let html = "";
 
 
   line.chunks.forEach(
   chunk=>{
 
     const cls =
-    time >= chunk.time
+    time >=
+    chunk.time
     ?
     "sung"
     :
@@ -1360,17 +2381,18 @@ time
 
 
     html +=
-    '<span class="'
-    +
-    cls
-    +
-    '">'
-    +
-    escapeHTML(
-      chunk.text
-    )
-    +
-    '</span>';
+
+      '<span class="'
+      +
+      cls
+      +
+      '">'
+      +
+      escapeHTML(
+        chunk.text
+      )
+      +
+      '</span>';
 
   });
 
@@ -1397,17 +2419,24 @@ function updateLyrics(){
   getLineIndex();
 
 
-  if(index < 0){
+  if(
+    index < 0
+  ){
 
-    previousLine.textContent="";
+    previousLine.textContent =
+    "";
 
-    currentLine.textContent="♪";
 
-    nextLine.textContent=
+    currentLine.textContent =
+    "♪";
+
+
+    nextLine.textContent =
     lyricLines[0]
     ?.text
     ||
     "";
+
 
     updateDisplay();
 
@@ -1416,21 +2445,21 @@ function updateLyrics(){
   }
 
 
-  previousLine.textContent=
+  previousLine.textContent =
   lyricLines[index-1]
   ?.text
   ||
   "";
 
 
-  currentLine.innerHTML=
+  currentLine.innerHTML =
   renderCurrentLine(
     lyricLines[index],
     audio.currentTime
   );
 
 
-  nextLine.textContent=
+  nextLine.textContent =
   lyricLines[index+1]
   ?.text
   ||
@@ -1442,15 +2471,17 @@ function updateLyrics(){
 }
 
 
-/* ------------------------------
+/* ==============================
    AUDIO
--------------------------------- */
+================================ */
 
 playButton.addEventListener(
 "click",
 async ()=>{
 
-  if(!currentSong){
+  if(
+    !currentSong
+  ){
 
     alert(
       "Seleziona un brano."
@@ -1461,7 +2492,56 @@ async ()=>{
   }
 
 
-  if(audio.paused){
+  /*
+  Se tonalità diversa da 0,
+  avvia SoundTouch.
+  */
+
+  if(
+    pitchSemitones !== 0
+  ){
+
+    const ok =
+    await ensurePitchEngine();
+
+
+    if(
+      ok
+    ){
+
+      soundTouchNode
+      .pitchSemitones
+      .value =
+      pitchSemitones;
+
+
+      soundTouchNode
+      .playbackRate
+      .value =
+      Number(
+        speed.value
+      );
+
+    }
+
+  }
+
+
+  if(
+    audioContext
+    &&
+    audioContext.state ===
+    "suspended"
+  ){
+
+    await audioContext.resume();
+
+  }
+
+
+  if(
+    audio.paused
+  ){
 
     await audio.play();
 
@@ -1478,7 +2558,7 @@ audio.addEventListener(
 "play",
 ()=>{
 
-  playButton.textContent=
+  playButton.textContent =
   "⏸ PAUSA";
 
 });
@@ -1488,7 +2568,7 @@ audio.addEventListener(
 "pause",
 ()=>{
 
-  playButton.textContent=
+  playButton.textContent =
   "▶ PLAY";
 
 });
@@ -1500,7 +2580,9 @@ stopButton.addEventListener(
 
   audio.pause();
 
-  audio.currentTime=0;
+
+  audio.currentTime =
+  0;
 
 });
 
@@ -1509,10 +2591,10 @@ back10.addEventListener(
 "click",
 ()=>{
 
-  audio.currentTime=
+  audio.currentTime =
   Math.max(
     0,
-    audio.currentTime-10
+    audio.currentTime - 10
   );
 
 });
@@ -1522,10 +2604,15 @@ forward10.addEventListener(
 "click",
 ()=>{
 
-  audio.currentTime=
+  audio.currentTime =
   Math.min(
-    audio.duration || 0,
-    audio.currentTime+10
+    audio.duration
+    ||
+    0,
+
+    audio.currentTime
+    +
+    10
   );
 
 });
@@ -1535,15 +2622,34 @@ volume.addEventListener(
 "input",
 ()=>{
 
-  audio.volume=
+  const v =
   Number(
     volume.value
   );
 
 
-  volumeValue.textContent=
+  if(
+    pitchEngineReady
+  ){
+
+    audio.volume =
+    1;
+
+
+    gainNode.gain.value =
+    v;
+
+  }else{
+
+    audio.volume =
+    v;
+
+  }
+
+
+  volumeValue.textContent =
   Math.round(
-    audio.volume*100
+    v * 100
   )
   +
   "%";
@@ -1555,25 +2661,41 @@ speed.addEventListener(
 "input",
 ()=>{
 
-  audio.playbackRate=
+  const tempo =
   Number(
     speed.value
   );
 
 
+  audio.playbackRate =
+  tempo;
+
+
   if(
-    "preservesPitch"
-    in audio
+    pitchEngineReady
   ){
 
-    audio.preservesPitch=
+    soundTouchNode
+    .playbackRate
+    .value =
+    tempo;
+
+  }else{
+
+    /*
+    Senza SoundTouch,
+    il browser mantiene
+    il pitch originale.
+    */
+
+    audio.preservesPitch =
     true;
 
   }
 
 
-  speedValue.textContent=
-  audio.playbackRate
+  speedValue.textContent =
+  tempo
   .toFixed(2)
   +
   "x";
@@ -1590,11 +2712,13 @@ seek.addEventListener(
       audio.duration
     )
   ){
+
     return;
+
   }
 
 
-  audio.currentTime=
+  audio.currentTime =
   (
     Number(
       seek.value
@@ -1620,7 +2744,7 @@ audio.addEventListener(
     audio.duration > 0
   ){
 
-    seek.value=
+    seek.value =
     (
       audio.currentTime
       /
@@ -1632,13 +2756,13 @@ audio.addEventListener(
   }
 
 
-  currentTimeBox.textContent=
+  currentTimeBox.textContent =
   formatTime(
     audio.currentTime
   );
 
 
-  durationBox.textContent=
+  durationBox.textContent =
   formatTime(
     audio.duration
   );
@@ -1653,7 +2777,7 @@ audio.addEventListener(
 "loadedmetadata",
 ()=>{
 
-  durationBox.textContent=
+  durationBox.textContent =
   formatTime(
     audio.duration
   );
@@ -1661,7 +2785,9 @@ audio.addEventListener(
 });
 
 
-function formatTime(seconds){
+function formatTime(
+seconds
+){
 
   if(
     !Number.isFinite(
@@ -1676,32 +2802,44 @@ function formatTime(seconds){
 
   const m =
   Math.floor(
-    seconds/60
+    seconds / 60
   );
 
 
   const s =
   Math.floor(
-    seconds%60
+    seconds % 60
   );
 
 
   return (
+
     String(m)
-    .padStart(2,"0")
+    .padStart(
+      2,
+      "0"
+    )
+
     +
+
     ":"
+
     +
+
     String(s)
-    .padStart(2,"0")
+    .padStart(
+      2,
+      "0"
+    )
+
   );
 
 }
 
 
-/* ------------------------------
+/* ==============================
    DISPLAY 2
--------------------------------- */
+================================ */
 
 displayButton.addEventListener(
 "click",
@@ -1720,15 +2858,21 @@ displayButton.addEventListener(
   }
 
 
-  displayWindow=
+  displayWindow =
   window.open(
+
     "",
+
     "KaraokeDisplay",
+
     "width=1200,height=750"
+
   );
 
 
-  if(!displayWindow){
+  if(
+    !displayWindow
+  ){
 
     alert(
       "Display 2 bloccato dal browser."
@@ -1740,10 +2884,18 @@ displayButton.addEventListener(
 
 
   displayWindow.document.write(`
+
 <!doctype html>
+
 <html>
+
 <head>
+
 <meta charset="utf-8">
+
+<title>
+Karaoke Live Show
+</title>
 
 <style>
 
@@ -1756,35 +2908,67 @@ body{
 
 body{
   background:#000;
-  font-family:Arial,Helvetica,sans-serif;
+
+  font-family:
+  Arial,
+  Helvetica,
+  sans-serif;
+
   display:flex;
+
   flex-direction:column;
+
   justify-content:center;
+
   align-items:center;
+
   text-align:center;
+
   overflow:hidden;
 }
 
 #title{
   position:absolute;
+
   top:20px;
+
   color:#777;
+
   font-size:20px;
+}
+
+#pitch{
+  position:absolute;
+
+  top:20px;
+
+  right:30px;
+
+  color:#ffd21f;
+
+  font-size:18px;
 }
 
 #prev,
 #next{
   color:#666;
+
   font-size:36px;
+
   min-height:50px;
+
   padding:0 4vw;
 }
 
 #cur{
   color:white;
+
   font-size:72px;
+
   line-height:1.2;
+
   font-weight:900;
+
   margin:40px 4vw;
 }
 
@@ -1797,6 +2981,7 @@ body{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -1805,16 +2990,24 @@ body{
 KARAOKE LIVE SHOW
 </div>
 
-<div id="prev"></div>
+<div id="pitch">
+TONALITÀ 0
+</div>
+
+<div id="prev">
+</div>
 
 <div id="cur">
 IN ATTESA
 </div>
 
-<div id="next"></div>
+<div id="next">
+</div>
 
 </body>
+
 </html>
+
   `);
 
 
@@ -1846,6 +3039,13 @@ function updateDisplay(){
   );
 
 
+  const pitch =
+  displayWindow.document
+  .getElementById(
+    "pitch"
+  );
+
+
   const prev =
   displayWindow.document
   .getElementById(
@@ -1867,7 +3067,7 @@ function updateDisplay(){
   );
 
 
-  title.textContent=
+  title.textContent =
   currentSong
   ?
   currentSong.title
@@ -1875,42 +3075,63 @@ function updateDisplay(){
   "KARAOKE LIVE SHOW";
 
 
+  pitch.textContent =
+  "TONALITÀ "
+  +
+  (
+    pitchSemitones > 0
+    ?
+    "+"
+    +
+    pitchSemitones
+    :
+    pitchSemitones
+  );
+
+
   const index =
   getLineIndex();
 
 
-  if(index < 0){
+  if(
+    index < 0
+  ){
 
-    prev.textContent="";
+    prev.textContent =
+    "";
 
-    cur.textContent="♪";
 
-    next.textContent=
+    cur.textContent =
+    "♪";
+
+
+    next.textContent =
     lyricLines[0]
     ?.text
     ||
     "";
+
 
     return;
 
   }
 
 
-  prev.textContent=
+  prev.textContent =
   lyricLines[index-1]
   ?.text
   ||
   "";
 
 
-  cur.innerHTML=
+  cur.innerHTML =
   renderCurrentLine(
     lyricLines[index],
     audio.currentTime
   );
 
 
-  next.textContent=
+  next.textContent =
   lyricLines[index+1]
   ?.text
   ||
@@ -1919,9 +3140,9 @@ function updateDisplay(){
 }
 
 
-/* ------------------------------
+/* ==============================
    FULLSCREEN
--------------------------------- */
+================================ */
 
 fullscreenButton.addEventListener(
 "click",
@@ -1945,16 +3166,40 @@ async ()=>{
 });
 
 
-function escapeHTML(text){
+/* ==============================
+   UTILITY
+================================ */
+
+function escapeHTML(
+text
+){
 
   return String(text)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
+
+
+showPitch();
 
 </script>
 
