@@ -6,18 +6,16 @@
 
 <title>Player - Karaoke Live Show</title>
 
-<style>
+<script src="https://cdn.jsdelivr.net/npm/tone@15.1.22/build/Tone.js"></script>
 
-*{
-  box-sizing:border-box;
-}
+<style>
+*{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   color:white;
   min-height:100vh;
-
   background:
     radial-gradient(circle at 15% 10%,rgba(255,0,180,.20),transparent 30%),
     radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
@@ -53,6 +51,7 @@ body{
   color:white;
   text-decoration:none;
   font-weight:bold;
+  margin-left:6px;
 }
 
 .grid{
@@ -75,9 +74,7 @@ body{
   gap:10px;
 }
 
-.library-title h2{
-  margin:0;
-}
+.library-title h2{margin:0}
 
 .file-label{
   display:inline-flex;
@@ -91,9 +88,7 @@ body{
   font-weight:900;
 }
 
-#fileInput{
-  display:none;
-}
+#fileInput{display:none}
 
 .search{
   width:100%;
@@ -106,7 +101,7 @@ body{
 
 .library{
   margin-top:14px;
-  max-height:610px;
+  max-height:650px;
   overflow:auto;
 }
 
@@ -128,9 +123,7 @@ body{
   background:rgba(255,210,31,.10);
 }
 
-.song-name{
-  font-weight:900;
-}
+.song-name{font-weight:900}
 
 .song-extra{
   color:#bfc2d4;
@@ -139,12 +132,10 @@ body{
 }
 
 .player{
-  min-height:650px;
+  min-height:690px;
 }
 
-.now{
-  text-align:center;
-}
+.now{text-align:center}
 
 .now-label{
   color:#adb0c6;
@@ -166,9 +157,7 @@ body{
   color:#cfd1df;
 }
 
-#seek{
-  width:100%;
-}
+#seek{width:100%}
 
 .controls{
   display:flex;
@@ -245,9 +234,59 @@ button{
   font-weight:bold;
 }
 
+.pitch-box{
+  margin-top:18px;
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
+  padding:18px;
+  text-align:center;
+}
+
+.pitch-title{
+  color:#ffd21f;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:14px;
+}
+
+.pitch-controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.pitch-minus,
+.pitch-plus{
+  min-width:95px;
+  font-size:23px;
+}
+
+.pitch-minus{
+  background:#1a77ff;
+  color:white;
+}
+
+.pitch-plus{
+  background:#ff259d;
+  color:white;
+}
+
+.pitch-reset{
+  background:#ffd21f;
+  color:#251e00;
+}
+
+.pitch-value{
+  min-width:100px;
+  font-size:30px;
+  font-weight:900;
+}
+
 .lyrics{
   margin-top:24px;
-  min-height:250px;
+  min-height:260px;
   border-radius:20px;
   background:#03040a;
   border:1px solid rgba(255,255,255,.10);
@@ -286,26 +325,19 @@ button{
   font-size:13px;
 }
 
-@media(max-width:850px){
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .library{
-    max-height:280px;
-  }
-
-  .options{
-    grid-template-columns:1fr;
-  }
-
-  .current-line{
-    font-size:30px;
-  }
-
+.format-status{
+  margin-top:10px;
+  text-align:center;
+  color:#ffd21f;
+  font-size:13px;
 }
 
+@media(max-width:850px){
+  .grid{grid-template-columns:1fr}
+  .library{max-height:280px}
+  .options{grid-template-columns:1fr}
+  .current-line{font-size:30px}
+}
 </style>
 </head>
 
@@ -320,20 +352,13 @@ button{
   </div>
 
   <div>
-    <a class="back" href="admin.html">
-      ← ADMIN
-    </a>
-
-    <a class="back" href="sito.html">
-      🌐 SITO
-    </a>
+    <a class="back" href="admin.html">← ADMIN</a>
+    <a class="back" href="sito.html">🌐 SITO</a>
   </div>
 
 </div>
 
-
 <div class="grid">
-
 
 <!-- LIBRERIA -->
 
@@ -359,14 +384,10 @@ button{
   class="search"
   placeholder="Cerca canzone...">
 
-  <div
-  id="library"
-  class="library">
-
+  <div id="library" class="library">
     <div class="song-extra">
       Carica uno o più MP3.
     </div>
-
   </div>
 
 </div>
@@ -390,18 +411,14 @@ button{
 
   </div>
 
-
   <audio id="audio"></audio>
-
 
   <div class="time">
 
     <span id="currentTime">00:00</span>
-
     <span id="duration">00:00</span>
 
   </div>
-
 
   <input
   id="seek"
@@ -409,7 +426,6 @@ button{
   min="0"
   max="100"
   value="0">
-
 
   <div class="controls">
 
@@ -451,6 +467,54 @@ button{
 
   </div>
 
+
+  <!-- TONALITÀ -->
+
+  <div class="pitch-box">
+
+    <div class="pitch-title">
+      🎼 TONALITÀ
+    </div>
+
+    <div class="pitch-controls">
+
+      <button
+      class="pitch-minus"
+      id="pitchMinus">
+        −
+      </button>
+
+      <div
+      class="pitch-value"
+      id="pitchValue">
+        0
+      </div>
+
+      <button
+      class="pitch-plus"
+      id="pitchPlus">
+        +
+      </button>
+
+      <button
+      class="pitch-reset"
+      id="pitchReset">
+        RESET 0
+      </button>
+
+    </div>
+
+    <div
+    style="margin-top:8px;color:#bbb;font-size:13px">
+
+      Da −6 a +6 semitoni
+
+    </div>
+
+  </div>
+
+
+  <!-- VOLUME E VELOCITÀ -->
 
   <div class="options">
 
@@ -502,6 +566,8 @@ button{
   </div>
 
 
+  <!-- TESTO -->
+
   <div class="lyrics">
 
     <div
@@ -514,8 +580,7 @@ button{
     id="currentLine">
 
       <span class="no-lyrics">
-        Carica un MP3 e, se disponibile,
-        il relativo file LRC.
+        Carica un MP3.
       </span>
 
     </div>
@@ -527,17 +592,18 @@ button{
 
   </div>
 
+  <div
+  class="format-status"
+  id="formatStatus">
+    In attesa di un brano...
+  </div>
 
   <div class="info-bar">
-
-    Il player riproduce già gli MP3.
-    La lettura diretta del testo M-Live incorporato
-    verrà aggiunta nel prossimo passaggio.
-
+    Supporto MP3 + LRC e tentativo automatico
+    di lettura testo sincronizzato ID3 SYLT.
   </div>
 
 </div>
-
 
 </div>
 
@@ -548,6 +614,8 @@ button{
 
 const audio =
 document.getElementById("audio");
+
+audio.preservesPitch = true;
 
 const fileInput =
 document.getElementById("fileInput");
@@ -609,6 +677,21 @@ document.getElementById("currentLine");
 const nextLine =
 document.getElementById("nextLine");
 
+const formatStatus =
+document.getElementById("formatStatus");
+
+const pitchMinus =
+document.getElementById("pitchMinus");
+
+const pitchPlus =
+document.getElementById("pitchPlus");
+
+const pitchReset =
+document.getElementById("pitchReset");
+
+const pitchValue =
+document.getElementById("pitchValue");
+
 
 let songs = [];
 
@@ -618,6 +701,119 @@ let currentLyrics = [];
 
 let displayWindow = null;
 
+let pitchSemitones = 0;
+
+
+/* AUDIO TONALITÀ */
+
+let audioGraphReady = false;
+let mediaSource = null;
+let pitchShift = null;
+let masterGain = null;
+
+
+async function initAudioGraph(){
+
+  if(audioGraphReady){
+    await Tone.start();
+    return;
+  }
+
+  await Tone.start();
+
+  const ctx =
+  Tone.getContext().rawContext;
+
+  mediaSource =
+  ctx.createMediaElementSource(audio);
+
+  pitchShift =
+  new Tone.PitchShift({
+    pitch:0,
+    windowSize:0.1,
+    delayTime:0,
+    feedback:0
+  });
+
+  masterGain =
+  new Tone.Gain(1);
+
+  mediaSource.connect(
+    pitchShift.input
+  );
+
+  pitchShift.connect(
+    masterGain
+  );
+
+  masterGain.toDestination();
+
+  audioGraphReady = true;
+
+}
+
+
+function setPitch(value){
+
+  pitchSemitones =
+  Math.max(
+    -6,
+    Math.min(6,value)
+  );
+
+  pitchValue.textContent =
+  pitchSemitones > 0
+  ? "+" + pitchSemitones
+  : String(pitchSemitones);
+
+  if(pitchShift){
+
+    pitchShift.pitch =
+    pitchSemitones;
+
+  }
+
+}
+
+
+pitchMinus.addEventListener(
+"click",
+async ()=>{
+
+  await initAudioGraph();
+
+  setPitch(
+    pitchSemitones - 1
+  );
+
+});
+
+
+pitchPlus.addEventListener(
+"click",
+async ()=>{
+
+  await initAudioGraph();
+
+  setPitch(
+    pitchSemitones + 1
+  );
+
+});
+
+
+pitchReset.addEventListener(
+"click",
+async ()=>{
+
+  await initAudioGraph();
+
+  setPitch(0);
+
+});
+
+
+/* NOMI FILE */
 
 function cleanName(name){
 
@@ -638,9 +834,11 @@ function baseName(name){
 }
 
 
+/* CARICAMENTO */
+
 fileInput.addEventListener(
 "change",
-function(){
+async function(){
 
   const files =
   Array.from(fileInput.files);
@@ -648,19 +846,25 @@ function(){
   const mp3Files =
   files.filter(
     f =>
-    f.name.toLowerCase().endsWith(".mp3")
+    f.name
+    .toLowerCase()
+    .endsWith(".mp3")
   );
 
   const lyricFiles =
   files.filter(
     f =>
-    f.name.toLowerCase().endsWith(".lrc")
+    f.name
+    .toLowerCase()
+    .endsWith(".lrc")
     ||
-    f.name.toLowerCase().endsWith(".txt")
+    f.name
+    .toLowerCase()
+    .endsWith(".txt")
   );
 
 
-  mp3Files.forEach(mp3=>{
+  for(const mp3 of mp3Files){
 
     const existing =
     songs.find(
@@ -668,9 +872,8 @@ function(){
     );
 
     if(existing){
-      return;
+      continue;
     }
-
 
     const lyric =
     lyricFiles.find(
@@ -679,7 +882,6 @@ function(){
       baseName(mp3.name)
     );
 
-
     songs.push({
 
       id:
@@ -687,8 +889,7 @@ function(){
       +
       Math.random(),
 
-      file:
-      mp3,
+      file:mp3,
 
       url:
       URL.createObjectURL(mp3),
@@ -701,13 +902,14 @@ function(){
 
     });
 
-  });
-
+  }
 
   renderLibrary();
 
 });
 
+
+/* LIBRERIA */
 
 function renderLibrary(){
 
@@ -716,9 +918,7 @@ function renderLibrary(){
   .toLowerCase()
   .trim();
 
-
   library.innerHTML="";
-
 
   const filtered =
   songs.filter(
@@ -728,7 +928,6 @@ function renderLibrary(){
     .includes(query)
   );
 
-
   if(filtered.length===0){
 
     library.innerHTML=
@@ -737,7 +936,6 @@ function renderLibrary(){
     return;
   }
 
-
   filtered.forEach(song=>{
 
     const item =
@@ -745,7 +943,6 @@ function renderLibrary(){
 
     item.className=
     "song-item";
-
 
     if(
       currentSong &&
@@ -756,7 +953,6 @@ function renderLibrary(){
 
     }
 
-
     const name =
     document.createElement("div");
 
@@ -765,7 +961,6 @@ function renderLibrary(){
 
     name.textContent=
     "🎵 " + song.title;
-
 
     const extra =
     document.createElement("div");
@@ -776,21 +971,17 @@ function renderLibrary(){
     extra.textContent=
     song.lyricFile
     ?
-    "Testo sincronizzato disponibile"
+    "LRC/TXT disponibile"
     :
-    "MP3";
-
+    "MP3 — ricerca SYLT automatica";
 
     item.appendChild(name);
-
     item.appendChild(extra);
-
 
     item.addEventListener(
       "click",
       ()=>loadSong(song)
     );
-
 
     library.appendChild(item);
 
@@ -805,10 +996,14 @@ renderLibrary
 );
 
 
+/* CARICA BRANO */
+
 async function loadSong(song){
 
   currentSong =
   song;
+
+  audio.pause();
 
   audio.src =
   song.url;
@@ -818,13 +1013,16 @@ async function loadSong(song){
 
   currentLyrics = [];
 
+  setPitch(0);
 
   previousLine.textContent="";
+  nextLine.textContent="";
 
   currentLine.innerHTML=
-  '<span class="no-lyrics">Caricamento...</span>';
+  '<span class="no-lyrics">Ricerca testo sincronizzato...</span>';
 
-  nextLine.textContent="";
+  formatStatus.textContent=
+  "Analisi MP3...";
 
 
   if(song.lyricFile){
@@ -835,13 +1033,57 @@ async function loadSong(song){
     currentLyrics =
     parseLRC(text);
 
+    if(currentLyrics.length){
+
+      formatStatus.textContent=
+      "✓ Testo LRC sincronizzato trovato";
+
+    }
+
+  }
+
+
+  if(currentLyrics.length===0){
+
+    try{
+
+      const buffer =
+      await song.file.arrayBuffer();
+
+      const sylt =
+      parseID3SYLT(buffer);
+
+      if(sylt.length){
+
+        currentLyrics =
+        sylt;
+
+        formatStatus.textContent=
+        "✓ Testo SYLT sincronizzato trovato dentro l'MP3";
+
+      }else{
+
+        formatStatus.textContent=
+        "Nessun frame SYLT standard trovato";
+
+      }
+
+    }catch(error){
+
+      console.error(error);
+
+      formatStatus.textContent=
+      "Errore durante l'analisi del testo";
+
+    }
+
   }
 
 
   if(currentLyrics.length===0){
 
     currentLine.innerHTML=
-    '<span class="no-lyrics">Testo sincronizzato non ancora disponibile per questo MP3.</span>';
+    '<span class="no-lyrics">Il testo sincronizzato di questo MP3 non è ancora stato riconosciuto.</span>';
 
   }
 
@@ -855,13 +1097,14 @@ async function loadSong(song){
 }
 
 
+/* LRC */
+
 function parseLRC(text){
 
   const result = [];
 
   const lines =
   text.split(/\r?\n/);
-
 
   lines.forEach(line=>{
 
@@ -870,18 +1113,15 @@ function parseLRC(text){
       /\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\]/g
     )];
 
-
     if(matches.length===0){
       return;
     }
-
 
     const lyricText =
     line.replace(
       /\[[^\]]+\]/g,
       ""
     ).trim();
-
 
     matches.forEach(match=>{
 
@@ -893,7 +1133,6 @@ function parseLRC(text){
 
       let fraction =
       match[3] || "0";
-
 
       if(fraction.length===1){
 
@@ -912,14 +1151,12 @@ function parseLRC(text){
 
       }
 
-
       const time =
-      minutes * 60
+      minutes*60
       +
       seconds
       +
       Number(fraction);
-
 
       result.push({
         time:time,
@@ -930,16 +1167,438 @@ function parseLRC(text){
 
   });
 
-
   result.sort(
     (a,b)=>a.time-b.time
   );
-
 
   return result;
 
 }
 
+
+/* ID3 / SYLT */
+
+function synchsafe32(
+a,b,c,d
+){
+
+  return (
+    (a << 21) |
+    (b << 14) |
+    (c << 7) |
+    d
+  );
+
+}
+
+
+function uint32be(
+bytes,
+offset
+){
+
+  return (
+    (
+      bytes[offset] * 0x1000000
+    )
+    +
+    (
+      bytes[offset+1] << 16
+    )
+    +
+    (
+      bytes[offset+2] << 8
+    )
+    +
+    bytes[offset+3]
+  ) >>> 0;
+
+}
+
+
+function parseID3SYLT(arrayBuffer){
+
+  const bytes =
+  new Uint8Array(arrayBuffer);
+
+  if(
+    bytes.length < 10 ||
+    bytes[0] !== 0x49 ||
+    bytes[1] !== 0x44 ||
+    bytes[2] !== 0x33
+  ){
+
+    return [];
+
+  }
+
+  const version =
+  bytes[3];
+
+  const tagSize =
+  synchsafe32(
+    bytes[6],
+    bytes[7],
+    bytes[8],
+    bytes[9]
+  );
+
+  let offset = 10;
+
+  const end =
+  Math.min(
+    bytes.length,
+    10 + tagSize
+  );
+
+
+  while(
+    offset + 10 <= end
+  ){
+
+    const frameId =
+    String.fromCharCode(
+      bytes[offset],
+      bytes[offset+1],
+      bytes[offset+2],
+      bytes[offset+3]
+    );
+
+    if(
+      !frameId.trim() ||
+      bytes[offset] === 0
+    ){
+
+      break;
+
+    }
+
+    let frameSize;
+
+    if(version === 4){
+
+      frameSize =
+      synchsafe32(
+        bytes[offset+4],
+        bytes[offset+5],
+        bytes[offset+6],
+        bytes[offset+7]
+      );
+
+    }else{
+
+      frameSize =
+      uint32be(
+        bytes,
+        offset+4
+      );
+
+    }
+
+    if(
+      frameSize <= 0 ||
+      offset + 10 + frameSize > bytes.length
+    ){
+
+      break;
+
+    }
+
+    if(frameId === "SYLT"){
+
+      const frameData =
+      bytes.slice(
+        offset+10,
+        offset+10+frameSize
+      );
+
+      const lyrics =
+      parseSYLTFrame(
+        frameData
+      );
+
+      if(lyrics.length){
+
+        return lyrics;
+
+      }
+
+    }
+
+    offset +=
+    10 + frameSize;
+
+  }
+
+  return [];
+
+}
+
+
+function parseSYLTFrame(data){
+
+  if(data.length < 7){
+
+    return [];
+
+  }
+
+  const encoding =
+  data[0];
+
+  const timestampFormat =
+  data[4];
+
+  /*
+  SYLT:
+  1 = millisecondi
+  2 = frame MPEG
+  */
+
+  if(timestampFormat !== 1){
+
+    return [];
+
+  }
+
+  let pos = 6;
+
+  const descriptor =
+  readEncodedString(
+    data,
+    pos,
+    encoding
+  );
+
+  pos =
+  descriptor.next;
+
+  const result = [];
+
+
+  while(
+    pos < data.length
+  ){
+
+    const lyric =
+    readEncodedString(
+      data,
+      pos,
+      encoding
+    );
+
+    pos =
+    lyric.next;
+
+    if(pos + 4 > data.length){
+
+      break;
+
+    }
+
+    const ms =
+    uint32be(
+      data,
+      pos
+    );
+
+    pos += 4;
+
+    const text =
+    lyric.text.trim();
+
+    if(text){
+
+      result.push({
+        time:ms/1000,
+        text:text
+      });
+
+    }
+
+  }
+
+  result.sort(
+    (a,b)=>a.time-b.time
+  );
+
+  return result;
+
+}
+
+
+function readEncodedString(
+data,
+start,
+encoding
+){
+
+  if(start >= data.length){
+
+    return {
+      text:"",
+      next:data.length
+    };
+
+  }
+
+
+  if(
+    encoding === 1 ||
+    encoding === 2
+  ){
+
+    let end = start;
+
+    while(
+      end + 1 < data.length
+    ){
+
+      if(
+        data[end] === 0 &&
+        data[end+1] === 0
+      ){
+
+        break;
+
+      }
+
+      end += 2;
+
+    }
+
+    const slice =
+    data.slice(
+      start,
+      end
+    );
+
+    let text =
+    decodeText(
+      slice,
+      encoding
+    );
+
+    return {
+      text:text,
+      next:
+      Math.min(
+        data.length,
+        end + 2
+      )
+    };
+
+  }
+
+
+  let end = start;
+
+  while(
+    end < data.length &&
+    data[end] !== 0
+  ){
+
+    end++;
+
+  }
+
+  const slice =
+  data.slice(
+    start,
+    end
+  );
+
+  return {
+    text:
+    decodeText(
+      slice,
+      encoding
+    ),
+    next:
+    Math.min(
+      data.length,
+      end+1
+    )
+  };
+
+}
+
+
+function decodeText(
+bytes,
+encoding
+){
+
+  try{
+
+    if(encoding === 3){
+
+      return new TextDecoder(
+        "utf-8"
+      ).decode(bytes);
+
+    }
+
+    if(encoding === 2){
+
+      return new TextDecoder(
+        "utf-16be"
+      ).decode(bytes);
+
+    }
+
+    if(encoding === 1){
+
+      /*
+      UTF-16 con BOM
+      */
+
+      if(
+        bytes.length >= 2 &&
+        bytes[0] === 0xFE &&
+        bytes[1] === 0xFF
+      ){
+
+        return new TextDecoder(
+          "utf-16be"
+        ).decode(
+          bytes.slice(2)
+        );
+
+      }
+
+      return new TextDecoder(
+        "utf-16le"
+      ).decode(
+        (
+          bytes.length >= 2 &&
+          bytes[0] === 0xFF &&
+          bytes[1] === 0xFE
+        )
+        ?
+        bytes.slice(2)
+        :
+        bytes
+      );
+
+    }
+
+    return new TextDecoder(
+      "windows-1252"
+    ).decode(bytes);
+
+  }catch(error){
+
+    console.error(error);
+
+    return "";
+
+  }
+
+}
+
+
+/* PLAY */
 
 playButton.addEventListener(
 "click",
@@ -954,6 +1613,7 @@ async ()=>{
     return;
   }
 
+  await initAudioGraph();
 
   if(audio.paused){
 
@@ -1029,13 +1689,20 @@ volume.addEventListener(
 "input",
 ()=>{
 
-  audio.volume =
+  const v =
   Number(volume.value);
 
+  audio.volume = 1;
+
+  if(masterGain){
+
+    masterGain.gain.value =
+    v;
+
+  }
+
   volumeValue.textContent =
-  Math.round(
-    audio.volume*100
-  )
+  Math.round(v*100)
   + "%";
 
 });
@@ -1047,6 +1714,9 @@ speed.addEventListener(
 
   audio.playbackRate =
   Number(speed.value);
+
+  audio.preservesPitch =
+  true;
 
   speedValue.textContent =
   audio.playbackRate
@@ -1093,18 +1763,15 @@ audio.addEventListener(
 
   }
 
-
   currentTimeBox.textContent =
   formatTime(
     audio.currentTime
   );
 
-
   durationBox.textContent =
   formatTime(
     audio.duration
   );
-
 
   updateLyrics();
 
@@ -1139,15 +1806,18 @@ function formatTime(seconds){
   const s =
   Math.floor(seconds%60);
 
-  return
-  String(m).padStart(2,"0")
-  +
-  ":"
-  +
-  String(s).padStart(2,"0");
+  return (
+    String(m).padStart(2,"0")
+    +
+    ":"
+    +
+    String(s).padStart(2,"0")
+  );
 
 }
 
+
+/* TESTO SINCRONIZZATO */
 
 function updateLyrics(){
 
@@ -1159,9 +1829,7 @@ function updateLyrics(){
 
   }
 
-
   let index = -1;
-
 
   for(
     let i=0;
@@ -1210,11 +1878,12 @@ function updateLyrics(){
 
   }
 
-
   updateDisplay();
 
 }
 
+
+/* DISPLAY 2 */
 
 displayButton.addEventListener(
 "click",
@@ -1228,8 +1897,8 @@ displayButton.addEventListener(
     displayWindow.focus();
 
     return;
-  }
 
+  }
 
   displayWindow =
   window.open(
@@ -1238,7 +1907,6 @@ displayButton.addEventListener(
     "width=1100,height=700"
   );
 
-
   if(!displayWindow){
 
     alert(
@@ -1246,9 +1914,7 @@ displayButton.addEventListener(
     );
 
     return;
-
   }
-
 
   displayWindow.document.write(`
 <!doctype html>
@@ -1286,6 +1952,14 @@ body{
   font-size:20px;
 }
 
+#displayPitch{
+  position:absolute;
+  top:25px;
+  right:30px;
+  color:#ffd21f;
+  font-size:18px;
+}
+
 #displayPrevious,
 #displayNext{
   color:#666;
@@ -1311,6 +1985,10 @@ body{
 KARAOKE LIVE SHOW
 </div>
 
+<div id="displayPitch">
+TONALITÀ 0
+</div>
+
 <div id="displayPrevious"></div>
 
 <div id="displayCurrent">
@@ -1323,9 +2001,7 @@ IN ATTESA
 </html>
   `);
 
-
   displayWindow.document.close();
-
 
   updateDisplay();
 
@@ -1343,13 +2019,11 @@ function updateDisplay(){
 
   }
 
-
   const p =
   displayWindow.document
   .getElementById(
     "displayPrevious"
   );
-
 
   const c =
   displayWindow.document
@@ -1357,18 +2031,22 @@ function updateDisplay(){
     "displayCurrent"
   );
 
-
   const n =
   displayWindow.document
   .getElementById(
     "displayNext"
   );
 
-
   const t =
   displayWindow.document
   .getElementById(
     "displayTitle"
+  );
+
+  const pitch =
+  displayWindow.document
+  .getElementById(
+    "displayPitch"
   );
 
 
@@ -1383,6 +2061,22 @@ function updateDisplay(){
 
   }
 
+  if(pitch){
+
+    pitch.textContent =
+    "TONALITÀ "
+    +
+    (
+      pitchSemitones > 0
+      ?
+      "+"
+      +
+      pitchSemitones
+      :
+      pitchSemitones
+    );
+
+  }
 
   if(p){
 
@@ -1390,7 +2084,6 @@ function updateDisplay(){
     previousLine.textContent;
 
   }
-
 
   if(c){
 
@@ -1400,7 +2093,6 @@ function updateDisplay(){
     "IN ATTESA";
 
   }
-
 
   if(n){
 
@@ -1412,6 +2104,8 @@ function updateDisplay(){
 }
 
 
+/* SCHERMO INTERO */
+
 fullscreenButton.addEventListener(
 "click",
 async ()=>{
@@ -1420,12 +2114,14 @@ async ()=>{
 
     if(!document.fullscreenElement){
 
-      await document.documentElement
+      await document
+      .documentElement
       .requestFullscreen();
 
     }else{
 
-      await document.exitFullscreen();
+      await document
+      .exitFullscreen();
 
     }
 
