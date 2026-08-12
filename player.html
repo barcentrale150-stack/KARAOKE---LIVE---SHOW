@@ -14,7 +14,6 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   color:white;
   min-height:100vh;
-
   background:
     radial-gradient(circle at 15% 10%,rgba(255,0,180,.20),transparent 30%),
     radial-gradient(circle at 85% 15%,rgba(0,180,255,.18),transparent 30%),
@@ -90,7 +89,9 @@ body{
 }
 
 #fileInput,
-#klsInput{
+#klsInput,
+#playlistInput,
+#playlistMp3Input{
   display:none;
 }
 
@@ -105,7 +106,7 @@ body{
 
 .library{
   margin-top:14px;
-  max-height:650px;
+  max-height:500px;
   overflow:auto;
 }
 
@@ -157,6 +158,28 @@ body{
 .kls-save{
   background:#ff259d;
   color:white;
+}
+
+.playlist-box{
+  margin-top:12px;
+}
+
+.playlist-row{
+  padding:12px;
+  margin:8px 0;
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+}
+
+.playlist-row.active{
+  border:1px solid #ffd21f;
+}
+
+.playlist-actions{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+  flex-wrap:wrap;
 }
 
 .now{
@@ -377,7 +400,6 @@ button{
 </style>
 </head>
 
-
 <body>
 
 <div class="app">
@@ -395,9 +417,7 @@ button{
 
 </div>
 
-
 <div class="grid">
-
 
 <!-- LIBRERIA -->
 
@@ -408,61 +428,111 @@ button{
     <h2>🎵 Libreria</h2>
 
     <label class="file-label">
-
       + CARICA MP3
-
       <input
       id="fileInput"
       type="file"
       multiple
       accept=".mp3,audio/mpeg">
-
     </label>
 
   </div>
-
 
   <input
   id="search"
   class="search"
   placeholder="Cerca canzone...">
 
-
   <div id="library" class="library">
-
     <div class="song-extra">
       Carica uno o più MP3.
     </div>
-
   </div>
-
 
   <div class="kls-panel">
 
-    <h3>💾 FORMATO KLS</h3>
+    <h3>💾 FILE KLS</h3>
 
     <div class="kls-buttons">
 
       <label class="file-label kls-open">
-
         📂 APRI KLS
-
         <input
         id="klsInput"
         type="file"
         accept=".kls,application/json">
-
       </label>
-
 
       <button
       class="kls-save"
       id="saveKlsButton">
-
         💾 SALVA COME KLS
-
       </button>
 
+    </div>
+
+
+    <h3 style="margin-top:24px">
+      🎶 PLAYLIST
+    </h3>
+
+    <input
+    id="playlistName"
+    class="search"
+    placeholder="Nome playlist">
+
+    <div class="kls-buttons">
+
+      <button
+      class="kls-save"
+      id="addPlaylistButton">
+        ➕ AGGIUNGI BRANO
+      </button>
+
+      <button
+      class="kls-open"
+      id="savePlaylistButton">
+        💾 SALVA PLAYLIST
+      </button>
+
+      <label class="file-label kls-open">
+        📂 APRI PLAYLIST
+        <input
+        id="playlistInput"
+        type="file"
+        accept=".kpl,application/json">
+      </label>
+
+      <label class="file-label">
+        🎵 ASSOCIA MP3
+        <input
+        id="playlistMp3Input"
+        type="file"
+        multiple
+        accept=".mp3,audio/mpeg">
+      </label>
+
+    </div>
+
+    <label
+    style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:14px;
+    ">
+
+      <input
+      id="autoNext"
+      type="checkbox">
+
+      ▶ AUTO NEXT
+
+    </label>
+
+    <div
+    id="playlistBox"
+    class="playlist-box">
     </div>
 
   </div>
@@ -483,19 +553,15 @@ button{
     <div
     class="now-title"
     id="nowTitle">
-
       Nessun brano
-
     </div>
 
   </div>
-
 
   <audio
   id="audio"
   preload="metadata">
   </audio>
-
 
   <div class="time">
 
@@ -509,7 +575,6 @@ button{
 
   </div>
 
-
   <input
   id="seek"
   type="range"
@@ -517,7 +582,6 @@ button{
   max="100"
   step="0.1"
   value="0">
-
 
   <div class="controls">
 
@@ -527,13 +591,11 @@ button{
       ⏪ 10s
     </button>
 
-
     <button
     class="play"
     id="playButton">
       ▶ PLAY
     </button>
-
 
     <button
     class="control"
@@ -541,20 +603,17 @@ button{
       10s ⏩
     </button>
 
-
     <button
     class="stop"
     id="stopButton">
       ■ STOP
     </button>
 
-
     <button
     class="display"
     id="displayButton">
       🖥 DISPLAY 2
     </button>
-
 
     <button
     class="full"
@@ -573,7 +632,6 @@ button{
       🎼 TONALITÀ
     </div>
 
-
     <div class="pitch-controls">
 
       <button
@@ -582,20 +640,17 @@ button{
         −
       </button>
 
-
       <div
       class="pitch-number"
       id="pitchNumber">
         0
       </div>
 
-
       <button
       class="pitch-plus"
       id="pitchPlus">
         +
       </button>
-
 
       <button
       class="pitch-reset"
@@ -604,7 +659,6 @@ button{
       </button>
 
     </div>
-
 
     <div
     class="pitch-status"
@@ -627,7 +681,6 @@ button{
         🔊 Volume
       </label>
 
-
       <input
       id="volume"
       type="range"
@@ -636,13 +689,10 @@ button{
       step="0.01"
       value="1">
 
-
       <div
       class="value"
       id="volumeValue">
-
         100%
-
       </div>
 
     </div>
@@ -654,7 +704,6 @@ button{
         ⚡ Velocità
       </label>
 
-
       <input
       id="speed"
       type="range"
@@ -663,13 +712,10 @@ button{
       step="0.05"
       value="1">
 
-
       <div
       class="value"
       id="speedValue">
-
         1.00x
-
       </div>
 
     </div>
@@ -686,7 +732,6 @@ button{
     id="previousLine">
     </div>
 
-
     <div
     class="current-line"
     id="currentLine">
@@ -697,7 +742,6 @@ button{
 
     </div>
 
-
     <div
     class="next-line"
     id="nextLine">
@@ -705,13 +749,10 @@ button{
 
   </div>
 
-
   <div
   class="status"
   id="status">
-
     In attesa...
-
   </div>
 
 </div>
@@ -721,13 +762,7 @@ button{
 </div>
 
 
-<script type="module">
-
-import {
-  SoundTouchNode
-}
-from "https://esm.sh/@soundtouchjs/audio-worklet@2.1.1";
-
+<script>
 
 /* ==============================
    ELEMENTI
@@ -744,6 +779,27 @@ document.getElementById("klsInput");
 
 const saveKlsButton =
 document.getElementById("saveKlsButton");
+
+const playlistInput =
+document.getElementById("playlistInput");
+
+const playlistMp3Input =
+document.getElementById("playlistMp3Input");
+
+const playlistName =
+document.getElementById("playlistName");
+
+const playlistBox =
+document.getElementById("playlistBox");
+
+const addPlaylistButton =
+document.getElementById("addPlaylistButton");
+
+const savePlaylistButton =
+document.getElementById("savePlaylistButton");
+
+const autoNext =
+document.getElementById("autoNext");
 
 const library =
 document.getElementById("library");
@@ -837,165 +893,9 @@ let pitchSemitones = 0;
 
 let pendingKls = null;
 
+let playlist = [];
 
-/* ==============================
-   MOTORE TONALITÀ
-================================ */
-
-let audioContext = null;
-
-let mediaSource = null;
-
-let soundTouchNode = null;
-
-let gainNode = null;
-
-let pitchEngineReady = false;
-
-
-async function ensurePitchEngine(){
-
-  if(pitchEngineReady){
-
-    if(
-      audioContext.state ===
-      "suspended"
-    ){
-
-      await audioContext.resume();
-
-    }
-
-    return true;
-
-  }
-
-
-  try{
-
-    const AudioCtx =
-    window.AudioContext
-    ||
-    window.webkitAudioContext;
-
-
-    audioContext =
-    new AudioCtx();
-
-
-    /*
-    Processor ufficiale
-    SoundTouchJS.
-    */
-
-    await SoundTouchNode.register(
-
-      audioContext,
-
-      "https://cdn.jsdelivr.net/npm/@soundtouchjs/audio-worklet@2.1.1/.dist/soundtouch-processor.js"
-
-    );
-
-
-    soundTouchNode =
-    new SoundTouchNode({
-
-      context:
-      audioContext
-
-    });
-
-
-    gainNode =
-    audioContext.createGain();
-
-
-    soundTouchNode.connect(
-      gainNode
-    );
-
-
-    gainNode.connect(
-      audioContext.destination
-    );
-
-
-    /*
-    IMPORTANTE:
-    createMediaElementSource
-    una volta sola.
-    */
-
-    mediaSource =
-    audioContext
-    .createMediaElementSource(
-      audio
-    );
-
-
-    mediaSource.connect(
-      soundTouchNode
-    );
-
-
-    audio.preservesPitch =
-    false;
-
-
-    soundTouchNode
-    .pitchSemitones
-    .value =
-    pitchSemitones;
-
-
-    soundTouchNode
-    .playbackRate
-    .value =
-    Number(
-      speed.value
-    );
-
-
-    gainNode.gain.value =
-    Number(
-      volume.value
-    );
-
-
-    audio.volume = 1;
-
-
-    pitchEngineReady =
-    true;
-
-
-    await audioContext.resume();
-
-
-    pitchStatus.textContent =
-    "✓ Motore tonalità attivo";
-
-
-    return true;
-
-
-  }catch(error){
-
-    console.error(
-      "Pitch engine:",
-      error
-    );
-
-
-    pitchStatus.textContent =
-    "Tonalità non disponibile — audio normale attivo";
-
-
-    return false;
-
-  }
-
-}
+let currentPlaylistIndex = -1;
 
 
 /* ==============================
@@ -1009,40 +909,27 @@ function showPitch(){
   ?
   "+" + pitchSemitones
   :
-  String(
-    pitchSemitones
-  );
+  String(pitchSemitones);
 
 
-  if(
-    pitchSemitones === 0
-  ){
-
-    pitchStatus.textContent =
-    pitchEngineReady
+  pitchStatus.textContent =
+  pitchSemitones === 0
+  ?
+  "Tonalità originale"
+  :
+  "Tonalità "
+  +
+  (
+    pitchSemitones > 0
     ?
-    "Tonalità originale"
+    "+"
+    +
+    pitchSemitones
     :
-    "Tonalità originale";
-
-  }else{
-
-    pitchStatus.textContent =
-    "Tonalità "
-    +
-    (
-      pitchSemitones > 0
-      ?
-      "+"
-      +
-      pitchSemitones
-      :
-      pitchSemitones
-    )
-    +
-    " semitoni";
-
-  }
+    pitchSemitones
+  )
+  +
+  " semitoni";
 
 
   updateDisplay();
@@ -1050,56 +937,28 @@ function showPitch(){
 }
 
 
-async function setPitch(value){
+function setPitch(value){
 
   pitchSemitones =
   Math.max(
     -6,
     Math.min(
       6,
-      value
+      Number(value)
     )
   );
 
 
   showPitch();
 
-
-  if(
-    pitchSemitones === 0
-    &&
-    !pitchEngineReady
-  ){
-
-    return;
-
-  }
-
-
-  const ok =
-  await ensurePitchEngine();
-
-
-  if(
-    ok &&
-    soundTouchNode
-  ){
-
-    soundTouchNode
-    .pitchSemitones
-    .value =
-    pitchSemitones;
-
-  }
-
 }
 
 
 pitchMinus.addEventListener(
 "click",
-async ()=>{
+()=>{
 
-  await setPitch(
+  setPitch(
     pitchSemitones - 1
   );
 
@@ -1108,9 +967,9 @@ async ()=>{
 
 pitchPlus.addEventListener(
 "click",
-async ()=>{
+()=>{
 
-  await setPitch(
+  setPitch(
     pitchSemitones + 1
   );
 
@@ -1119,9 +978,9 @@ async ()=>{
 
 pitchReset.addEventListener(
 "click",
-async ()=>{
+()=>{
 
-  await setPitch(0);
+  setPitch(0);
 
 });
 
@@ -1142,6 +1001,57 @@ function cleanName(name){
 }
 
 
+function addMp3File(file){
+
+  if(
+    !file.name
+    .toLowerCase()
+    .endsWith(".mp3")
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    songs.some(
+      s =>
+      s.file.name ===
+      file.name
+    )
+  ){
+
+    return;
+
+  }
+
+
+  songs.push({
+
+    id:
+    Date.now()
+    +
+    Math.random(),
+
+    title:
+    cleanName(
+      file.name
+    ),
+
+    file:
+    file,
+
+    url:
+    URL.createObjectURL(
+      file
+    )
+
+  });
+
+}
+
+
 fileInput.addEventListener(
 "change",
 ()=>{
@@ -1152,66 +1062,37 @@ fileInput.addEventListener(
   );
 
 
-  files
-  .filter(
-    file =>
-    file.name
-    .toLowerCase()
-    .endsWith(".mp3")
-  )
-  .forEach(file=>{
-
-    if(
-      songs.some(
-        s =>
-        s.file.name ===
-        file.name
-      )
-    ){
-
-      return;
-
-    }
-
-
-    songs.push({
-
-      id:
-      Date.now()
-      +
-      Math.random(),
-
-      title:
-      cleanName(
-        file.name
-      ),
-
-      file:
-      file,
-
-      url:
-      URL.createObjectURL(
-        file
-      )
-
-    });
-
-  });
+  files.forEach(
+    addMp3File
+  );
 
 
   renderLibrary();
 
 
-  /*
-  Se prima avevi aperto
-  un KLS e ora carichi
-  l'MP3 corrispondente,
-  lo apre automaticamente.
-  */
+  if(
+    pendingKls
+  ){
 
-  if(pendingKls){
+    const song =
+    songs.find(
+      s =>
+      s.file.name ===
+      pendingKls.song.filename
+    );
 
-    tryApplyPendingKls();
+
+    if(song){
+
+      applyKlsToSong(
+        pendingKls,
+        song
+      );
+
+      pendingKls =
+      null;
+
+    }
 
   }
 
@@ -1246,7 +1127,7 @@ function renderLibrary(){
 
   if(!list.length){
 
-    library.innerHTML =
+    library.innerHTML=
     '<div class="song-extra">Nessun brano.</div>';
 
     return;
@@ -1267,7 +1148,8 @@ function renderLibrary(){
 
 
     if(
-      currentSong &&
+      currentSong
+      &&
       currentSong.id ===
       song.id
     ){
@@ -1280,22 +1162,21 @@ function renderLibrary(){
 
 
     item.innerHTML =
-
-      '<div class="song-name">'
-      +
-      '🎵 '
-      +
-      escapeHTML(
-        song.title
-      )
-      +
-      '</div>'
-      +
-      '<div class="song-extra">'
-      +
-      'MP3 SongService / M-Live'
-      +
-      '</div>';
+    '<div class="song-name">'
+    +
+    '🎵 '
+    +
+    escapeHTML(
+      song.title
+    )
+    +
+    '</div>'
+    +
+    '<div class="song-extra">'
+    +
+    'MP3 SongService / M-Live'
+    +
+    '</div>';
 
 
     item.addEventListener(
@@ -1347,9 +1228,10 @@ keepSettings=false
     !keepSettings
   ){
 
-    pitchSemitones = 0;
+    setPitch(0);
 
-    speed.value = 1;
+    speed.value =
+    1;
 
     speedValue.textContent =
     "1.00x";
@@ -1357,17 +1239,16 @@ keepSettings=false
   }
 
 
-  showPitch();
-
-
-  previousLine.textContent = "";
+  previousLine.textContent =
+  "";
 
 
   currentLine.textContent =
   "Analisi testo...";
 
 
-  nextLine.textContent = "";
+  nextLine.textContent =
+  "";
 
 
   status.textContent =
@@ -1431,7 +1312,12 @@ keepSettings=false
   }
 
 
-  seek.value = 0;
+  seek.value =
+  0;
+
+
+  currentTimeBox.textContent =
+  "00:00";
 
 
   renderLibrary();
@@ -1446,11 +1332,6 @@ keepSettings=false
    KLS
 ================================ */
 
-/*
-KLS LEGGERO:
-non contiene l'MP3.
-*/
-
 saveKlsButton.addEventListener(
 "click",
 ()=>{
@@ -1460,7 +1341,7 @@ saveKlsButton.addEventListener(
   ){
 
     alert(
-      "Carica e seleziona prima un MP3."
+      "Seleziona prima un MP3."
     );
 
     return;
@@ -1468,7 +1349,7 @@ saveKlsButton.addEventListener(
   }
 
 
-  const kls = {
+  const data = {
 
     format:
     "KLS",
@@ -1488,10 +1369,7 @@ saveKlsButton.addEventListener(
       currentSong.title,
 
       size:
-      currentSong.file.size,
-
-      lastModified:
-      currentSong.file.lastModified
+      currentSong.file.size
 
     },
 
@@ -1515,63 +1393,13 @@ saveKlsButton.addEventListener(
   };
 
 
-  const text =
-  JSON.stringify(
-    kls,
-    null,
-    2
-  );
-
-
-  const blob =
-  new Blob(
-    [text],
-    {
-      type:
-      "application/json"
-    }
-  );
-
-
-  const url =
-  URL.createObjectURL(
-    blob
-  );
-
-
-  const a =
-  document.createElement(
-    "a"
-  );
-
-
-  a.href =
-  url;
-
-
-  a.download =
-  safeFileName(
-    currentSong.title
-  )
-  +
-  ".kls";
-
-
-  document.body
-  .appendChild(a);
-
-
-  a.click();
-
-
-  a.remove();
-
-
-  setTimeout(
-    ()=>URL.revokeObjectURL(
-      url
-    ),
-    1000
+  downloadJsonFile(
+    data,
+    safeFileName(
+      currentSong.title
+    )
+    +
+    ".kls"
   );
 
 
@@ -1596,13 +1424,9 @@ async ()=>{
 
   try{
 
-    const text =
-    await file.text();
-
-
     const data =
     JSON.parse(
-      text
+      await file.text()
     );
 
 
@@ -1614,17 +1438,49 @@ async ()=>{
     ){
 
       throw new Error(
-        "Formato KLS non valido"
+        "KLS non valido"
       );
 
     }
 
 
-    pendingKls =
-    data;
+    const existing =
+    songs.find(
+      s =>
+      s.file.name ===
+      data.song.filename
+    );
 
 
-    tryApplyPendingKls();
+    if(existing){
+
+      await applyKlsToSong(
+        data,
+        existing
+      );
+
+
+    }else{
+
+      pendingKls =
+      data;
+
+
+      status.textContent =
+      "KLS aperto. Adesso carica MP3: "
+      +
+      data.song.filename;
+
+
+      alert(
+        "KLS aperto.\n\n"
+        +
+        "Adesso premi CARICA MP3 e scegli:\n"
+        +
+        data.song.filename
+      );
+
+    }
 
 
   }catch(error){
@@ -1639,54 +1495,30 @@ async ()=>{
   }
 
 
-  klsInput.value = "";
+  klsInput.value =
+  "";
 
 });
 
 
-async function tryApplyPendingKls(){
+async function applyKlsToSong(
+data,
+song
+){
 
-  if(
-    !pendingKls
-  ){
-
-    return;
-
-  }
-
-
-  const filename =
-  pendingKls.song.filename;
-
-
-  const song =
-  songs.find(
-    s =>
-    s.file.name ===
-    filename
+  await loadSong(
+    song,
+    true
   );
 
 
-  if(!song){
-
-    status.textContent =
-    "📂 KLS aperto. Adesso carica l'MP3: "
-    +
-    filename;
-
-
-    return;
-
-  }
-
-
   const settings =
-  pendingKls.settings
+  data.settings
   ||
   {};
 
 
-  pitchSemitones =
+  const savedPitch =
   Number(
     settings.pitchSemitones
     ||
@@ -1694,17 +1526,7 @@ async function tryApplyPendingKls(){
   );
 
 
-  pitchSemitones =
-  Math.max(
-    -6,
-    Math.min(
-      6,
-      pitchSemitones
-    )
-  );
-
-
-  speed.value =
+  const savedSpeed =
   Number(
     settings.speed
     ||
@@ -1712,7 +1534,7 @@ async function tryApplyPendingKls(){
   );
 
 
-  volume.value =
+  const savedVolume =
   Number(
     settings.volume
     ??
@@ -1720,25 +1542,416 @@ async function tryApplyPendingKls(){
   );
 
 
+  setPitch(
+    savedPitch
+  );
+
+
+  speed.value =
+  savedSpeed;
+
+
+  audio.playbackRate =
+  savedSpeed;
+
+
   speedValue.textContent =
-  Number(
-    speed.value
-  )
+  savedSpeed
   .toFixed(2)
   +
   "x";
 
 
+  volume.value =
+  savedVolume;
+
+
+  audio.volume =
+  savedVolume;
+
+
   volumeValue.textContent =
   Math.round(
-    Number(
-      volume.value
-    )
-    *
-    100
+    savedVolume*100
   )
   +
   "%";
+
+
+  status.textContent =
+  "✓ KLS caricato — tonalità "
+  +
+  (
+    savedPitch > 0
+    ?
+    "+"
+    +
+    savedPitch
+    :
+    savedPitch
+  );
+
+}
+
+
+/* ==============================
+   PLAYLIST
+================================ */
+
+addPlaylistButton.addEventListener(
+"click",
+()=>{
+
+  if(
+    !currentSong
+  ){
+
+    alert(
+      "Seleziona prima un brano."
+    );
+
+    return;
+
+  }
+
+
+  playlist.push({
+
+    filename:
+    currentSong.file.name,
+
+    title:
+    currentSong.title,
+
+    pitch:
+    pitchSemitones,
+
+    speed:
+    Number(
+      speed.value
+    ),
+
+    volume:
+    Number(
+      volume.value
+    )
+
+  });
+
+
+  currentPlaylistIndex =
+  playlist.length - 1;
+
+
+  renderPlaylist();
+
+});
+
+
+function renderPlaylist(){
+
+  playlistBox.innerHTML =
+  "";
+
+
+  if(
+    !playlist.length
+  ){
+
+    playlistBox.innerHTML =
+    '<div class="song-extra">Playlist vuota.</div>';
+
+    return;
+
+  }
+
+
+  playlist.forEach(
+  (item,index)=>{
+
+    const row =
+    document.createElement(
+      "div"
+    );
+
+
+    row.className =
+    "playlist-row"
+    +
+    (
+      index ===
+      currentPlaylistIndex
+      ?
+      " active"
+      :
+      ""
+    );
+
+
+    const title =
+    document.createElement(
+      "div"
+    );
+
+
+    title.style.fontWeight =
+    "900";
+
+
+    title.textContent =
+    (index+1)
+    +
+    ". "
+    +
+    item.title;
+
+
+    const settings =
+    document.createElement(
+      "div"
+    );
+
+
+    settings.className =
+    "song-extra";
+
+
+    settings.textContent =
+    "Tonalità "
+    +
+    (
+      item.pitch > 0
+      ?
+      "+"
+      +
+      item.pitch
+      :
+      item.pitch
+    )
+    +
+    " • "
+    +
+    Number(
+      item.speed
+      ||
+      1
+    )
+    .toFixed(2)
+    +
+    "x";
+
+
+    const actions =
+    document.createElement(
+      "div"
+    );
+
+
+    actions.className =
+    "playlist-actions";
+
+
+    const playBtn =
+    document.createElement(
+      "button"
+    );
+
+
+    playBtn.textContent =
+    "▶";
+
+
+    playBtn.addEventListener(
+      "click",
+      ()=>playPlaylistItem(index)
+    );
+
+
+    const up =
+    document.createElement(
+      "button"
+    );
+
+
+    up.textContent =
+    "↑";
+
+
+    up.addEventListener(
+      "click",
+      ()=>{
+
+        if(
+          index === 0
+        ){
+          return;
+        }
+
+
+        const temp =
+        playlist[index-1];
+
+
+        playlist[index-1] =
+        playlist[index];
+
+
+        playlist[index] =
+        temp;
+
+
+        renderPlaylist();
+
+      }
+    );
+
+
+    const down =
+    document.createElement(
+      "button"
+    );
+
+
+    down.textContent =
+    "↓";
+
+
+    down.addEventListener(
+      "click",
+      ()=>{
+
+        if(
+          index ===
+          playlist.length-1
+        ){
+          return;
+        }
+
+
+        const temp =
+        playlist[index+1];
+
+
+        playlist[index+1] =
+        playlist[index];
+
+
+        playlist[index] =
+        temp;
+
+
+        renderPlaylist();
+
+      }
+    );
+
+
+    const del =
+    document.createElement(
+      "button"
+    );
+
+
+    del.textContent =
+    "✕";
+
+
+    del.addEventListener(
+      "click",
+      ()=>{
+
+        playlist.splice(
+          index,
+          1
+        );
+
+
+        renderPlaylist();
+
+      }
+    );
+
+
+    actions.appendChild(
+      playBtn
+    );
+
+
+    actions.appendChild(
+      up
+    );
+
+
+    actions.appendChild(
+      down
+    );
+
+
+    actions.appendChild(
+      del
+    );
+
+
+    row.appendChild(
+      title
+    );
+
+
+    row.appendChild(
+      settings
+    );
+
+
+    row.appendChild(
+      actions
+    );
+
+
+    playlistBox.appendChild(
+      row
+    );
+
+  });
+
+}
+
+
+async function playPlaylistItem(
+index
+){
+
+  const item =
+  playlist[index];
+
+
+  if(!item){
+    return;
+  }
+
+
+  const song =
+  songs.find(
+    s =>
+    s.file.name ===
+    item.filename
+  );
+
+
+  if(!song){
+
+    alert(
+      "MP3 non associato:\n"
+      +
+      item.filename
+    );
+
+    return;
+
+  }
+
+
+  currentPlaylistIndex =
+  index;
 
 
   await loadSong(
@@ -1747,100 +1960,305 @@ async function tryApplyPendingKls(){
   );
 
 
-  audio.playbackRate =
-  Number(
-    speed.value
+  setPitch(
+    item.pitch
+    ||
+    0
   );
 
 
-  showPitch();
+  speed.value =
+  item.speed
+  ||
+  1;
 
+
+  audio.playbackRate =
+  Number(
+    item.speed
+    ||
+    1
+  );
+
+
+  speedValue.textContent =
+  Number(
+    item.speed
+    ||
+    1
+  )
+  .toFixed(2)
+  +
+  "x";
+
+
+  volume.value =
+  item.volume
+  ??
+  1;
+
+
+  audio.volume =
+  Number(
+    item.volume
+    ??
+    1
+  );
+
+
+  volumeValue.textContent =
+  Math.round(
+    Number(
+      item.volume
+      ??
+      1
+    )
+    *
+    100
+  )
+  +
+  "%";
+
+
+  renderPlaylist();
+
+
+  try{
+
+    await audio.play();
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+savePlaylistButton.addEventListener(
+"click",
+()=>{
 
   if(
-    pitchSemitones !== 0
+    !playlist.length
   ){
 
-    const ok =
-    await ensurePitchEngine();
+    alert(
+      "La playlist è vuota."
+    );
+
+    return;
+
+  }
+
+
+  const name =
+  playlistName.value.trim()
+  ||
+  "Playlist Karaoke";
+
+
+  const data = {
+
+    format:
+    "KPL",
+
+    version:
+    1,
+
+    app:
+    "Karaoke Live Show",
+
+    name:
+    name,
+
+    tracks:
+    playlist
+
+  };
+
+
+  downloadJsonFile(
+    data,
+    safeFileName(name)
+    +
+    ".kpl"
+  );
+
+});
+
+
+playlistInput.addEventListener(
+"change",
+async ()=>{
+
+  const file =
+  playlistInput.files[0];
+
+
+  if(!file){
+    return;
+  }
+
+
+  try{
+
+    const data =
+    JSON.parse(
+      await file.text()
+    );
 
 
     if(
-      ok
+      data.format !==
+      "KPL"
+      ||
+      !Array.isArray(
+        data.tracks
+      )
     ){
 
-      soundTouchNode
-      .pitchSemitones
-      .value =
-      pitchSemitones;
+      throw new Error(
+        "KPL non valido"
+      );
 
     }
 
+
+    playlist =
+    data.tracks;
+
+
+    playlistName.value =
+    data.name
+    ||
+    "";
+
+
+    currentPlaylistIndex =
+    -1;
+
+
+    renderPlaylist();
+
+
+    alert(
+      "Playlist caricata.\n\n"
+      +
+      "Adesso premi ASSOCIA MP3 e seleziona gli MP3 della playlist."
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    alert(
+      "File KPL non valido."
+    );
+
   }
 
 
-  if(
-    pitchEngineReady
-  ){
+  playlistInput.value =
+  "";
 
-    soundTouchNode
-    .playbackRate
-    .value =
-    Number(
-      speed.value
-    );
+});
 
 
-    gainNode.gain.value =
-    Number(
-      volume.value
-    );
+playlistMp3Input.addEventListener(
+"change",
+()=>{
 
-
-  }else{
-
-    audio.volume =
-    Number(
-      volume.value
-    );
-
-  }
-
-
-  status.textContent =
-  "✓ KLS caricato — tonalità "
-  +
-  (
-    pitchSemitones > 0
-    ?
-    "+"
-    +
-    pitchSemitones
-    :
-    pitchSemitones
+  const files =
+  Array.from(
+    playlistMp3Input.files
   );
 
 
-  pendingKls =
-  null;
+  files.forEach(
+    addMp3File
+  );
 
-}
+
+  renderLibrary();
 
 
-function safeFileName(name){
+  const missing =
+  playlist.filter(
+    item =>
+    !songs.some(
+      song =>
+      song.file.name ===
+      item.filename
+    )
+  );
 
-  return String(name)
-  .replace(
-    /[\\/:*?"<>|]/g,
-    "_"
-  )
-  .trim();
 
-}
+  if(
+    !missing.length
+  ){
+
+    alert(
+      "✓ Tutti gli MP3 sono stati associati."
+    );
+
+  }else{
+
+    alert(
+      "Mancano ancora "
+      +
+      missing.length
+      +
+      " MP3."
+    );
+
+  }
+
+
+  playlistMp3Input.value =
+  "";
+
+});
+
+
+audio.addEventListener(
+"ended",
+()=>{
+
+  if(
+    !autoNext.checked
+  ){
+
+    return;
+
+  }
+
+
+  const nextIndex =
+  currentPlaylistIndex
+  +
+  1;
+
+
+  if(
+    nextIndex <
+    playlist.length
+  ){
+
+    playPlaylistItem(
+      nextIndex
+    );
+
+  }
+
+});
 
 
 /* ==============================
-   PARSER SONGSERVICE / M-LIVE
-   (QUELLO CHE GIÀ FUNZIONA)
+   PARSER SONGSERVICE
 ================================ */
 
 function uint32be(
@@ -1874,7 +2292,8 @@ arrayBuffer
   );
 
 
-  let frameStart = -1;
+  let frameStart =
+  -1;
 
 
   for(
@@ -1893,7 +2312,8 @@ arrayBuffer
       bytes[i+3]===0x54
     ){
 
-      frameStart=i;
+      frameStart =
+      i;
 
       break;
 
@@ -1936,17 +2356,13 @@ arrayBuffer
   );
 
 
-  let pos = 0;
+  let pos =
+  0;
 
 
   const encoding =
   data[pos++];
 
-
-  /*
-  Byte aggiuntivo
-  SongService/M-Live.
-  */
 
   if(
     data[pos] === 0x00
@@ -1963,10 +2379,6 @@ arrayBuffer
   }
 
 
-  /*
-  Lingua XXX.
-  */
-
   pos += 3;
 
 
@@ -1974,16 +2386,8 @@ arrayBuffer
   data[pos++];
 
 
-  /*
-  Content type.
-  */
-
   pos++;
 
-
-  /*
-  Descrizione SYLT.
-  */
 
   while(
     pos < data.length
@@ -1999,7 +2403,8 @@ arrayBuffer
   pos++;
 
 
-  const chunks = [];
+  const chunks =
+  [];
 
 
   while(
@@ -2117,7 +2522,8 @@ function buildLines(
 chunks
 ){
 
-  const lines = [];
+  const lines =
+  [];
 
 
   let line =
@@ -2329,8 +2735,7 @@ function getLineIndex(){
   ){
 
     if(
-      audio.currentTime
-      >=
+      audio.currentTime >=
       lyricLines[i].start
     ){
 
@@ -2356,16 +2761,13 @@ line,
 time
 ){
 
-  if(
-    !line
-  ){
-
+  if(!line){
     return "";
-
   }
 
 
-  let html = "";
+  let html =
+  "";
 
 
   line.chunks.forEach(
@@ -2381,18 +2783,17 @@ time
 
 
     html +=
-
-      '<span class="'
-      +
-      cls
-      +
-      '">'
-      +
-      escapeHTML(
-        chunk.text
-      )
-      +
-      '</span>';
+    '<span class="'
+    +
+    cls
+    +
+    '">'
+    +
+    escapeHTML(
+      chunk.text
+    )
+    +
+    '</span>';
 
   });
 
@@ -2492,62 +2893,23 @@ async ()=>{
   }
 
 
-  /*
-  Se tonalità diversa da 0,
-  avvia SoundTouch.
-  */
-
-  if(
-    pitchSemitones !== 0
-  ){
-
-    const ok =
-    await ensurePitchEngine();
-
+  try{
 
     if(
-      ok
+      audio.paused
     ){
 
-      soundTouchNode
-      .pitchSemitones
-      .value =
-      pitchSemitones;
+      await audio.play();
 
+    }else{
 
-      soundTouchNode
-      .playbackRate
-      .value =
-      Number(
-        speed.value
-      );
+      audio.pause();
 
     }
 
-  }
+  }catch(error){
 
-
-  if(
-    audioContext
-    &&
-    audioContext.state ===
-    "suspended"
-  ){
-
-    await audioContext.resume();
-
-  }
-
-
-  if(
-    audio.paused
-  ){
-
-    await audio.play();
-
-  }else{
-
-    audio.pause();
+    console.error(error);
 
   }
 
@@ -2628,23 +2990,8 @@ volume.addEventListener(
   );
 
 
-  if(
-    pitchEngineReady
-  ){
-
-    audio.volume =
-    1;
-
-
-    gainNode.gain.value =
-    v;
-
-  }else{
-
-    audio.volume =
-    v;
-
-  }
+  audio.volume =
+  v;
 
 
   volumeValue.textContent =
@@ -2672,21 +3019,9 @@ speed.addEventListener(
 
 
   if(
-    pitchEngineReady
+    "preservesPitch"
+    in audio
   ){
-
-    soundTouchNode
-    .playbackRate
-    .value =
-    tempo;
-
-  }else{
-
-    /*
-    Senza SoundTouch,
-    il browser mantiene
-    il pitch originale.
-    */
 
     audio.preservesPitch =
     true;
@@ -2813,25 +3148,19 @@ seconds
 
 
   return (
-
     String(m)
     .padStart(
       2,
       "0"
     )
-
     +
-
     ":"
-
     +
-
     String(s)
     .padStart(
       2,
       "0"
     )
-
   );
 
 }
@@ -2860,13 +3189,9 @@ displayButton.addEventListener(
 
   displayWindow =
   window.open(
-
     "",
-
     "KaraokeDisplay",
-
     "width=1200,height=750"
-
   );
 
 
@@ -2884,9 +3209,7 @@ displayButton.addEventListener(
 
 
   displayWindow.document.write(`
-
 <!doctype html>
-
 <html>
 
 <head>
@@ -2908,67 +3231,43 @@ body{
 
 body{
   background:#000;
-
-  font-family:
-  Arial,
-  Helvetica,
-  sans-serif;
-
+  font-family:Arial,Helvetica,sans-serif;
   display:flex;
-
   flex-direction:column;
-
   justify-content:center;
-
   align-items:center;
-
   text-align:center;
-
   overflow:hidden;
 }
 
 #title{
   position:absolute;
-
   top:20px;
-
   color:#777;
-
   font-size:20px;
 }
 
 #pitch{
   position:absolute;
-
   top:20px;
-
   right:30px;
-
   color:#ffd21f;
-
   font-size:18px;
 }
 
 #prev,
 #next{
   color:#666;
-
   font-size:36px;
-
   min-height:50px;
-
   padding:0 4vw;
 }
 
 #cur{
   color:white;
-
   font-size:72px;
-
   line-height:1.2;
-
   font-weight:900;
-
   margin:40px 4vw;
 }
 
@@ -3007,7 +3306,6 @@ IN ATTESA
 </body>
 
 </html>
-
   `);
 
 
@@ -3170,6 +3468,83 @@ async ()=>{
    UTILITY
 ================================ */
 
+function safeFileName(
+name
+){
+
+  return String(name)
+  .replace(
+    /[\\/:*?"<>|]/g,
+    "_"
+  )
+  .trim();
+
+}
+
+
+function downloadJsonFile(
+data,
+filename
+){
+
+  const blob =
+  new Blob(
+    [
+      JSON.stringify(
+        data,
+        null,
+        2
+      )
+    ],
+    {
+      type:
+      "application/json"
+    }
+  );
+
+
+  const url =
+  URL.createObjectURL(
+    blob
+  );
+
+
+  const a =
+  document.createElement(
+    "a"
+  );
+
+
+  a.href =
+  url;
+
+
+  a.download =
+  filename;
+
+
+  document.body
+  .appendChild(a);
+
+
+  a.click();
+
+
+  a.remove();
+
+
+  setTimeout(
+    ()=>{
+      URL.revokeObjectURL(
+        url
+      );
+    },
+    1000
+  );
+
+}
+
+
 function escapeHTML(
 text
 ){
@@ -3200,6 +3575,7 @@ text
 
 
 showPitch();
+renderPlaylist();
 
 </script>
 
