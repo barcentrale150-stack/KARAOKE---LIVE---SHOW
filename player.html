@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Player - Karaoke Live Show</title>
+<title>Karaoke Live Show - Player</title>
 
 <style>
 *{box-sizing:border-box}
@@ -30,30 +30,30 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:15px;
-  margin-bottom:22px;
   flex-wrap:wrap;
+  margin-bottom:22px;
 }
 
 .brand{
   color:#ffd21f;
-  font-size:32px;
+  font-size:30px;
   font-weight:900;
 }
 
 .back{
   display:inline-block;
-  padding:12px 18px;
+  padding:11px 16px;
+  margin-left:6px;
   border-radius:12px;
   background:rgba(255,255,255,.10);
   color:white;
   text-decoration:none;
   font-weight:bold;
-  margin-left:6px;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:360px 1fr;
+  grid-template-columns:350px 1fr;
   gap:22px;
 }
 
@@ -71,7 +71,9 @@ body{
   gap:10px;
 }
 
-.library-title h2{margin:0}
+.library-title h2{
+  margin:0;
+}
 
 .file-label{
   display:inline-flex;
@@ -85,7 +87,9 @@ body{
   font-weight:900;
 }
 
-#fileInput{display:none}
+#fileInput{
+  display:none;
+}
 
 .search{
   width:100%;
@@ -111,10 +115,6 @@ body{
   border:1px solid transparent;
 }
 
-.song-item:hover{
-  background:rgba(255,255,255,.10);
-}
-
 .song-item.active{
   border-color:#ffd21f;
   background:rgba(255,210,31,.10);
@@ -130,10 +130,6 @@ body{
   margin-top:4px;
 }
 
-.player{
-  min-height:690px;
-}
-
 .now{
   text-align:center;
 }
@@ -147,7 +143,7 @@ body{
 .now-title{
   margin-top:7px;
   color:#ffd21f;
-  font-size:32px;
+  font-size:30px;
   font-weight:900;
 }
 
@@ -166,17 +162,17 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:12px;
+  gap:10px;
   margin-top:20px;
   flex-wrap:wrap;
 }
 
 button{
   border:0;
-  border-radius:14px;
-  padding:14px 18px;
+  border-radius:13px;
+  padding:13px 17px;
   font-weight:900;
-  font-size:16px;
+  font-size:15px;
   cursor:pointer;
 }
 
@@ -188,7 +184,7 @@ button{
 .play{
   background:#52ff8a;
   color:#052d14;
-  font-size:22px;
+  font-size:20px;
   min-width:110px;
 }
 
@@ -208,10 +204,10 @@ button{
 }
 
 .options{
-  margin-top:24px;
+  margin-top:22px;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:16px;
+  gap:15px;
 }
 
 .option{
@@ -238,7 +234,7 @@ button{
 }
 
 .lyrics{
-  margin-top:24px;
+  margin-top:22px;
   min-height:300px;
   border-radius:20px;
   background:#03040a;
@@ -253,17 +249,17 @@ button{
 
 .previous-line,
 .next-line{
-  color:#777b8d;
-  font-size:24px;
-  min-height:38px;
+  color:#707486;
+  font-size:22px;
+  min-height:34px;
 }
 
 .current-line{
-  color:#eee;
-  font-size:46px;
-  font-weight:900;
+  color:white;
+  font-size:44px;
   line-height:1.25;
-  margin:24px 0;
+  font-weight:900;
+  margin:22px 0;
   min-height:60px;
 }
 
@@ -273,7 +269,7 @@ button{
 }
 
 .waiting{
-  color:#f2f2f2;
+  color:white;
 }
 
 .no-lyrics{
@@ -281,26 +277,18 @@ button{
   font-size:18px;
 }
 
-.format-status{
+.status{
   margin-top:12px;
   text-align:center;
   color:#52ff8a;
-  font-size:14px;
   font-weight:bold;
-}
-
-.info-bar{
-  margin-top:10px;
-  color:#bfc2d4;
-  text-align:center;
-  font-size:13px;
 }
 
 @media(max-width:850px){
   .grid{grid-template-columns:1fr}
-  .library{max-height:280px}
+  .library{max-height:260px}
   .options{grid-template-columns:1fr}
-  .current-line{font-size:31px}
+  .current-line{font-size:30px}
 }
 </style>
 </head>
@@ -310,7 +298,6 @@ button{
 <div class="app">
 
 <div class="topbar">
-
   <div class="brand">
     🎤 KARAOKE LIVE SHOW — PLAYER
   </div>
@@ -319,7 +306,6 @@ button{
     <a class="back" href="admin.html">← ADMIN</a>
     <a class="back" href="sito.html">🌐 SITO</a>
   </div>
-
 </div>
 
 <div class="grid">
@@ -327,7 +313,6 @@ button{
 <div class="card">
 
   <div class="library-title">
-
     <h2>🎵 Libreria</h2>
 
     <label class="file-label">
@@ -336,9 +321,8 @@ button{
       id="fileInput"
       type="file"
       multiple
-      accept=".mp3,.lrc,.txt,audio/mpeg">
+      accept=".mp3,audio/mpeg">
     </label>
-
   </div>
 
   <input
@@ -355,7 +339,7 @@ button{
 </div>
 
 
-<div class="card player">
+<div class="card">
 
   <div class="now">
 
@@ -363,9 +347,7 @@ button{
       BRANO IN RIPRODUZIONE
     </div>
 
-    <div
-    class="now-title"
-    id="nowTitle">
+    <div class="now-title" id="nowTitle">
       Nessun brano
     </div>
 
@@ -469,7 +451,7 @@ button{
     id="currentLine">
 
       <span class="no-lyrics">
-        Carica un MP3.
+        Carica un MP3 SongService.
       </span>
 
     </div>
@@ -481,118 +463,154 @@ button{
 
   </div>
 
-
-  <div
-  class="format-status"
-  id="formatStatus">
-    In attesa di un brano...
-  </div>
-
-  <div class="info-bar">
-    Testo M-Live ricostruito in righe con evidenziazione sincronizzata.
+  <div class="status" id="status">
+    In attesa...
   </div>
 
 </div>
 
 </div>
-
 </div>
 
 
 <script>
 
-const audio = document.getElementById("audio");
-const fileInput = document.getElementById("fileInput");
-const library = document.getElementById("library");
-const search = document.getElementById("search");
-const nowTitle = document.getElementById("nowTitle");
-const playButton = document.getElementById("playButton");
-const stopButton = document.getElementById("stopButton");
-const back10 = document.getElementById("back10");
-const forward10 = document.getElementById("forward10");
-const seek = document.getElementById("seek");
-const currentTimeBox = document.getElementById("currentTime");
-const durationBox = document.getElementById("duration");
-const volume = document.getElementById("volume");
-const volumeValue = document.getElementById("volumeValue");
-const speed = document.getElementById("speed");
-const speedValue = document.getElementById("speedValue");
-const displayButton = document.getElementById("displayButton");
-const fullscreenButton = document.getElementById("fullscreenButton");
-const previousLine = document.getElementById("previousLine");
-const currentLine = document.getElementById("currentLine");
-const nextLine = document.getElementById("nextLine");
-const formatStatus = document.getElementById("formatStatus");
+const audio =
+document.getElementById("audio");
+
+const fileInput =
+document.getElementById("fileInput");
+
+const library =
+document.getElementById("library");
+
+const search =
+document.getElementById("search");
+
+const nowTitle =
+document.getElementById("nowTitle");
+
+const playButton =
+document.getElementById("playButton");
+
+const stopButton =
+document.getElementById("stopButton");
+
+const back10 =
+document.getElementById("back10");
+
+const forward10 =
+document.getElementById("forward10");
+
+const seek =
+document.getElementById("seek");
+
+const currentTimeBox =
+document.getElementById("currentTime");
+
+const durationBox =
+document.getElementById("duration");
+
+const volume =
+document.getElementById("volume");
+
+const volumeValue =
+document.getElementById("volumeValue");
+
+const speed =
+document.getElementById("speed");
+
+const speedValue =
+document.getElementById("speedValue");
+
+const displayButton =
+document.getElementById("displayButton");
+
+const fullscreenButton =
+document.getElementById("fullscreenButton");
+
+const previousLine =
+document.getElementById("previousLine");
+
+const currentLine =
+document.getElementById("currentLine");
+
+const nextLine =
+document.getElementById("nextLine");
+
+const status =
+document.getElementById("status");
+
 
 let songs = [];
+
 let currentSong = null;
 
-/*
-Ogni elemento sarà una RIGA completa:
-
-{
- start: 3.41,
- chunks: [
-   {time:3.41,text:"DI"},
-   {time:3.59,text:"CE"},
-   ...
- ],
- text:"DICE CHE ERA UN BELL'UOMO E VENIVA"
-}
-*/
-
 let lyricLines = [];
+
 let displayWindow = null;
 
 
-/* FILE */
+/* ------------------------------
+   LIBRERIA
+-------------------------------- */
 
 function cleanName(name){
-  return name.replace(/\.[^/.]+$/,"").trim();
-}
 
-function baseName(name){
-  return cleanName(name)
-  .toLowerCase()
-  .replace(/\s+/g," ")
+  return name
+  .replace(/\.[^/.]+$/,"")
   .trim();
+
 }
 
 
-fileInput.addEventListener("change",function(){
+fileInput.addEventListener(
+"change",
+()=>{
 
-  const files = Array.from(fileInput.files);
-
-  const mp3Files = files.filter(
-    f => f.name.toLowerCase().endsWith(".mp3")
+  const files =
+  Array.from(
+    fileInput.files
   );
 
-  const lyricFiles = files.filter(
-    f =>
-    f.name.toLowerCase().endsWith(".lrc") ||
-    f.name.toLowerCase().endsWith(".txt")
-  );
+  files
+  .filter(
+    file =>
+    file.name
+    .toLowerCase()
+    .endsWith(".mp3")
+  )
+  .forEach(file=>{
 
-  mp3Files.forEach(mp3=>{
-
-    const existing = songs.find(
-      s => s.file.name === mp3.name
-    );
-
-    if(existing){
+    if(
+      songs.some(
+        s =>
+        s.file.name ===
+        file.name
+      )
+    ){
       return;
     }
 
-    const lyric = lyricFiles.find(
-      l => baseName(l.name) === baseName(mp3.name)
-    );
-
     songs.push({
-      id:Date.now()+Math.random(),
-      file:mp3,
-      url:URL.createObjectURL(mp3),
-      title:cleanName(mp3.name),
-      lyricFile:lyric || null
+
+      id:
+      Date.now()
+      +
+      Math.random(),
+
+      title:
+      cleanName(
+        file.name
+      ),
+
+      file:file,
+
+      url:
+      URL.createObjectURL(
+        file
+      )
+
     });
 
   });
@@ -602,95 +620,122 @@ fileInput.addEventListener("change",function(){
 });
 
 
-/* LIBRERIA */
+search.addEventListener(
+"input",
+renderLibrary
+);
+
 
 function renderLibrary(){
 
   const query =
-  search.value.toLowerCase().trim();
+  search.value
+  .toLowerCase()
+  .trim();
 
   library.innerHTML="";
 
-  const filtered = songs.filter(
+  const list =
+  songs.filter(
     song =>
-    song.title.toLowerCase().includes(query)
+    song.title
+    .toLowerCase()
+    .includes(query)
   );
 
-  if(filtered.length===0){
+  if(!list.length){
 
     library.innerHTML=
     '<div class="song-extra">Nessun brano.</div>';
 
     return;
+
   }
 
-  filtered.forEach(song=>{
+  list.forEach(song=>{
 
     const item =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
-    item.className="song-item";
+    item.className=
+    "song-item";
 
     if(
       currentSong &&
-      currentSong.id === song.id
+      currentSong.id ===
+      song.id
     ){
-      item.classList.add("active");
+
+      item.classList.add(
+        "active"
+      );
+
     }
 
-    const name =
-    document.createElement("div");
-
-    name.className="song-name";
-    name.textContent="🎵 "+song.title;
-
-    const extra =
-    document.createElement("div");
-
-    extra.className="song-extra";
-
-    extra.textContent=
-    "MP3 — lettura karaoke M-Live";
-
-    item.appendChild(name);
-    item.appendChild(extra);
+    item.innerHTML=
+    '<div class="song-name">'
+    +
+    '🎵 '
+    +
+    escapeHTML(
+      song.title
+    )
+    +
+    '</div>'
+    +
+    '<div class="song-extra">'
+    +
+    'MP3 SongService / M-Live'
+    +
+    '</div>';
 
     item.addEventListener(
       "click",
       ()=>loadSong(song)
     );
 
-    library.appendChild(item);
+    library.appendChild(
+      item
+    );
 
   });
 
 }
 
-search.addEventListener("input",renderLibrary);
 
-
-/* CARICA BRANO */
+/* ------------------------------
+   CARICA BRANO
+-------------------------------- */
 
 async function loadSong(song){
 
   audio.pause();
 
-  currentSong = song;
+  currentSong =
+  song;
+
   lyricLines = [];
 
-  audio.src = song.url;
+  audio.src =
+  song.url;
+
   audio.load();
 
-  nowTitle.textContent = song.title;
+  nowTitle.textContent =
+  song.title;
 
   previousLine.textContent="";
+
+  currentLine.textContent=
+  "Analisi testo...";
+
   nextLine.textContent="";
 
-  currentLine.innerHTML=
-  '<span class="no-lyrics">Analisi testo M-Live...</span>';
+  status.textContent=
+  "Ricerca testo SongService...";
 
-  formatStatus.textContent=
-  "Analisi MP3...";
 
   try{
 
@@ -698,28 +743,36 @@ async function loadSong(song){
     await song.file.arrayBuffer();
 
     const chunks =
-    parseID3SYLT(buffer);
+    parseSongServiceSYLT(
+      buffer
+    );
 
-    if(chunks.length){
+    if(
+      chunks.length
+    ){
 
       lyricLines =
-      buildKaraokeLines(chunks);
+      buildLines(
+        chunks
+      );
 
-      formatStatus.textContent=
-      "✓ TESTO M-LIVE TROVATO — "
-      + lyricLines.length
-      + " righe";
+      status.textContent=
+      "✓ TESTO TROVATO — "
+      +
+      lyricLines.length
+      +
+      " righe";
 
       currentLine.textContent=
-      "Testo karaoke caricato ✓";
+      "TESTO CARICATO ✓";
 
     }else{
 
-      formatStatus.textContent=
-      "Nessun testo M-Live trovato";
+      status.textContent=
+      "Questo MP3 non contiene testo karaoke riconosciuto.";
 
       currentLine.innerHTML=
-      '<span class="no-lyrics">Audio pronto. Questo MP3 non contiene testo karaoke riconosciuto.</span>';
+      '<span class="no-lyrics">Nessun testo sincronizzato.</span>';
 
     }
 
@@ -727,285 +780,416 @@ async function loadSong(song){
 
     console.error(error);
 
-    formatStatus.textContent=
-    "Errore analisi testo";
+    status.textContent=
+    "Errore durante la lettura.";
 
   }
 
   seek.value=0;
-  currentTimeBox.textContent="00:00";
 
   renderLibrary();
-  updateDisplay();
 
 }
 
 
-/* ID3 */
+/* ------------------------------
+   PARSER SONGSERVICE / M-LIVE
+-------------------------------- */
 
-function synchsafe32(a,b,c,d){
-
-  return (
-    (a << 21) |
-    (b << 14) |
-    (c << 7) |
-    d
-  ) >>> 0;
-
-}
-
-
-function uint32be(bytes,offset){
+function uint32be(
+bytes,
+offset
+){
 
   return (
-    bytes[offset] * 16777216 +
-    bytes[offset+1] * 65536 +
-    bytes[offset+2] * 256 +
+    bytes[offset]
+    * 16777216
+    +
+    bytes[offset+1]
+    * 65536
+    +
+    bytes[offset+2]
+    * 256
+    +
     bytes[offset+3]
   ) >>> 0;
 
 }
 
 
-/*
-RITORNA I PEZZI ORIGINALI M-LIVE
-con i loro timestamp.
-*/
+function synchsafe32(
+a,b,c,d
+){
 
-function parseID3SYLT(arrayBuffer){
-
-  const bytes =
-  new Uint8Array(arrayBuffer);
-
-  if(
-    bytes.length < 10 ||
-    bytes[0] !== 0x49 ||
-    bytes[1] !== 0x44 ||
-    bytes[2] !== 0x33
-  ){
-    return [];
-  }
-
-  const version = bytes[3];
-
-  const tagSize =
-  synchsafe32(
-    bytes[6],
-    bytes[7],
-    bytes[8],
-    bytes[9]
-  );
-
-  let offset = 10;
-
-  const end =
-  Math.min(
-    bytes.length,
-    10 + tagSize
-  );
-
-  while(offset+10 <= end){
-
-    if(bytes[offset]===0){
-      break;
-    }
-
-    const frameId =
-    String.fromCharCode(
-      bytes[offset],
-      bytes[offset+1],
-      bytes[offset+2],
-      bytes[offset+3]
-    );
-
-    let frameSize;
-
-    if(version===4){
-
-      frameSize =
-      synchsafe32(
-        bytes[offset+4],
-        bytes[offset+5],
-        bytes[offset+6],
-        bytes[offset+7]
-      );
-
-    }else{
-
-      frameSize =
-      uint32be(
-        bytes,
-        offset+4
-      );
-
-    }
-
-    if(
-      frameSize<=0 ||
-      offset+10+frameSize > bytes.length
-    ){
-      break;
-    }
-
-    if(frameId==="SYLT"){
-
-      const frame =
-      bytes.slice(
-        offset+10,
-        offset+10+frameSize
-      );
-
-      return parseSYLTChunks(frame);
-
-    }
-
-    offset += 10+frameSize;
-
-  }
-
-  return [];
+  return (
+    (a << 21)
+    |
+    (b << 14)
+    |
+    (c << 7)
+    |
+    d
+  ) >>> 0;
 
 }
 
 
-/* SYLT M-LIVE */
+function parseSongServiceSYLT(
+arrayBuffer
+){
 
-function parseSYLTChunks(data){
-
-  if(data.length < 7){
-    return [];
-  }
-
-  const encoding = data[0];
-  const timestampFormat = data[4];
-
-  let pos = 6;
-
-  /* salta "Sincro by M-live" */
-
-  const descriptor =
-  readEncodedString(
-    data,
-    pos,
-    encoding
+  const bytes =
+  new Uint8Array(
+    arrayBuffer
   );
 
-  pos = descriptor.next;
+
+  /*
+  Cerca direttamente
+  il frame SYLT.
+  */
+
+  let frameStart = -1;
+
+
+  for(
+    let i=0;
+    i<bytes.length-4;
+    i++
+  ){
+
+    if(
+      bytes[i]===0x53
+      &&
+      bytes[i+1]===0x59
+      &&
+      bytes[i+2]===0x4C
+      &&
+      bytes[i+3]===0x54
+    ){
+
+      frameStart=i;
+
+      break;
+
+    }
+
+  }
+
+
+  if(
+    frameStart < 0
+  ){
+
+    return [];
+
+  }
+
+
+  /*
+  Dimensione frame.
+  */
+
+  const frameSize =
+  uint32be(
+    bytes,
+    frameStart+4
+  );
+
+
+  /*
+  Salta header
+  SYLT + size + flags
+  = 10 byte.
+  */
+
+  const start =
+  frameStart + 10;
+
+
+  const end =
+  Math.min(
+    bytes.length,
+    start + frameSize
+  );
+
+
+  const data =
+  bytes.slice(
+    start,
+    end
+  );
+
+
+  /*
+  SONGSERVICE / M-LIVE:
+
+  00
+  00
+  XXX
+  02
+  01
+
+  Il secondo 00 è quello
+  che mancava nel parser
+  precedente.
+  */
+
+
+  let pos = 0;
+
+
+  const encoding =
+  data[pos++];
+
+
+  /*
+  Byte aggiuntivo
+  presente nei file
+  SongService/M-Live.
+  */
+
+  if(
+    data[pos] === 0x00
+    &&
+    data[pos+1] === 0x58
+    &&
+    data[pos+2] === 0x58
+    &&
+    data[pos+3] === 0x58
+  ){
+
+    pos++;
+
+  }
+
+
+  /*
+  lingua XXX
+  */
+
+  pos += 3;
+
+
+  const timestampFormat =
+  data[pos++];
+
+
+  /*
+  content type
+  */
+
+  pos++;
+
+
+  /*
+  descrizione:
+  Sincro by M-live
+  */
+
+  while(
+    pos < data.length
+    &&
+    data[pos] !== 0
+  ){
+
+    pos++;
+
+  }
+
+  pos++;
+
 
   const chunks = [];
 
-  while(pos < data.length){
 
-    const lyric =
-    readEncodedString(
-      data,
-      pos,
-      encoding
-    );
+  while(
+    pos < data.length
+  ){
 
-    pos = lyric.next;
+    const textStart =
+    pos;
 
-    if(pos+4 > data.length){
-      break;
+
+    while(
+      pos < data.length
+      &&
+      data[pos] !== 0
+    ){
+
+      pos++;
+
     }
 
+
+    if(
+      pos >= data.length
+    ){
+
+      break;
+
+    }
+
+
+    const textBytes =
+    data.slice(
+      textStart,
+      pos
+    );
+
+
+    pos++;
+
+
+    if(
+      pos + 4 >
+      data.length
+    ){
+
+      break;
+
+    }
+
+
     const timestamp =
-    uint32be(data,pos);
+    uint32be(
+      data,
+      pos
+    );
+
 
     pos += 4;
 
+
+    const text =
+    new TextDecoder(
+      "windows-1252"
+    ).decode(
+      textBytes
+    );
+
+
     let seconds;
 
+
     /*
-    Nel tuo M-Live:
+    Nei file SongService
+    che abbiamo controllato:
     02 = millisecondi.
     */
 
-    if(timestampFormat===2){
+    if(
+      timestampFormat === 2
+    ){
 
       seconds =
-      timestamp/1000;
+      timestamp / 1000;
 
     }else{
 
-      /*
-      fallback frame MPEG
-      */
-
       seconds =
-      timestamp/38.28125;
+      timestamp / 38.28125;
 
     }
 
+
     chunks.push({
-      time:seconds,
-      text:lyric.text
+
+      time:
+      seconds,
+
+      text:
+      text
+
     });
 
   }
+
 
   return chunks;
 
 }
 
 
-/*
-QUI È LA CORREZIONE IMPORTANTE.
+/* ------------------------------
+   COSTRUISCE LE RIGHE
+-------------------------------- */
 
-M-Live inserisce "\n" quando comincia
-una nuova riga.
-
-Noi uniamo tutte le sillabe fino
-al prossimo "\n".
-*/
-
-function buildKaraokeLines(chunks){
+function buildLines(chunks){
 
   const lines = [];
 
-  let current = null;
+  let line = null;
+
 
   chunks.forEach(chunk=>{
 
     let text =
     chunk.text || "";
 
-    const newLine =
+
+    /*
+    \n significa
+    NUOVA RIGA.
+    */
+
+    const beginsNewLine =
     text.includes("\n");
 
+
     text =
-    text.replace(/\r/g,"")
+    text
+    .replace(/\r/g,"")
     .replace(/\n/g,"");
 
-    if(newLine || !current){
 
-      if(
-        current &&
-        current.chunks.length
-      ){
+    if(
+      beginsNewLine
+      ||
+      !line
+    ){
 
-        finishLine(current);
+      if(line){
+
+        finishLine(line);
 
         if(
-          isRealKaraokeLine(current)
+          validLine(
+            line.text
+          )
         ){
-          lines.push(current);
+
+          lines.push(
+            line
+          );
+
         }
 
       }
 
-      current = {
-        start:chunk.time,
+
+      line = {
+
+        start:
+        chunk.time,
+
         chunks:[]
+
       };
 
     }
 
-    if(text.length){
 
-      current.chunks.push({
-        time:chunk.time,
-        text:text
+    if(text){
+
+      line.chunks.push({
+
+        time:
+        chunk.time,
+
+        text:
+        text
+
       });
 
     }
@@ -1013,20 +1197,24 @@ function buildKaraokeLines(chunks){
   });
 
 
-  if(
-    current &&
-    current.chunks.length
-  ){
+  if(line){
 
-    finishLine(current);
+    finishLine(line);
 
     if(
-      isRealKaraokeLine(current)
+      validLine(
+        line.text
+      )
     ){
-      lines.push(current);
+
+      lines.push(
+        line
+      );
+
     }
 
   }
+
 
   return lines;
 
@@ -1037,204 +1225,226 @@ function finishLine(line){
 
   line.text =
   line.chunks
-  .map(c=>c.text)
+  .map(
+    x => x.text
+  )
   .join("")
   .trim();
 
 }
 
 
-/*
-TOGLIE LE RIGHE TECNICHE
-M-LIVE dall'esecuzione karaoke.
-*/
+function validLine(text){
 
-function isRealKaraokeLine(line){
+  const t =
+  String(text || "")
+  .trim();
 
-  const text =
-  (line.text || "").trim();
 
-  if(!text){
+  if(!t){
     return false;
   }
 
-  if(/^[-_]{5,}$/.test(text)){
-    return false;
-  }
 
-  if(/^www\./i.test(text)){
-    return false;
-  }
-
-  if(/^\(c\)/i.test(text)){
-    return false;
-  }
-
-  if(/^".*"$/.test(text)){
-    return false;
-  }
-
-  if(/^\(Ron\)$/i.test(text)){
-    return false;
-  }
+  /*
+  Elimina intestazioni
+  SongService.
+  */
 
   if(
-    /Universal Music/i.test(text)
+    t.includes(
+      "www.songservice.it"
+    )
   ){
     return false;
   }
+
+
+  if(
+    t.includes(
+      "Universal Music"
+    )
+  ){
+    return false;
+  }
+
+
+  if(
+    /^[-_]{5,}$/
+    .test(t)
+  ){
+    return false;
+  }
+
+
+  if(
+    /^".*"$/
+    .test(t)
+  ){
+    return false;
+  }
+
+
+  if(
+    /^\(.*\)$/
+    .test(t)
+  ){
+    return false;
+  }
+
 
   return true;
 
 }
 
 
-/* STRINGHE */
+/* ------------------------------
+   TESTO LIVE
+-------------------------------- */
 
-function readEncodedString(data,start,encoding){
+function getLineIndex(){
 
-  if(start>=data.length){
-
-    return{
-      text:"",
-      next:data.length
-    };
-
-  }
+  let index = -1;
 
 
-  if(
-    encoding===0 ||
-    encoding===3
+  for(
+    let i=0;
+    i<lyricLines.length;
+    i++
   ){
 
-    let end=start;
-
-    while(
-      end<data.length &&
-      data[end]!==0
-    ){
-      end++;
-    }
-
-    return{
-      text:
-      decodeText(
-        data.slice(start,end),
-        encoding
-      ),
-      next:
-      Math.min(
-        data.length,
-        end+1
-      )
-    };
-
-  }
-
-
-  let end=start;
-
-  while(end+1<data.length){
-
     if(
-      data[end]===0 &&
-      data[end+1]===0
+      audio.currentTime
+      >=
+      lyricLines[i].start
     ){
+
+      index=i;
+
+    }else{
+
       break;
-    }
 
-    end+=2;
+    }
 
   }
 
-  return{
-    text:
-    decodeText(
-      data.slice(start,end),
-      encoding
-    ),
 
-    next:
-    Math.min(
-      data.length,
-      end+2
-    )
-  };
+  return index;
 
 }
 
 
-function decodeText(bytes,encoding){
+function renderCurrentLine(
+line,
+time
+){
 
-  try{
-
-    if(encoding===3){
-
-      return new TextDecoder(
-        "utf-8"
-      ).decode(bytes);
-
-    }
-
-    if(encoding===2){
-
-      return new TextDecoder(
-        "utf-16be"
-      ).decode(bytes);
-
-    }
-
-    if(encoding===1){
-
-      if(
-        bytes.length>=2 &&
-        bytes[0]===0xFE &&
-        bytes[1]===0xFF
-      ){
-
-        return new TextDecoder(
-          "utf-16be"
-        ).decode(
-          bytes.slice(2)
-        );
-
-      }
-
-      if(
-        bytes.length>=2 &&
-        bytes[0]===0xFF &&
-        bytes[1]===0xFE
-      ){
-
-        return new TextDecoder(
-          "utf-16le"
-        ).decode(
-          bytes.slice(2)
-        );
-
-      }
-
-      return new TextDecoder(
-        "utf-16le"
-      ).decode(bytes);
-
-    }
-
-    return new TextDecoder(
-      "windows-1252"
-    ).decode(bytes);
-
-  }catch(error){
-
+  if(!line){
     return "";
-
   }
+
+
+  let html="";
+
+
+  line.chunks.forEach(
+  chunk=>{
+
+    const cls =
+    time >= chunk.time
+    ?
+    "sung"
+    :
+    "waiting";
+
+
+    html +=
+    '<span class="'
+    +
+    cls
+    +
+    '">'
+    +
+    escapeHTML(
+      chunk.text
+    )
+    +
+    '</span>';
+
+  });
+
+
+  return html;
 
 }
 
 
-/* PLAY */
+function updateLyrics(){
+
+  if(
+    !lyricLines.length
+  ){
+
+    updateDisplay();
+
+    return;
+
+  }
+
+
+  const index =
+  getLineIndex();
+
+
+  if(index < 0){
+
+    previousLine.textContent="";
+
+    currentLine.textContent="♪";
+
+    nextLine.textContent=
+    lyricLines[0]
+    ?.text
+    ||
+    "";
+
+    updateDisplay();
+
+    return;
+
+  }
+
+
+  previousLine.textContent=
+  lyricLines[index-1]
+  ?.text
+  ||
+  "";
+
+
+  currentLine.innerHTML=
+  renderCurrentLine(
+    lyricLines[index],
+    audio.currentTime
+  );
+
+
+  nextLine.textContent=
+  lyricLines[index+1]
+  ?.text
+  ||
+  "";
+
+
+  updateDisplay();
+
+}
+
+
+/* ------------------------------
+   AUDIO
+-------------------------------- */
 
 playButton.addEventListener(
 "click",
@@ -1243,34 +1453,30 @@ async ()=>{
   if(!currentSong){
 
     alert(
-      "Seleziona prima un brano."
+      "Seleziona un brano."
     );
 
     return;
+
   }
 
-  try{
 
-    if(audio.paused){
+  if(audio.paused){
 
-      await audio.play();
+    await audio.play();
 
-    }else{
+  }else{
 
-      audio.pause();
-
-    }
-
-  }catch(error){
-
-    console.error(error);
+    audio.pause();
 
   }
 
 });
 
 
-audio.addEventListener("play",()=>{
+audio.addEventListener(
+"play",
+()=>{
 
   playButton.textContent=
   "⏸ PAUSA";
@@ -1278,7 +1484,9 @@ audio.addEventListener("play",()=>{
 });
 
 
-audio.addEventListener("pause",()=>{
+audio.addEventListener(
+"pause",
+()=>{
 
   playButton.textContent=
   "▶ PLAY";
@@ -1291,6 +1499,7 @@ stopButton.addEventListener(
 ()=>{
 
   audio.pause();
+
   audio.currentTime=0;
 
 });
@@ -1313,62 +1522,64 @@ forward10.addEventListener(
 "click",
 ()=>{
 
-  const d =
-  Number.isFinite(audio.duration)
-  ? audio.duration
-  : 0;
-
   audio.currentTime=
   Math.min(
-    d,
+    audio.duration || 0,
     audio.currentTime+10
   );
 
 });
 
 
-/* VOLUME */
-
 volume.addEventListener(
 "input",
 ()=>{
 
   audio.volume=
-  Number(volume.value);
+  Number(
+    volume.value
+  );
+
 
   volumeValue.textContent=
   Math.round(
     audio.volume*100
-  )+"%";
+  )
+  +
+  "%";
 
 });
 
-
-/* VELOCITÀ */
 
 speed.addEventListener(
 "input",
 ()=>{
 
   audio.playbackRate=
-  Number(speed.value);
+  Number(
+    speed.value
+  );
+
 
   if(
     "preservesPitch"
     in audio
   ){
-    audio.preservesPitch=true;
+
+    audio.preservesPitch=
+    true;
+
   }
+
 
   speedValue.textContent=
   audio.playbackRate
   .toFixed(2)
-  +"x";
+  +
+  "x";
 
 });
 
-
-/* SEEK */
 
 seek.addEventListener(
 "input",
@@ -1382,9 +1593,14 @@ seek.addEventListener(
     return;
   }
 
+
   audio.currentTime=
   (
-    Number(seek.value)/100
+    Number(
+      seek.value
+    )
+    /
+    100
   )
   *
   audio.duration;
@@ -1399,27 +1615,34 @@ audio.addEventListener(
   if(
     Number.isFinite(
       audio.duration
-    ) &&
-    audio.duration>0
+    )
+    &&
+    audio.duration > 0
   ){
 
     seek.value=
     (
-      audio.currentTime/
+      audio.currentTime
+      /
       audio.duration
-    )*100;
+    )
+    *
+    100;
 
   }
+
 
   currentTimeBox.textContent=
   formatTime(
     audio.currentTime
   );
 
+
   durationBox.textContent=
   formatTime(
     audio.duration
   );
+
 
   updateLyrics();
 
@@ -1440,171 +1663,58 @@ audio.addEventListener(
 
 function formatTime(seconds){
 
-  if(!Number.isFinite(seconds)){
+  if(
+    !Number.isFinite(
+      seconds
+    )
+  ){
+
     return "00:00";
+
   }
 
-  const m=
-  Math.floor(seconds/60);
 
-  const s=
-  Math.floor(seconds%60);
+  const m =
+  Math.floor(
+    seconds/60
+  );
 
-  return(
-    String(m).padStart(2,"0")
+
+  const s =
+  Math.floor(
+    seconds%60
+  );
+
+
+  return (
+    String(m)
+    .padStart(2,"0")
     +
     ":"
     +
-    String(s).padStart(2,"0")
+    String(s)
+    .padStart(2,"0")
   );
 
 }
 
 
-/* TROVA RIGA CORRENTE */
-
-function getCurrentLineIndex(){
-
-  let index=-1;
-
-  for(
-    let i=0;
-    i<lyricLines.length;
-    i++
-  ){
-
-    if(
-      audio.currentTime >=
-      lyricLines[i].start
-    ){
-
-      index=i;
-
-    }else{
-
-      break;
-
-    }
-
-  }
-
-  return index;
-
-}
-
-
-/*
-COSTRUISCE LA RIGA COLORATA.
-
-La parte già cantata = gialla.
-La parte futura = bianca.
-*/
-
-function renderHighlightedLine(line,time){
-
-  if(!line){
-    return "";
-  }
-
-  let html="";
-
-  line.chunks.forEach(chunk=>{
-
-    const cls =
-    time >= chunk.time
-    ? "sung"
-    : "waiting";
-
-    html +=
-    '<span class="'
-    +cls+
-    '">'
-    +escapeHTML(chunk.text)
-    +'</span>';
-
-  });
-
-  return html;
-
-}
-
-
-function escapeHTML(text){
-
-  return String(text)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
-
-}
-
-
-/* AGGIORNA TESTO */
-
-function updateLyrics(){
-
-  if(!lyricLines.length){
-
-    updateDisplay();
-
-    return;
-  }
-
-  const index =
-  getCurrentLineIndex();
-
-
-  if(index<0){
-
-    previousLine.textContent="";
-
-    currentLine.innerHTML="♪";
-
-    nextLine.textContent=
-    lyricLines[0]?.text || "";
-
-    updateDisplay();
-
-    return;
-  }
-
-
-  previousLine.textContent=
-  lyricLines[index-1]
-  ?.text || "";
-
-
-  currentLine.innerHTML=
-  renderHighlightedLine(
-    lyricLines[index],
-    audio.currentTime
-  );
-
-
-  nextLine.textContent=
-  lyricLines[index+1]
-  ?.text || "";
-
-
-  updateDisplay();
-
-}
-
-
-/* DISPLAY 2 */
+/* ------------------------------
+   DISPLAY 2
+-------------------------------- */
 
 displayButton.addEventListener(
 "click",
 ()=>{
 
   if(
-    displayWindow &&
+    displayWindow
+    &&
     !displayWindow.closed
   ){
 
     displayWindow.focus();
+
     return;
 
   }
@@ -1621,66 +1731,58 @@ displayButton.addEventListener(
   if(!displayWindow){
 
     alert(
-      "Il browser ha bloccato Display 2."
+      "Display 2 bloccato dal browser."
     );
 
     return;
+
   }
 
 
   displayWindow.document.write(`
 <!doctype html>
 <html>
-
 <head>
-
 <meta charset="utf-8">
-
-<title>
-Karaoke Display 2
-</title>
 
 <style>
 
 html,
 body{
+  margin:0;
   width:100%;
   height:100%;
-  margin:0;
 }
 
 body{
   background:#000;
-  color:#fff;
   font-family:Arial,Helvetica,sans-serif;
-
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   text-align:center;
-
   overflow:hidden;
 }
 
-#displayTitle{
+#title{
   position:absolute;
-  top:25px;
+  top:20px;
   color:#777;
   font-size:20px;
 }
 
-#displayPrevious,
-#displayNext{
+#prev,
+#next{
   color:#666;
   font-size:36px;
   min-height:50px;
-  padding:0 5vw;
+  padding:0 4vw;
 }
 
-#displayCurrent{
+#cur{
   color:white;
-  font-size:76px;
+  font-size:72px;
   line-height:1.2;
   font-weight:900;
   margin:40px 4vw;
@@ -1688,9 +1790,6 @@ body{
 
 .sung{
   color:#ffd21f;
-  text-shadow:
-  0 0 20px
-  rgba(255,210,31,.4);
 }
 
 .waiting{
@@ -1698,31 +1797,29 @@ body{
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div id="displayTitle">
+<div id="title">
 KARAOKE LIVE SHOW
 </div>
 
-<div id="displayPrevious">
-</div>
+<div id="prev"></div>
 
-<div id="displayCurrent">
+<div id="cur">
 IN ATTESA
 </div>
 
-<div id="displayNext">
-</div>
+<div id="next"></div>
 
 </body>
-
 </html>
   `);
 
+
   displayWindow.document.close();
+
 
   updateDisplay();
 
@@ -1732,53 +1829,57 @@ IN ATTESA
 function updateDisplay(){
 
   if(
-    !displayWindow ||
+    !displayWindow
+    ||
     displayWindow.closed
   ){
+
     return;
+
   }
 
 
   const title =
   displayWindow.document
   .getElementById(
-    "displayTitle"
+    "title"
   );
+
 
   const prev =
   displayWindow.document
   .getElementById(
-    "displayPrevious"
+    "prev"
   );
+
 
   const cur =
   displayWindow.document
   .getElementById(
-    "displayCurrent"
+    "cur"
   );
+
 
   const next =
   displayWindow.document
   .getElementById(
-    "displayNext"
+    "next"
   );
 
 
-  if(title){
-
-    title.textContent=
-    currentSong
-    ? currentSong.title
-    : "KARAOKE LIVE SHOW";
-
-  }
+  title.textContent=
+  currentSong
+  ?
+  currentSong.title
+  :
+  "KARAOKE LIVE SHOW";
 
 
   const index =
-  getCurrentLineIndex();
+  getLineIndex();
 
 
-  if(index<0){
+  if(index < 0){
 
     prev.textContent="";
 
@@ -1786,19 +1887,24 @@ function updateDisplay(){
 
     next.textContent=
     lyricLines[0]
-    ?.text || "";
+    ?.text
+    ||
+    "";
 
     return;
+
   }
 
 
   prev.textContent=
   lyricLines[index-1]
-  ?.text || "";
+  ?.text
+  ||
+  "";
 
 
   cur.innerHTML=
-  renderHighlightedLine(
+  renderCurrentLine(
     lyricLines[index],
     audio.currentTime
   );
@@ -1806,41 +1912,49 @@ function updateDisplay(){
 
   next.textContent=
   lyricLines[index+1]
-  ?.text || "";
+  ?.text
+  ||
+  "";
 
 }
 
 
-/* SCHERMO INTERO */
+/* ------------------------------
+   FULLSCREEN
+-------------------------------- */
 
 fullscreenButton.addEventListener(
 "click",
 async ()=>{
 
-  try{
+  if(
+    !document.fullscreenElement
+  ){
 
-    if(
-      !document.fullscreenElement
-    ){
+    await document
+    .documentElement
+    .requestFullscreen();
 
-      await document
-      .documentElement
-      .requestFullscreen();
+  }else{
 
-    }else{
-
-      await document
-      .exitFullscreen();
-
-    }
-
-  }catch(error){
-
-    console.error(error);
+    await document
+    .exitFullscreen();
 
   }
 
 });
+
+
+function escapeHTML(text){
+
+  return String(text)
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+
+}
 
 </script>
 
